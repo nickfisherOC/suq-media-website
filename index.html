@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suq Media — Media. Music. Fashion. Purpose.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0a;
+      --card:      #111111;
+      --secondary: #181818;
+      --border:    #262626;
+      --fg:        #edece8;
+      --muted:     #7a7a7a;
+      --blue:      oklch(0.6 0.22 255);
+      --gold:      oklch(0.72 0.18 55);
+      --violet:    oklch(0.55 0.22 290);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    /* ── Animations ── */
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes fadeUp  { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes glow    { 0%,100% { box-shadow: 0 0 20px oklch(0.6 0.22 255 / .4); } 50% { box-shadow: 0 0 40px oklch(0.6 0.22 255 / .7); } }
+
+    .fade-up        { animation: fadeUp .8s ease both; }
+    .delay-1        { animation-delay: .1s; }
+    .delay-2        { animation-delay: .25s; }
+    .delay-3        { animation-delay: .4s; }
+    .glow-pulse     { animation: glow 3s ease-in-out infinite; }
+
+    /* ── Utils ── */
+    .section-label {
+      font-size: .7rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .display {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+      padding: 1rem 2rem;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all .2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-blue  { background: var(--blue); color: #fff; }
+    .btn-blue:hover  { opacity: .85; }
+    .btn-gold  { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+    .btn-gold:hover  { background: oklch(0.72 0.18 55 / .1); }
+    .btn-white { background: var(--fg); color: var(--bg); }
+    .btn-white:hover { opacity: .85; }
+
+    /* ── Navbar ── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      transition: all .4s;
+      padding: 0 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 9rem;
+    }
+    #navbar.scrolled {
+      height: 5rem;
+      background: oklch(0.1 0 0 / .9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    #navbar img { height: 6rem; width: auto; transition: height .4s; }
+    #navbar.scrolled img { height: 3rem; }
+
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a.foundation {
+      color: var(--gold);
+      border: 1px solid oklch(0.72 0.18 55 / .4);
+      padding: .4rem .75rem;
+    }
+    .nav-links a.foundation:hover { background: oklch(0.72 0.18 55 / .1); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .5rem; background: none; border: none; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--fg); transition: all .3s; }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem 2.5rem 1.5rem;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: fixed;
+      top: 5rem; left: 0; right: 0;
+      z-index: 99;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: .85rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .mobile-menu a.foundation { color: var(--gold); }
+
+    @media (max-width: 1024px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    /* ── Hero ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('public/images/hero-bg.jpg') center/cover no-repeat;
+      opacity: .7;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--bg) 0%, transparent 50%),
+                  linear-gradient(to left, oklch(0.1 0 0 / .5) 0%, transparent 67%),
+                  var(--bg) / 40%;
+      background: oklch(0.1 0 0 / .4);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, var(--bg) 0%, transparent 55%),
+        linear-gradient(to left, oklch(0.1 0 0 / .5) 0%, transparent 67%);
+    }
+    .hero-glow-blue {
+      position: absolute;
+      top: -2.5rem; left: -2.5rem;
+      width: 24rem; height: 24rem;
+      background: var(--blue);
+      opacity: .15;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .hero-glow-violet {
+      position: absolute;
+      top: 33%; right: -2.5rem;
+      width: 18rem; height: 18rem;
+      background: var(--violet);
+      opacity: .1;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 90rem;
+      margin: 0 auto;
+      padding: 11rem 2.5rem 6rem;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-size: .7rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-headline { font-size: clamp(4rem, 10vw, 10rem); margin-bottom: 2rem; }
+    .hero-headline .gold { color: var(--gold); }
+    .hero-headline .blue { color: var(--blue); }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 40rem;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 5rem; }
+
+    .hero-scroll {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      color: var(--muted);
+    }
+    .hero-scroll-line { width: 1px; height: 3rem; background: var(--border); }
+    .hero-scroll span { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; }
+
+    /* Seal stamp */
+    .seal {
+      position: absolute;
+      bottom: 6rem; right: 2.5rem;
+      z-index: 10;
+      transform: rotate(-15deg);
+      width: 10rem;
+    }
+
+    /* Marquee */
+    .marquee-bar {
+      position: relative;
+      z-index: 10;
+      border-top: 1px solid var(--border);
+      padding: 1rem 0;
+      overflow: hidden;
+      background: oklch(0.13 0 0 / .3);
+      backdrop-filter: blur(4px);
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 25s linear infinite;
+    }
+    .marquee-track span { display: flex; gap: 3rem; margin-right: 3rem; }
+    .marquee-item {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .marquee-item::before { content: '+'; color: var(--blue); margin-right: .75rem; }
+
+    /* ── Sections general ── */
+    .section { padding: 8rem 2.5rem; max-width: 90rem; margin: 0 auto; }
+    .section-full { padding: 8rem 0; position: relative; overflow: hidden; }
+
+    .bg-section {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+    }
+    .bg-overlay-lr {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--bg) 0%, oklch(0.1 0 0 / .6) 60%, oklch(0.1 0 0 / .2) 100%),
+                  linear-gradient(to top, var(--bg) 0%, transparent 60%);
+    }
+    .bg-overlay-tb {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, var(--bg) 0%, transparent 40%, var(--bg) 100%);
+    }
+    .section-inner { position: relative; z-index: 10; max-width: 90rem; margin: 0 auto; padding: 0 2.5rem; }
+
+    /* ── About ── */
+    #about .about-inner { max-width: 50rem; }
+    #about h2 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 2rem; }
+    #about h2 .blue { color: var(--blue); }
+    #about p { color: var(--muted); line-height: 1.7; max-width: 36rem; margin-bottom: 2.5rem; }
+
+    /* ── Services ── */
+    #services .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    #services h2 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 2rem; }
+    #services h2 .blue { color: var(--blue); }
+    #services .lead { color: var(--muted); line-height: 1.7; max-width: 28rem; }
+    .service-list { list-style: none; }
+    .service-list li {
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--fg);
+      transition: color .2s;
+    }
+    .service-list li:hover { color: var(--blue); }
+
+    @media (max-width: 768px) {
+      #services .services-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Podcast ── */
+    #podcast { border-top: 1px solid var(--border); }
+    #podcast .pod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    #podcast h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 2rem; }
+    #podcast h2 .blue { color: var(--blue); }
+    #podcast .lead { color: var(--muted); line-height: 1.7; max-width: 22rem; margin-bottom: 2.5rem; }
+
+    .platform-list { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2.5rem; }
+    .platform-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .85rem 1.25rem;
+      border: 1px solid var(--border);
+      background: var(--card);
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .platform-link:hover { background: var(--secondary); }
+    .platform-link .icon { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+    .platform-link .name { font-size: .85rem; font-weight: 600; color: var(--fg); }
+    .platform-link .arrow { margin-left: auto; font-size: .75rem; color: var(--muted); }
+
+    .ep-list { display: flex; flex-direction: column; gap: 1rem; }
+    .ep-card {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--card);
+      transition: border-color .2s, background .2s;
+    }
+    .ep-card:hover { border-color: oklch(0.6 0.22 255 / .5); background: var(--secondary); }
+    .ep-play {
+      width: 3rem; height: 3rem;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid oklch(0.6 0.22 255 / .4);
+      transition: all .2s;
+    }
+    .ep-card:hover .ep-play { background: var(--blue); border-color: var(--blue); }
+    .ep-play svg { width: 1rem; height: 1rem; color: var(--blue); fill: currentColor; }
+    .ep-card:hover .ep-play svg { color: #fff; }
+    .ep-meta { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: .25rem; }
+    .ep-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; color: var(--fg); }
+    .ep-soon { font-size: .75rem; color: var(--muted); margin-left: auto; flex-shrink: 0; }
+    .ep-more {
+      border: 1px dashed var(--border);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      #podcast .pod-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Music ── */
+    #music .music-content { max-width: 40rem; }
+    #music h2 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 2rem; }
+    #music h2 .gold { color: var(--gold); }
+    #music .lead { color: var(--muted); line-height: 1.7; margin-bottom: 3rem; }
+    .music-services {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      margin-bottom: 3rem;
+    }
+    .music-service-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: .875rem;
+      font-weight: 500;
+    }
+    .music-service-item::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+    .stream-links { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2.5rem; }
+    @media (min-width: 640px) { .stream-links { flex-direction: row; } }
+
+    /* ── Merch ── */
+    #merch {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 6rem 2.5rem;
+    }
+    #merch .merch-inner { max-width: 90rem; margin: 0 auto; }
+    .merch-header {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+    @media (min-width: 768px) {
+      .merch-header { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+    }
+    #merch h2 { font-size: clamp(2.5rem, 6vw, 5rem); }
+    #merch h2 .blue { color: var(--blue); }
+    .merch-desc { max-width: 22rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .product-card {
+      border: 1px solid var(--border);
+      background: var(--bg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .3s;
+    }
+    .product-card:hover { border-color: oklch(0.6 0.22 255 / .5); }
+    .product-img {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+    .product-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: .75;
+      transition: opacity .5s, transform .5s;
+    }
+    .product-card:hover .product-img img { opacity: .9; transform: scale(1.05); }
+    .product-accent {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .product-body { padding: 1.25rem; }
+    .product-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      margin-bottom: .5rem;
+    }
+    .product-desc { font-size: .75rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── Studio ── */
+    #studio h2 { font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 2rem; }
+    #studio h2 .blue { color: var(--blue); }
+    #studio .lead { color: var(--muted); line-height: 1.7; max-width: 36rem; margin-bottom: 3rem; }
+    .studio-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .studio-feature {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      background: oklch(0.13 0 0 / .5);
+      backdrop-filter: blur(4px);
+      font-size: .875rem;
+      font-weight: 500;
+    }
+    .studio-feature::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+
+    /* ── Founders ── */
+    #founders {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 6rem 2.5rem;
+    }
+    #founders .founders-inner { max-width: 90rem; margin: 0 auto; }
+    .founders-header { text-align: center; margin-bottom: 5rem; }
+    .founders-header h2 { font-size: clamp(2.5rem, 6vw, 5rem); }
+    .founders-header h2 .blue { color: var(--blue); }
+    .founders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem 4rem; }
+    @media (max-width: 768px) { .founders-grid { grid-template-columns: 1fr; } }
+    .founder-img {
+      position: relative;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .founder-img img { width: 100%; height: 100%; object-fit: cover; opacity: .9; }
+    .founder-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--card) 0%, transparent 60%);
+    }
+    .founder-accent {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 6rem; height: 4px;
+      z-index: 2;
+    }
+    .founder-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 2.25rem;
+      text-transform: uppercase;
+      margin-bottom: .25rem;
+    }
+    .founder-role { font-size: .75rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 1rem; }
+    .founder-bio { color: var(--muted); line-height: 1.7; margin-bottom: 1rem; font-size: .9rem; }
+    .founder-focus { color: var(--fg); line-height: 1.7; font-size: .9rem; }
+
+    /* ── Community ── */
+    #community { text-align: center; }
+    #community .community-label { font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 2rem; }
+    .big-40 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(6rem, 20vw, 16rem);
+      line-height: 1;
+      color: var(--gold);
+    }
+    .big-40-sub { font-size: 1.1rem; color: var(--fg); margin-top: -2rem; margin-bottom: 2rem; }
+    #community h2 { font-size: clamp(2rem, 5vw, 4rem); max-width: 55rem; margin: 0 auto 2rem; }
+    #community h2 .gold { color: var(--gold); }
+    #community .lead { color: var(--muted); line-height: 1.7; max-width: 44rem; margin: 0 auto 3rem; }
+    #community .lead a { color: var(--gold); }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 4rem;
+      text-align: left;
+    }
+    .impact-card {
+      padding: 1.5rem;
+      border: 1px solid oklch(0.72 0.18 55 / .25);
+      background: oklch(0.13 0 0 / .6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      gap: 1rem;
+    }
+    .impact-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+      margin-top: .45rem;
+    }
+    .impact-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      margin-bottom: .5rem;
+    }
+    .impact-desc { font-size: .825rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── Newsletter ── */
+    #newsletter {
+      background: var(--secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 6rem 2.5rem;
+      text-align: center;
+    }
+    #newsletter h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; }
+    #newsletter h2 .blue { color: var(--blue); }
+    #newsletter .lead { color: var(--muted); line-height: 1.7; max-width: 28rem; margin: 0 auto 2.5rem; }
+    .newsletter-form { display: flex; gap: 1rem; max-width: 28rem; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .newsletter-form input {
+      flex: 1;
+      min-width: 200px;
+      padding: 1rem 1.25rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-size: .875rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .newsletter-form input:focus { border-color: var(--blue); }
+    .newsletter-form input::placeholder { color: var(--muted); }
+    .newsletter-success {
+      display: none;
+      padding: 1rem 2rem;
+      border: 1px solid oklch(0.6 0.22 255 / .5);
+      background: oklch(0.6 0.22 255 / .1);
+      color: var(--blue);
+      font-size: .875rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+    }
+    .socials { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-top: 3rem; }
+    .socials a { color: var(--muted); transition: color .2s; text-decoration: none; }
+    .socials a:hover { color: var(--fg); }
+    .socials svg { width: 1.25rem; height: 1.25rem; fill: currentColor; display: block; }
+
+    /* ── Contact ── */
+    #contact {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 6rem 2.5rem;
+    }
+    #contact .contact-inner { max-width: 90rem; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    @media (max-width: 768px) { #contact .contact-inner { grid-template-columns: 1fr; } }
+    #contact h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 2rem; }
+    #contact h2 .blue { color: var(--blue); }
+    #contact .lead { color: var(--muted); line-height: 1.7; max-width: 22rem; margin-bottom: 3rem; }
+    .contact-detail { margin-bottom: 1rem; }
+    .contact-detail-label { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: .25rem; }
+    .contact-detail-val { font-size: .875rem; font-weight: 500; color: var(--fg); }
+    .contact-detail-val a { color: var(--gold); text-decoration: underline; text-underline-offset: 4px; }
+    .contact-divider { border-top: 1px solid var(--border); padding-top: 2.5rem; margin-top: 2.5rem; }
+
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .form-group label span { color: var(--blue); }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: .75rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-size: .875rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s;
+      appearance: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--blue); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--muted); }
+    .form-group select option { background: var(--bg); }
+    .form-group textarea { resize: none; }
+    .form-success {
+      display: none;
+      border: 1px solid oklch(0.6 0.22 255 / .4);
+      background: oklch(0.6 0.22 255 / .05);
+      padding: 3rem;
+      text-align: center;
+    }
+    .form-success-icon {
+      width: 3rem; height: 3rem;
+      border: 2px solid var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .form-success-icon svg { width: 1.25rem; height: 1.25rem; stroke: var(--blue); fill: none; stroke-width: 2.5; }
+    .form-success h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; margin-bottom: .75rem; }
+    .form-success p { color: var(--muted); font-size: .875rem; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 4rem 2.5rem;
+    }
+    .footer-inner { max-width: 90rem; margin: 0 auto; }
+    .footer-top {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 768px) {
+      .footer-top { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+    }
+    footer img { height: 5rem; width: auto; margin-bottom: .5rem; }
+    .footer-tagline { font-size: .875rem; color: var(--muted); font-style: italic; }
+    .footer-nav { display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; list-style: none; }
+    .footer-nav a { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-nav a:hover { color: var(--fg); }
+    .footer-nav a.gold { color: var(--gold); }
+    .footer-bottom { display: flex; flex-direction: column; gap: 1rem; font-size: .75rem; color: var(--muted); }
+    @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
+    .footer-bottom a { color: var(--gold); text-decoration: underline; text-underline-offset: 4px; }
+    .footer-watermark { display: flex; justify-content: center; overflow: hidden; margin-top: 2rem; opacity: .06; pointer-events: none; }
+    .footer-watermark img { width: 70vw; max-width: 48rem; height: auto; }
+
+    .pod-sticky { position: sticky; top: 6rem; }
+
+    @media (max-width: 768px) {
+      .pod-sticky { position: static; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-content { padding-top: 8rem; }
+      .seal { display: none; }
+      #navbar { padding: 0 1.25rem; }
+      .section { padding: 4rem 1.25rem; }
+      #merch, #founders, #contact, #newsletter { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .section-inner { padding: 0 1.25rem; }
+      .section-full { padding: 3rem 0; }
+      /* Reduce inner padding on full-bleed sections */
+      .section-inner > div[style*="padding:6rem"] { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+      .section-inner > div[style*="padding: 6rem"] { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+      /* Services inner grid */
+      .services-grid > div:first-child { margin-bottom: 2rem; }
+      .section-pad { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<header>
+  <nav id="navbar">
+    <a href="#hero" aria-label="Suq Media home">
+      <img src="public/images/logo.png" alt="Suq Media" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#podcast">Podcast</a></li>
+      <li><a href="#music">Music</a></li>
+      <li><a href="#merch">Merch</a></li>
+      <li><a href="#studio">Studio Rental</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="foundation">Foundation ↗</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#podcast" class="mobile-link">Podcast</a>
+    <a href="#music" class="mobile-link">Music</a>
+    <a href="#merch" class="mobile-link">Merch</a>
+    <a href="#studio" class="mobile-link">Studio Rental</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+    <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="foundation">Foundation ↗</a>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-glow-blue"></div>
+  <div class="hero-glow-violet"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow fade-up">Est. 2024 — A Creative Movement</p>
+    <h1 class="display hero-headline fade-up delay-1">
+      <span style="color:var(--fg)">Media.</span><br>
+      <span style="color:var(--fg)">Music.</span><br>
+      <span class="blue">Fashion.</span><br>
+      <span class="gold">Purpose.</span>
+    </h1>
+    <p class="hero-sub fade-up delay-2">
+      Suq Media is a creative movement using storytelling, culture, production and apparel to inspire healing, hope and community impact.
+    </p>
+    <div class="hero-btns fade-up delay-3">
+      <a href="#about" class="btn btn-blue glow-pulse">Explore Suq Media</a>
+      <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Support the Foundation ↗</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </div>
+
+  <!-- Seal stamp -->
+  <svg class="seal" viewBox="0 0 160 160" aria-hidden="true">
+    <circle cx="80" cy="80" r="78" fill="none" stroke="var(--gold)" stroke-width="3"/>
+    <circle cx="80" cy="80" r="68" fill="none" stroke="var(--gold)" stroke-width="1" stroke-dasharray="4,4"/>
+    <circle cx="80" cy="80" r="40" fill="none" stroke="var(--gold)" stroke-width="1"/>
+    <circle cx="80" cy="15" r="2" fill="var(--gold)"/>
+    <circle cx="60" cy="20" r="1.5" fill="var(--gold)"/>
+    <circle cx="100" cy="20" r="1.5" fill="var(--gold)"/>
+    <circle cx="80" cy="145" r="2" fill="var(--gold)"/>
+    <circle cx="60" cy="140" r="1.5" fill="var(--gold)"/>
+    <circle cx="100" cy="140" r="1.5" fill="var(--gold)"/>
+    <defs>
+      <path id="topCurve" d="M 30,80 A 50,50 0 0,1 130,80" fill="none"/>
+      <path id="bottomCurve" d="M 130,80 A 50,50 0 0,1 30,80" fill="none"/>
+    </defs>
+    <text font-size="10" font-weight="700" letter-spacing="1" fill="var(--gold)" text-anchor="middle">
+      <textPath href="#topCurve" startOffset="50%" text-anchor="middle">MARKIN K KOSSOWSKI</textPath>
+    </text>
+    <text font-size="10" font-weight="700" letter-spacing="1" fill="var(--gold)" text-anchor="middle">
+      <textPath href="#bottomCurve" startOffset="50%" text-anchor="middle">FOUNDATION FOR HOPE</textPath>
+    </text>
+    <text x="80" y="90" font-size="32" font-weight="900" text-anchor="middle" fill="var(--gold)" font-family="'Barlow Condensed',sans-serif">40%</text>
+    <text x="80" y="110" font-size="8" font-weight="700" text-anchor="middle" fill="var(--gold)" letter-spacing="1">GOES TO</text>
+  </svg>
+
+  <!-- Marquee bar -->
+  <div class="marquee-bar">
+    <div class="marquee-track">
+      <span>
+        <span class="marquee-item">Podcast Production</span>
+        <span class="marquee-item">Music Production</span>
+        <span class="marquee-item">Artist Development</span>
+        <span class="marquee-item">Custom Apparel</span>
+        <span class="marquee-item">DTF Printing</span>
+        <span class="marquee-item">Studio Rental</span>
+        <span class="marquee-item">Community Impact</span>
+        <span class="marquee-item">Storytelling</span>
+        <span class="marquee-item">Independent Distribution</span>
+        <span class="marquee-item">Merch &amp; Streetwear</span>
+        <span class="marquee-item">Healing + Hope</span>
+      </span>
+      <span>
+        <span class="marquee-item">Podcast Production</span>
+        <span class="marquee-item">Music Production</span>
+        <span class="marquee-item">Artist Development</span>
+        <span class="marquee-item">Custom Apparel</span>
+        <span class="marquee-item">DTF Printing</span>
+        <span class="marquee-item">Studio Rental</span>
+        <span class="marquee-item">Community Impact</span>
+        <span class="marquee-item">Storytelling</span>
+        <span class="marquee-item">Independent Distribution</span>
+        <span class="marquee-item">Merch &amp; Streetwear</span>
+        <span class="marquee-item">Healing + Hope</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ── About ── -->
+<section class="section-full" id="about">
+  <div class="bg-section" style="background-image:url('public/images/about-bg.jpg');opacity:.5;"></div>
+  <div class="bg-overlay-lr"></div>
+  <div class="section-inner" style="padding-top:2rem;padding-bottom:2rem;">
+    <div class="about-inner section-pad" style="padding:6rem 0;">
+      <p class="section-label">01 — About</p>
+      <h2 class="display" style="font-size:clamp(2.5rem,6vw,5rem);margin-bottom:2rem;">
+        <span style="display:block">Media is more than</span>
+        <span style="display:block">entertainment.</span>
+        <span style="display:block;color:var(--blue)">It's transformation.</span>
+      </h2>
+      <p style="color:var(--muted);line-height:1.7;max-width:36rem;margin-bottom:2.5rem;">
+        Through storytelling, music, fashion, podcasting and creative production, we exist to inspire hope, empower people and create meaningful conversations around the human experience.
+      </p>
+      <a href="#contact" class="btn btn-gold">Start A Conversation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Services ── -->
+<section class="section-full" id="services">
+  <div class="bg-section" style="background-image:url('public/images/services-bg.jpg');opacity:.5;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,var(--bg) 0%,oklch(0.1 0 0/.5) 60%,oklch(0.1 0 0/.2) 100%),linear-gradient(to bottom,oklch(0.1 0 0/.5) 0%,transparent 40%,var(--bg) 100%);"></div>
+  <div class="section-inner" style="padding-top:2rem;padding-bottom:2rem;">
+    <div class="services-grid section-pad" style="padding:6rem 0;">
+      <div>
+        <p class="section-label">02 — What We Do</p>
+        <h2 class="display" style="font-size:clamp(2.5rem,6vw,5rem);">
+          <span style="display:block;">Built for</span>
+          <span style="display:block;color:var(--blue);">Creators</span>
+        </h2>
+        <p style="color:var(--muted);line-height:1.7;margin-top:2rem;max-width:28rem;">From the streets to the studio, every service is designed to amplify your vision and expand your impact.</p>
+      </div>
+      <div>
+        <ul class="service-list">
+          <li>Podcast Production</li>
+          <li>Music Production</li>
+          <li>Content Creation</li>
+          <li>Merch &amp; Streetwear</li>
+          <li>Studio Rental</li>
+          <li>Community Projects</li>
+        </ul>
+        <a href="#contact" class="btn btn-gold" style="margin-top:2.5rem;">Explore Services →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Podcast ── -->
+<div class="section" id="podcast" style="max-width:90rem;">
+  <div class="pod-grid">
+    <!-- Left sticky -->
+    <div class="pod-sticky">
+      <p class="section-label">03 — Podcast</p>
+      <h2 class="display" style="font-size:clamp(2.5rem,5vw,4rem);margin-bottom:2rem;">
+        <span style="display:block;">Podcasting</span>
+        <span style="display:block;">That Starts</span>
+        <span style="display:block;color:var(--blue);">Real</span>
+        <span style="display:block;">Conversations</span>
+      </h2>
+      <p class="lead">Suq Media creates and produces podcasts that explore culture, healing, recovery, resilience, identity, creativity and the human experience.</p>
+
+      <p style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Listen &amp; Watch</p>
+      <div class="platform-list">
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+          <svg class="icon" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span class="name">Watch on YouTube</span>
+          <span class="arrow">↗</span>
+        </a>
+        <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+          <svg class="icon" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+          <span class="name">Listen on Spotify</span>
+          <span class="arrow">↗</span>
+        </a>
+        <a href="https://podcasts.apple.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+          <svg class="icon" viewBox="0 0 24 24" fill="#9b59b6"><path d="M12.003 0C5.379 0 0 5.379 0 12.003 0 18.628 5.379 24 12.003 24 18.628 24 24 18.628 24 12.003 24 5.379 18.628 0 12.003 0zm0 4.367c4.19 0 7.606 3.416 7.606 7.606 0 4.19-3.416 7.606-7.606 7.606-4.19 0-7.606-3.416-7.606-7.606 0-4.19 3.416-7.606 7.606-7.606zm0 2.09c-3.04 0-5.516 2.476-5.516 5.516s2.476 5.516 5.516 5.516 5.516-2.476 5.516-5.516-2.476-5.516-5.516-5.516zm0 2.62c.862 0 1.56.698 1.56 1.56 0 .617-.36 1.15-.883 1.41l.31 3.098a.316.316 0 0 1-.315.346h-1.344a.316.316 0 0 1-.315-.346l.31-3.098a1.559 1.559 0 0 1-.883-1.41c0-.862.698-1.56 1.56-1.56z"/></svg>
+          <span class="name">Listen on Apple Podcasts</span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+      <a href="#contact" class="btn btn-blue">Book Podcast Production →</a>
+    </div>
+
+    <!-- Right: episodes -->
+    <div>
+      <p style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">Featured Episodes</p>
+      <div class="ep-list">
+        <div class="ep-card">
+          <div class="ep-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div>
+            <p class="ep-meta">EP 001 — Recovery &amp; Resilience</p>
+            <h3 class="ep-title">Building Through Brokenness</h3>
+          </div>
+          <span class="ep-soon">Coming Soon</span>
+        </div>
+        <div class="ep-card">
+          <div class="ep-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div>
+            <p class="ep-meta">EP 002 — Mental Wellness</p>
+            <h3 class="ep-title">The Culture of Healing</h3>
+          </div>
+          <span class="ep-soon">Coming Soon</span>
+        </div>
+        <div class="ep-card">
+          <div class="ep-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <div>
+            <p class="ep-meta">EP 003 — Creativity &amp; Impact</p>
+            <h3 class="ep-title">Creating With Purpose</h3>
+          </div>
+          <span class="ep-soon">Coming Soon</span>
+        </div>
+        <div class="ep-more">More episodes coming soon</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Music ── -->
+<section class="section-full" id="music" style="border-top:1px solid var(--border);">
+  <div class="bg-section" style="background-image:url('public/images/music-bg.jpg');opacity:.5;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to right,var(--bg) 0%,oklch(0.1 0 0/.5) 60%,oklch(0.1 0 0/.2) 100%);"></div>
+  <div class="section-inner" style="padding-top:2rem;padding-bottom:2rem;">
+    <div class="music-content" style="padding:6rem 0;">
+      <p class="section-label">04 — Music</p>
+      <h2 class="display" style="font-size:clamp(2.5rem,6vw,5rem);margin-bottom:2rem;">
+        <span style="display:block;">Music</span>
+        <span style="display:block;color:var(--gold);">With</span>
+        <span style="display:block;">Meaning</span>
+      </h2>
+      <p style="color:var(--muted);line-height:1.7;margin-bottom:3rem;max-width:36rem;">
+        From music production and artist development to independent distribution, Suq Media helps artists create, release and share work that carries purpose, culture and emotion.
+      </p>
+      <div class="music-services">
+        <span class="music-service-item">Music Production</span>
+        <span class="music-service-item">Artist Development</span>
+        <span class="music-service-item">Independent Distribution</span>
+        <span class="music-service-item">Recording Sessions</span>
+        <span class="music-service-item">Mixing &amp; Mastering</span>
+        <span class="music-service-item">Creative Direction</span>
+      </div>
+
+      <p style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;">Stream Our Music</p>
+      <div class="stream-links">
+        <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="platform-link" style="flex:1;">
+          <svg class="icon" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+          <span class="name">Listen on Spotify</span>
+          <span class="arrow">↗</span>
+        </a>
+        <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" class="platform-link" style="flex:1;">
+          <svg class="icon" viewBox="0 0 24 24" fill="#fc3c44"><path d="M23.994 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 0 0-1.877-.726 10.496 10.496 0 0 0-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026C4.786.07 4.043.15 3.34.428 2.004.958 1.04 1.88.475 3.208a5.495 5.495 0 0 0-.36 1.548c-.062.625-.068 1.252-.079 1.878v9.754c.012.58.018 1.16.07 1.737.124 1.346.56 2.554 1.497 3.54.71.748 1.597 1.2 2.571 1.454a8.756 8.756 0 0 0 1.815.237c.35.015.7.02 1.05.02h9.38c.48 0 .96-.01 1.44-.04.76-.047 1.502-.179 2.198-.5 1.319-.605 2.222-1.589 2.7-2.961.2-.565.29-1.15.345-1.745.05-.554.055-1.11.058-1.664V6.124z"/></svg>
+          <span class="name">Listen on Apple Music</span>
+          <span class="arrow">↗</span>
+        </a>
+      </div>
+      <a href="#contact" class="btn btn-gold">Work With The Music Studio →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Merch ── -->
+<section id="merch">
+  <div class="merch-inner">
+    <div class="merch-header">
+      <div>
+        <p class="section-label">05 — Merch Store</p>
+        <h2 class="display">
+          <span style="display:block;">Fashion</span>
+          <span style="display:block;">Built With</span>
+          <span style="display:block;color:var(--blue);">Purpose</span>
+        </h2>
+      </div>
+      <div>
+        <p class="merch-desc">Premium custom clothing, streetwear, merch, recovery collections and branded merchandise for creators, businesses, organizations, artists and communities.</p>
+        <a href="#" class="btn btn-white">Shop Merch →</a>
+      </div>
+    </div>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-img">
+          <img src="public/images/merch-hoodie.jpg" alt="Suq Media Hoodie" />
+          <div class="product-accent" style="background:var(--blue);"></div>
+        </div>
+        <div class="product-body">
+          <h3 class="display product-name">Suq Media Hoodie</h3>
+          <p class="product-desc">Premium black hoodie with embroidered Suq Media logo.</p>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">
+          <img src="public/images/merch-tee.jpg" alt="People Suq Tee" />
+          <div class="product-accent" style="background:var(--violet);"></div>
+        </div>
+        <div class="product-body">
+          <h3 class="display product-name">People Suq Tee</h3>
+          <p class="product-desc">Classic black t-shirt with bold People Suq slogan.</p>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">
+          <img src="public/images/merch-cap.jpg" alt="Suq Media Cap" />
+          <div class="product-accent" style="background:var(--gold);"></div>
+        </div>
+        <div class="product-body">
+          <h3 class="display product-name">Suq Media Cap</h3>
+          <p class="product-desc">Premium snapback with embroidered Suq Media branding.</p>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">
+          <img src="public/images/merch-crewneck.jpg" alt="People Suq Crewneck" />
+          <div class="product-accent" style="background:oklch(0.5 0.22 25);"></div>
+        </div>
+        <div class="product-body">
+          <h3 class="display product-name">People Suq Crewneck</h3>
+          <p class="product-desc">Luxury crewneck sweatshirt with People Suq graphic.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Studio ── -->
+<section class="section-full" id="studio">
+  <div class="bg-section" style="background-image:url('public/images/studio-bg.jpg');opacity:.5;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,oklch(0.1 0 0/.45) 50%,oklch(0.1 0 0/.2) 100%),linear-gradient(to right,oklch(0.1 0 0/.8) 0%,oklch(0.1 0 0/.4) 50%,transparent 100%);"></div>
+  <div class="section-inner" style="padding-top:2rem;padding-bottom:2rem;">
+    <div style="max-width:44rem;padding:6rem 0;">
+      <p class="section-label">06 — Studio Rental</p>
+      <h2 class="display" style="font-size:clamp(2.5rem,6vw,5rem);margin-bottom:2rem;">
+        <span style="display:block;">Rent</span>
+        <span style="display:block;color:var(--blue);">The</span>
+        <span style="display:block;">Studio</span>
+      </h2>
+      <p style="color:var(--muted);line-height:1.7;max-width:36rem;margin-bottom:3rem;">
+        Suq Media offers podcast and music studio rental for creators, artists, entrepreneurs, community leaders and storytellers who need a professional creative space.
+      </p>
+      <div class="studio-features">
+        <div class="studio-feature">Podcast recording</div>
+        <div class="studio-feature">Music sessions</div>
+        <div class="studio-feature">Content creation</div>
+        <div class="studio-feature">Artist interviews</div>
+        <div class="studio-feature">Voice recording</div>
+        <div class="studio-feature">Creative production</div>
+      </div>
+      <a href="#contact" class="btn btn-blue glow-pulse">Book Studio Time →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Founders ── -->
+<section id="founders">
+  <div class="founders-inner">
+    <div class="founders-header">
+      <p class="section-label" style="justify-content:center;display:flex;">The People Behind Suq Media</p>
+      <h2 class="display">
+        <span style="color:var(--fg);">Built From </span>
+        <span style="color:var(--blue);">Real Stories</span>
+      </h2>
+    </div>
+    <div class="founders-grid">
+      <!-- Kerry -->
+      <div>
+        <div class="founder-img">
+          <img src="public/images/founder-kerry.jpg" alt="Kerry — Co-Founder" />
+          <div class="founder-accent" style="background:var(--gold);"></div>
+        </div>
+        <h3 class="founder-name">Kerry</h3>
+        <p class="founder-role" style="color:var(--gold);">Co-Founder</p>
+        <p class="founder-bio">Kerry's journey through addiction, healing, self-discovery and personal transformation has shaped the heart behind Suq Media. With 23 years clean and sober, 13 years of postsecondary education and a lifetime of real-world experiences, she brings raw honesty, emotional depth and a passion for understanding the human condition.</p>
+        <p class="founder-focus">Through storytelling, wellness, and meaningful conversations, Kerry hopes to inspire growth, emotional maturity, and hope in others while challenging mainstream narratives around healing and personal evolution.</p>
+      </div>
+      <!-- Krzysztof -->
+      <div>
+        <div class="founder-img">
+          <img src="public/images/founder-kris.jpg" alt="Krzysztof — Co-Founder" />
+          <div class="founder-accent" style="background:var(--blue);"></div>
+        </div>
+        <h3 class="founder-name">Krzysztof</h3>
+        <p class="founder-role" style="color:var(--blue);">Co-Founder</p>
+        <p class="founder-bio">As co-founder of Suq Media, Krzysztof leads the company's audio, video and digital production with a unique blend of technical skill and creative vision. With a background in IT, telecommunications and computer science, he now uses media as a platform for transformation, recovery and social impact.</p>
+        <p class="founder-focus">Having overcome addiction himself, Kris is passionate about creating authentic content that breaks stigma, encourages healing and gives a voice to stories that matter. Outside the studio, he finds inspiration in woodworking and aviation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Community ── -->
+<section class="section-full" id="community">
+  <div class="bg-section" style="background-image:url('public/images/community-bg.jpg');opacity:.5;"></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,var(--bg) 0%,oklch(0.1 0 0/.4) 40%,var(--bg) 100%);"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,oklch(0.72 0.18 55/.15) 0%,transparent 50%);"></div>
+  <div class="section-inner" style="padding-top:2rem;padding-bottom:2rem;">
+    <div style="padding:6rem 0;text-align:center;">
+      <p class="community-label">07 — Community Impact</p>
+      <p class="big-40">40%</p>
+      <p class="big-40-sub">of every dollar we earn goes directly to the Foundation</p>
+      <h2 class="display" style="font-size:clamp(2rem,5vw,4rem);max-width:55rem;margin:0 auto 2rem;">
+        <span style="color:var(--fg);">This Isn't Charity. </span>
+        <span style="color:var(--gold);">It's Why We Exist.</span>
+      </h2>
+      <p style="color:var(--muted);line-height:1.7;max-width:44rem;margin:0 auto 3rem;">
+        Suq Media was built with purpose at its core. We're proudly connected to the
+        <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" style="color:var(--gold);text-decoration:underline;text-underline-offset:4px;font-weight:600;">Markin K Kossowski Foundation for Hope</a>,
+        a nonprofit dedicated to supporting individuals and communities facing mental health challenges, addiction, poverty and homelessness. This isn't a marketing line. It's a commitment written into everything we do.
+      </p>
+      <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="btn" style="background:var(--gold);color:#0a0a0a;display:inline-flex;">Learn About The Foundation ↗</a>
+
+      <p style="font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:5rem;margin-bottom:2.5rem;">Where The Money Goes</p>
+      <div class="impact-grid" style="text-align:left;">
+        <div class="impact-card"><div class="impact-dot"></div><div><h3 class="impact-title">Mental Health</h3><p class="impact-desc">Breaking stigma and providing resources for mental wellness</p></div></div>
+        <div class="impact-card"><div class="impact-dot"></div><div><h3 class="impact-title">Addiction Recovery</h3><p class="impact-desc">Supporting those on the path to sobriety and healing</p></div></div>
+        <div class="impact-card"><div class="impact-dot"></div><div><h3 class="impact-title">Poverty Reduction</h3><p class="impact-desc">Creating opportunities and pathways out of poverty</p></div></div>
+        <div class="impact-card"><div class="impact-dot"></div><div><h3 class="impact-title">Homelessness</h3><p class="impact-desc">Addressing housing insecurity with dignity and care</p></div></div>
+        <div class="impact-card"><div class="impact-dot"></div><div><h3 class="impact-title">Youth Empowerment</h3><p class="impact-desc">Investing in the next generation of changemakers</p></div></div>
+        <div class="impact-card"><div class="impact-dot"></div><div><h3 class="impact-title">Community Wellness</h3><p class="impact-desc">Building healthier, more connected communities</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Newsletter ── -->
+<section id="newsletter">
+  <p class="section-label" style="justify-content:center;display:flex;">Stay Connected</p>
+  <h2 class="display" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:1rem;">
+    <span style="color:var(--fg);">Follow The </span>
+    <span style="color:var(--blue);">Journey</span>
+  </h2>
+  <p class="lead" style="color:var(--muted);line-height:1.7;max-width:28rem;margin:0 auto 2.5rem;">Get updates on new episodes, music drops, merch releases and stories from the Suq Media community. No spam, just purpose.</p>
+
+  <form class="newsletter-form" id="newsletterForm">
+    <input type="email" placeholder="Enter your email" required />
+    <button type="submit" class="btn btn-blue" style="padding:.85rem 1.5rem;">Join</button>
+  </form>
+  <div class="newsletter-success" id="newsletterSuccess">
+    You're in. Welcome to the movement.
+  </div>
+
+  <div class="socials">
+    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+      <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+    <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+      <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+    </a>
+    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="X">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ── Contact ── -->
+<section id="contact">
+  <div class="contact-inner">
+    <div>
+      <p class="section-label">09 — Contact</p>
+      <h2 class="display">
+        <span style="display:block;">Let's Create</span>
+        <span style="display:block;">Something</span>
+        <span style="display:block;color:var(--blue);">That Matters</span>
+      </h2>
+      <p class="lead">Whether you want to book a session, collaborate, design custom apparel, or support the mission, we want to hear from you.</p>
+      <div class="contact-divider">
+        <div class="contact-detail">
+          <p class="contact-detail-label">Email</p>
+          <p class="contact-detail-val">hello@suqmedia.com</p>
+        </div>
+        <div class="contact-detail">
+          <p class="contact-detail-label">Foundation</p>
+          <p class="contact-detail-val"><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">markinkkossowskifoundation.org ↗</a></p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name">Name <span>*</span></label>
+          <input id="name" name="name" type="text" required placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email <span>*</span></label>
+          <input id="email" name="email" type="email" required placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="interest">What are you interested in? <span>*</span></label>
+          <select id="interest" name="interest" required>
+            <option value="" disabled selected>Select an option</option>
+            <option>Podcast Production</option>
+            <option>Music Production</option>
+            <option>Studio Rental</option>
+            <option>Custom Apparel</option>
+            <option>Merch</option>
+            <option>Collaboration</option>
+            <option>Foundation / Community Impact</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message <span>*</span></label>
+          <textarea id="message" name="message" required rows="5" placeholder="Tell us about your project..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-blue glow-pulse" style="width:100%;justify-content:center;">Send Message</button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <div class="form-success-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3 class="display">Message Received</h3>
+        <p>We'll be in touch soon. Thanks for reaching out.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="public/images/logo.png" alt="Suq Media" />
+        <p class="footer-tagline">Creativity. Culture. Healing. Hope.</p>
+      </div>
+      <ul class="footer-nav">
+        <li><a href="#about">About</a></li>
+        <li><a href="#podcast">Podcast</a></li>
+        <li><a href="#music">Music</a></li>
+        <li><a href="#merch">Merch</a></li>
+        <li><a href="#studio">Studio Rental</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="gold">Foundation ↗</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> Suq Media. All rights reserved.</p>
+      <p style="max-width:28rem;text-align:right;">40% of profits support the <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">Markin K Kossowski Foundation for Hope</a>.</p>
+    </div>
+  </div>
+  <div class="footer-watermark" aria-hidden="true">
+    <img src="public/images/logo.png" alt="" />
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Hamburger
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburgerBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburgerBtn.setAttribute('aria-expanded', open);
+    hamburgerBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+      hamburgerBtn.setAttribute('aria-label', 'Open menu');
+    });
+  });
+
+  // Newsletter form
+  document.getElementById('newsletterForm').addEventListener('submit', e => {
+    e.preventDefault();
+    e.target.style.display = 'none';
+    document.getElementById('newsletterSuccess').style.display = 'inline-flex';
+  });
+
+  // Contact form
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    e.target.style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  });
+</script>
+</body>
+</html>
