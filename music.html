@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music — Suq Media</title>
+  <meta name="description" content="Discover music that means something. Real artists. Independent music worth hearing — curated by Suq Media." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0a;
+      --card:      #111111;
+      --secondary: #181818;
+      --border:    #262626;
+      --fg:        #edece8;
+      --muted:     #7a7a7a;
+      --blue:      oklch(0.55 0.28 292);
+      --gold:      oklch(0.72 0.18 55);
+      --violet:    oklch(0.42 0.28 292);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); overflow-x: hidden; }
+
+    /* ── Animations ── */
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes fadeUp  { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes glow    { 0%,100% { box-shadow: 0 0 20px oklch(0.55 0.28 292 / .4); } 50% { box-shadow: 0 0 40px oklch(0.55 0.28 292 / .7); } }
+    @keyframes spin    { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .fade-up    { animation: fadeUp .8s ease both; }
+    .delay-1    { animation-delay: .1s; }
+    .delay-2    { animation-delay: .25s; }
+    .delay-3    { animation-delay: .4s; }
+    .glow-pulse { animation: glow 3s ease-in-out infinite; }
+
+    /* ── Utils ── */
+    .section-label {
+      font-size: .7rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--blue); font-weight: 700; margin-bottom: 1.5rem;
+    }
+    .display {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; text-transform: uppercase; line-height: 1;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: .75rem;
+      padding: 1rem 2rem; font-size: .75rem; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase; text-decoration: none;
+      transition: all .2s; cursor: pointer; border: none;
+    }
+    .btn-blue  { background: var(--blue); color: #fff; }
+    .btn-blue:hover  { opacity: .85; }
+    .btn-gold  { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+    .btn-gold:hover  { background: oklch(0.72 0.18 55 / .1); }
+    .btn-white { background: var(--fg); color: var(--bg); }
+    .btn-white:hover { opacity: .85; }
+    .btn-ghost { border: 1px solid var(--border); color: var(--fg); background: transparent; }
+    .btn-ghost:hover { border-color: oklch(0.55 0.28 292 / .5); background: oklch(0.55 0.28 292 / .05); }
+
+    /* ── Navbar ── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: all .4s; padding: 0 2.5rem;
+      display: flex; align-items: center; justify-content: space-between; height: 9rem;
+    }
+    #navbar.scrolled {
+      height: 5rem; background: oklch(0.1 0 0 / .9);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+    }
+    #navbar img { height: 6rem; width: auto; transition: height .4s; }
+    #navbar.scrolled img { height: 3rem; }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a.active { color: var(--blue); }
+    .nav-links a.foundation {
+      color: var(--gold); border: 1px solid oklch(0.72 0.18 55 / .4); padding: .4rem .75rem;
+    }
+    .nav-links a.foundation:hover { background: oklch(0.72 0.18 55 / .1); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > a { display: inline-flex; align-items: center; gap: .35rem; cursor: pointer; }
+    .nav-dropdown > a::after { content: '▾'; font-size: .55rem; transition: transform .2s; }
+    .nav-dropdown:hover > a::after { transform: rotate(180deg); }
+    .dropdown-menu { position: absolute; top: calc(100% + 1rem); left: 0; background: oklch(0.1 0 0 / .95); backdrop-filter: blur(12px); border: 1px solid var(--border); min-width: 12rem; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all .2s; z-index: 200; list-style: none; }
+    .nav-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu li a { display: block; padding: .85rem 1.25rem; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s, background .2s; border-bottom: 1px solid var(--border); }
+    .dropdown-menu li:last-child a { border-bottom: none; }
+    .dropdown-menu li a:hover { color: var(--fg); background: var(--secondary); }
+    .mobile-menu .mobile-dropdown-label { font-size: .85rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
+    .mobile-menu .mobile-dropdown-items { display: flex; flex-direction: column; gap: .75rem; padding-left: 1rem; border-left: 2px solid var(--border); }
+    .mobile-menu .mobile-dropdown-items a { font-size: .75rem; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .5rem; background: none; border: none; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--fg); transition: all .3s; }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 1rem; padding: 1rem 2.5rem 1.5rem;
+      background: var(--card); border-bottom: 1px solid var(--border);
+      position: fixed; top: 5rem; left: 0; right: 0; z-index: 99;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: .85rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .mobile-menu a.active { color: var(--blue); }
+    .mobile-menu a.foundation { color: var(--gold); }
+    @media (max-width: 1024px) { .nav-links { display: none; } .hamburger { display: flex; } }
+
+    /* ── Layout ── */
+    .section { padding: 8rem 2.5rem; max-width: 90rem; margin: 0 auto; }
+    .section-full { padding: 8rem 0; position: relative; overflow: hidden; }
+    .section-inner { position: relative; z-index: 10; max-width: 90rem; margin: 0 auto; padding: 0 2.5rem; }
+    .bg-section { position: absolute; inset: 0; background-size: cover; background-position: center; }
+    .bg-overlay-lr {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--bg) 0%, oklch(0.1 0 0 / .6) 60%, oklch(0.1 0 0 / .2) 100%),
+                  linear-gradient(to top, var(--bg) 0%, transparent 60%);
+    }
+
+    /* ── Platform link ── */
+    .platform-link {
+      display: flex; align-items: center; gap: 1rem; padding: .85rem 1.25rem;
+      border: 1px solid var(--border); background: var(--card); text-decoration: none; transition: background .2s;
+    }
+    .platform-link:hover { background: var(--secondary); }
+    .platform-link .icon { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+    .platform-link .name { font-size: .85rem; font-weight: 600; color: var(--fg); }
+    .platform-link .arrow { margin-left: auto; font-size: .75rem; color: var(--muted); }
+
+    /* ── Ep card ── */
+    .ep-card {
+      display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem;
+      border: 1px solid var(--border); background: var(--card);
+      transition: border-color .2s, background .2s;
+    }
+    .ep-card:hover { border-color: oklch(0.55 0.28 292 / .5); background: var(--secondary); }
+    .ep-play {
+      width: 3rem; height: 3rem; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid oklch(0.55 0.28 292 / .4); transition: all .2s;
+    }
+    .ep-card:hover .ep-play { background: var(--blue); border-color: var(--blue); }
+    .ep-play svg { width: 1rem; height: 1rem; color: var(--blue); fill: currentColor; }
+    .ep-card:hover .ep-play svg { color: #fff; }
+    .ep-meta { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: .25rem; }
+    .ep-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; color: var(--fg); }
+    .ep-soon { font-size: .75rem; color: var(--muted); margin-left: auto; flex-shrink: 0; }
+
+    /* ── Hero ── */
+    #pod-hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; overflow: hidden;
+    }
+    .pod-hero-bg {
+      position: absolute; inset: 0;
+      background: url('public/images/music-bg.jpg') center/cover no-repeat; opacity: .7;
+    }
+    .pod-hero-overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to top, var(--bg) 0%, transparent 55%),
+        linear-gradient(to right, var(--bg) 0%, oklch(0.1 0 0 / .4) 70%, transparent 100%);
+    }
+    .pod-glow-blue {
+      position: absolute; top: -2.5rem; left: -2.5rem;
+      width: 28rem; height: 28rem; background: var(--blue);
+      opacity: .12; filter: blur(90px); pointer-events: none;
+    }
+    .pod-glow-violet {
+      position: absolute; top: 30%; right: -2.5rem;
+      width: 20rem; height: 20rem; background: var(--violet);
+      opacity: .1; filter: blur(80px); pointer-events: none;
+    }
+    .pod-hero-content {
+      position: relative; z-index: 10; max-width: 90rem;
+      margin: 0 auto; padding: 12rem 2.5rem 6rem; width: 100%;
+    }
+    .pod-hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    @media (max-width: 900px) { .pod-hero-grid { grid-template-columns: 1fr; gap: 3rem; } }
+    .pod-hero-eyebrow {
+      font-size: .7rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--blue); font-weight: 700; margin-bottom: 1.5rem;
+    }
+    .pod-hero-headline { font-size: clamp(3.5rem, 8vw, 8rem); margin-bottom: 2rem; }
+    .pod-hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.7; max-width: 38rem; margin-bottom: 2.5rem; }
+    .pod-hero-platforms { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 2.5rem; max-width: 22rem; }
+    .pod-hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* Show artwork in hero */
+    .pod-hero-artwork {
+      position: relative; display: flex; justify-content: center; align-items: center;
+    }
+    .pod-artwork-main {
+      width: 100%; max-width: 22rem; aspect-ratio: 1;
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .pod-artwork-main::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, oklch(0.55 0.28 292 / .15), oklch(0.42 0.28 292 / .1));
+    }
+    .pod-artwork-label {
+      position: relative; z-index: 2; text-align: center; padding: 2rem;
+    }
+    .pod-artwork-label .display { font-size: 3rem; color: var(--blue); margin-bottom: .5rem; }
+    .pod-artwork-label p { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+    .pod-artwork-badge {
+      position: absolute; bottom: -1rem; right: -1rem;
+      background: var(--gold); color: #0a0a0a;
+      font-size: .6rem; font-weight: 700; letter-spacing: .2em;
+      text-transform: uppercase; padding: .5rem .75rem;
+    }
+    .pod-artwork-dots {
+      position: absolute; top: 1rem; left: 1rem;
+      display: flex; gap: .4rem;
+    }
+    .pod-artwork-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+    .pod-artwork-dots span:first-child { background: var(--blue); }
+
+    /* Marquee */
+    .marquee-bar {
+      position: relative; z-index: 10; border-top: 1px solid var(--border);
+      padding: 1rem 0; overflow: hidden;
+      background: oklch(0.13 0 0 / .3); backdrop-filter: blur(4px);
+    }
+    .marquee-track { display: flex; white-space: nowrap; animation: marquee 30s linear infinite; }
+    .marquee-track span { display: flex; gap: 3rem; margin-right: 3rem; }
+    .marquee-item { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+    .marquee-item::before { content: '+'; color: var(--blue); margin-right: .75rem; }
+
+    /* ── Search Bar ── */
+    #search-bar {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2.5rem; position: sticky; top: 5rem; z-index: 50;
+    }
+    .search-inner { max-width: 90rem; margin: 0 auto; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+    .search-input-wrap { position: relative; flex: 1; min-width: 200px; }
+    .search-input-wrap svg {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      width: 1rem; height: 1rem; fill: none; stroke: var(--muted); stroke-width: 2;
+    }
+    #searchInput {
+      width: 100%; padding: .75rem 1rem .75rem 2.75rem;
+      background: var(--bg); border: 1px solid var(--border); color: var(--fg);
+      font-size: .875rem; font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color .2s;
+    }
+    #searchInput:focus { border-color: var(--blue); }
+    #searchInput::placeholder { color: var(--muted); }
+    .filter-pills { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .filter-pill {
+      padding: .4rem .85rem; border: 1px solid var(--border); background: transparent;
+      color: var(--muted); font-size: .65rem; letter-spacing: .15em; text-transform: uppercase;
+      font-weight: 600; cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+    }
+    .filter-pill:hover { border-color: oklch(0.55 0.28 292 / .5); color: var(--fg); }
+    .filter-pill.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+    /* ── Featured Episode ── */
+    #featured { border-top: 1px solid var(--border); }
+    .featured-card {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 0;
+      border: 1px solid var(--border); background: var(--card); overflow: hidden;
+    }
+    @media (max-width: 768px) { .featured-card { grid-template-columns: 1fr; } }
+    .featured-artwork {
+      position: relative; aspect-ratio: 1; overflow: hidden; background: var(--secondary);
+    }
+    .featured-artwork-placeholder {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, oklch(0.55 0.28 292 / .2), oklch(0.42 0.28 292 / .1));
+      flex-direction: column; gap: 1rem; padding: 2rem; text-align: center;
+    }
+    .featured-artwork-placeholder .display { font-size: 2rem; color: var(--blue); }
+    .featured-artwork-placeholder p { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+    .featured-ep-badge {
+      position: absolute; top: 1.25rem; left: 1.25rem; z-index: 2;
+      background: var(--blue); color: #fff;
+      font-size: .6rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; padding: .35rem .75rem;
+    }
+    .featured-body { padding: 3rem; display: flex; flex-direction: column; justify-content: center; }
+    .featured-meta { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .featured-meta-item { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: .4rem; }
+    .featured-meta-item svg { width: .75rem; height: .75rem; fill: none; stroke: var(--muted); stroke-width: 2; }
+    .featured-title { font-size: clamp(1.5rem, 3vw, 2.5rem); margin-bottom: 1rem; line-height: 1.1; }
+    .featured-summary { color: var(--muted); line-height: 1.7; font-size: .9rem; margin-bottom: 2rem; max-width: 34rem; }
+    .featured-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .featured-guest {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
+      padding-bottom: 2rem; border-bottom: 1px solid var(--border);
+    }
+    .featured-guest-avatar {
+      width: 3rem; height: 3rem; border-radius: 50%; border: 2px solid var(--border);
+      background: var(--secondary); display: flex; align-items: center; justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.1rem;
+      color: var(--blue); flex-shrink: 0;
+    }
+    .featured-guest-name { font-weight: 600; font-size: .875rem; margin-bottom: .15rem; }
+    .featured-guest-role { font-size: .7rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+
+    /* ── Latest Episodes ── */
+    #latest { border-top: 1px solid var(--border); }
+    .latest-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem; }
+    .ep-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+    .ep-grid-card {
+      border: 1px solid var(--border); background: var(--card);
+      overflow: hidden; transition: border-color .2s, background .2s; cursor: pointer;
+    }
+    .ep-grid-card:hover { border-color: oklch(0.55 0.28 292 / .5); background: var(--secondary); }
+    .ep-grid-thumb {
+      position: relative; aspect-ratio: 16/9; overflow: hidden;
+      background: linear-gradient(135deg, oklch(0.55 0.28 292 / .15), oklch(0.42 0.28 292 / .1));
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ep-grid-thumb .display { font-size: 1.5rem; color: oklch(0.55 0.28 292 / .4); }
+    .ep-grid-thumb-overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s; background: oklch(0.1 0 0 / .6);
+    }
+    .ep-grid-card:hover .ep-grid-thumb-overlay { opacity: 1; }
+    .ep-grid-play {
+      width: 3.5rem; height: 3.5rem; border: 2px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ep-grid-play svg { width: 1.2rem; height: 1.2rem; fill: #fff; }
+    .ep-grid-cat {
+      position: absolute; bottom: .75rem; left: .75rem;
+      background: var(--bg); border: 1px solid var(--border);
+      font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); padding: .25rem .6rem; font-weight: 600;
+    }
+    .ep-grid-body { padding: 1.25rem; }
+    .ep-grid-meta { display: flex; gap: 1rem; margin-bottom: .6rem; }
+    .ep-grid-meta span { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+    .ep-grid-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 1.15rem; text-transform: uppercase; color: var(--fg);
+      line-height: 1.2; margin-bottom: .5rem;
+    }
+    .ep-grid-guest { font-size: .8rem; color: var(--muted); }
+    .ep-coming-soon {
+      position: absolute; top: .75rem; right: .75rem;
+      background: var(--gold); color: #0a0a0a;
+      font-size: .55rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; padding: .25rem .6rem;
+    }
+
+    /* ── Browse By Topic ── */
+    #topics { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6rem 2.5rem; }
+    #topics .topics-inner { max-width: 90rem; margin: 0 auto; }
+    #topics h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: .75rem; }
+    .topics-lead { color: var(--muted); line-height: 1.7; max-width: 36rem; margin-bottom: 3.5rem; }
+    .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; }
+    .topic-card {
+      padding: 1.5rem; border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; transition: border-color .2s, background .2s; text-decoration: none;
+      display: flex; flex-direction: column; gap: .75rem;
+    }
+    .topic-card:hover { border-color: oklch(0.55 0.28 292 / .5); background: oklch(0.55 0.28 292 / .04); }
+    .topic-icon {
+      width: 2.5rem; height: 2.5rem; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; transition: border-color .2s;
+    }
+    .topic-card:hover .topic-icon { border-color: var(--blue); }
+    .topic-name {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 1rem; text-transform: uppercase; color: var(--fg);
+    }
+    .topic-desc { font-size: .75rem; color: var(--muted); line-height: 1.5; }
+    .topic-count { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--blue); font-weight: 700; margin-top: auto; }
+
+
+    /* ── Popular Episodes ── */
+    #popular { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6rem 2.5rem; }
+    #popular .popular-inner { max-width: 90rem; margin: 0 auto; }
+    .popular-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 768px) { .popular-grid { grid-template-columns: 1fr; } }
+    .popular-card {
+      display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem;
+      border: 1px solid var(--border); background: var(--bg);
+      transition: border-color .2s, background .2s; cursor: pointer;
+    }
+    .popular-card:hover { border-color: oklch(0.55 0.28 292 / .5); background: var(--secondary); }
+    .popular-rank {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: 2.5rem; color: var(--border); line-height: 1; flex-shrink: 0;
+      width: 2.5rem; text-align: center; transition: color .2s;
+    }
+    .popular-card:hover .popular-rank { color: var(--blue); }
+    .popular-thumb {
+      width: 4rem; height: 4rem; flex-shrink: 0;
+      background: linear-gradient(135deg, oklch(0.55 0.28 292 / .2), oklch(0.42 0.28 292 / .1));
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--border);
+    }
+    .popular-thumb svg { width: 1.25rem; height: 1.25rem; fill: oklch(0.55 0.28 292 / .6); }
+    .popular-info { flex: 1; min-width: 0; }
+    .popular-cat { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
+    .popular-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.05rem; text-transform: uppercase; color: var(--fg); line-height: 1.2; margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .popular-guest { font-size: .75rem; color: var(--muted); }
+    .popular-play {
+      width: 2.5rem; height: 2.5rem; flex-shrink: 0; border: 1px solid oklch(0.55 0.28 292 / .3);
+      display: flex; align-items: center; justify-content: center; transition: all .2s;
+    }
+    .popular-card:hover .popular-play { background: var(--blue); border-color: var(--blue); }
+    .popular-play svg { width: .85rem; height: .85rem; fill: var(--blue); transition: fill .2s; }
+    .popular-card:hover .popular-play svg { fill: #fff; }
+
+    /* ── Hosts ── */
+    /* ── Meet The Hosts ── */
+    #hosts { border-top: 1px solid var(--border); overflow: hidden; }
+    .hosts-banner {
+      position: relative; width: 100%;
+      aspect-ratio: 16/7;
+      overflow: hidden;
+    }
+    @media (max-width: 768px) { .hosts-banner { aspect-ratio: 4/3; } }
+    .hosts-banner img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center top;
+      display: block;
+    }
+    /* Purple colour grade overlay */
+    .hosts-banner-overlay {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to right, oklch(0.55 0.28 292 / .35) 0%, transparent 40%, oklch(0.42 0.28 292 / .2) 100%),
+        linear-gradient(to bottom, transparent 30%, var(--bg) 100%),
+        linear-gradient(to top, transparent 70%, oklch(0.1 0 0 / .5) 100%);
+    }
+    /* Subtle purple glow behind the image */
+    .hosts-banner-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 20% 60%, oklch(0.55 0.28 292 / .18) 0%, transparent 55%),
+                  radial-gradient(ellipse at 80% 40%, oklch(0.42 0.28 292 / .12) 0%, transparent 50%);
+    }
+    .hosts-bios {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem 5rem;
+      padding: 3rem 0 0;
+    }
+    @media (max-width: 768px) { .hosts-bios { grid-template-columns: 1fr; gap: 2.5rem; } }
+    .host-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2.25rem; text-transform: uppercase; margin-bottom: .25rem; }
+    .host-role { font-size: .75rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 1rem; }
+    .host-bio { color: var(--muted); line-height: 1.7; margin-bottom: 1rem; font-size: .9rem; }
+    .host-shows { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .host-show-tag {
+      font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 700;
+      padding: .3rem .65rem; border: 1px solid oklch(0.55 0.28 292 / .4); color: var(--blue);
+    }
+    .host-accent-bar { width: 4rem; height: 3px; margin-bottom: 1.25rem; }
+    .host-socials { display: flex; gap: 1rem; }
+    .host-socials a { color: var(--muted); transition: color .2s; }
+    .host-socials a:hover { color: var(--fg); }
+    .host-socials svg { width: 1.1rem; height: 1.1rem; fill: currentColor; display: block; }
+
+    /* ── Guest Application ── */
+    #guest { border-top: 1px solid var(--border); }
+    .guest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    @media (max-width: 768px) { .guest-grid { grid-template-columns: 1fr; } }
+    .guest-left h2 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 1.5rem; }
+    .guest-left p { color: var(--muted); line-height: 1.7; max-width: 32rem; margin-bottom: 2rem; }
+    .guest-criteria { list-style: none; display: flex; flex-direction: column; gap: .85rem; margin-bottom: 2.5rem; }
+    .guest-criteria li {
+      display: flex; align-items: flex-start; gap: .85rem;
+      font-size: .875rem; color: var(--muted); line-height: 1.5;
+    }
+    .guest-criteria li::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--blue); flex-shrink: 0; margin-top: .45rem;
+    }
+
+    /* ── Sponsorship ── */
+    #sponsorship {
+      background: var(--card); border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); padding: 6rem 2.5rem;
+    }
+    #sponsorship .sponsor-inner { max-width: 90rem; margin: 0 auto; }
+    .sponsor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    @media (max-width: 768px) { .sponsor-grid { grid-template-columns: 1fr; } }
+    .sponsor-left h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1.5rem; }
+    .sponsor-left p { color: var(--muted); line-height: 1.7; max-width: 32rem; margin-bottom: 2.5rem; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2.5rem; }
+    .stat-card {
+      padding: 1.5rem; border: 1px solid var(--border); background: var(--bg);
+    }
+    .stat-number {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 900;
+      font-size: 2.5rem; color: var(--blue); line-height: 1; margin-bottom: .25rem;
+    }
+    .stat-label { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+    .sponsor-packages { display: flex; flex-direction: column; gap: .75rem; }
+    .sponsor-package {
+      padding: 1.25rem 1.5rem; border: 1px solid var(--border); background: var(--bg);
+      display: flex; align-items: center; gap: 1rem; transition: border-color .2s;
+    }
+    .sponsor-package:hover { border-color: oklch(0.55 0.28 292 / .4); }
+    .sponsor-package-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .sponsor-package-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; }
+    .sponsor-package-desc { font-size: .775rem; color: var(--muted); margin-left: auto; text-align: right; }
+
+    /* ── Newsletter ── */
+    #pod-newsletter {
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 6rem 2.5rem; text-align: center; background: var(--secondary);
+    }
+    #pod-newsletter h2 { font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 1rem; }
+    #pod-newsletter .lead { color: var(--muted); line-height: 1.7; max-width: 28rem; margin: 0 auto 1rem; }
+    .newsletter-benefits { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .newsletter-benefit { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: .5rem; }
+    .newsletter-benefit::before { content: '✓'; color: var(--blue); font-weight: 700; }
+    .newsletter-form { display: flex; gap: 1rem; max-width: 28rem; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+    .newsletter-form input {
+      flex: 1; min-width: 200px; padding: 1rem 1.25rem;
+      background: var(--card); border: 1px solid var(--border); color: var(--fg);
+      font-size: .875rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s;
+    }
+    .newsletter-form input:focus { border-color: var(--blue); }
+    .newsletter-form input::placeholder { color: var(--muted); }
+    .newsletter-success {
+      display: none; padding: 1rem 2rem;
+      border: 1px solid oklch(0.55 0.28 292 / .5);
+      background: oklch(0.55 0.28 292 / .1);
+      color: var(--blue); font-size: .875rem; font-weight: 600; letter-spacing: .05em;
+    }
+    .privacy-note { font-size: .7rem; color: var(--muted); margin-top: 1rem; }
+
+    /* ── Final CTA ── */
+    #final-cta {
+      position: relative; overflow: hidden;
+      padding: 10rem 2.5rem; text-align: center;
+    }
+    .final-cta-bg {
+      position: absolute; inset: 0;
+      background: url('public/images/community-bg.jpg') center/cover no-repeat; opacity: .3;
+    }
+    .final-cta-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, oklch(0.55 0.28 292 / .1) 0%, transparent 60%),
+                  linear-gradient(to bottom, var(--bg) 0%, transparent 30%, var(--bg) 100%);
+    }
+    .final-cta-inner { position: relative; z-index: 10; max-width: 60rem; margin: 0 auto; }
+    .final-cta-inner h2 { font-size: clamp(3rem, 8vw, 7rem); margin-bottom: 1.5rem; }
+    .final-cta-inner p { color: var(--muted); font-size: 1.1rem; line-height: 1.7; max-width: 38rem; margin: 0 auto 3rem; }
+    .final-cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Forms shared ── */
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .form-group label span { color: var(--blue); }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; padding: .75rem 1rem; background: var(--bg);
+      border: 1px solid var(--border); color: var(--fg); font-size: .875rem;
+      font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s; appearance: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--blue); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--muted); }
+    .form-group select option { background: var(--bg); }
+    .form-group textarea { resize: none; }
+    .form-success {
+      display: none; border: 1px solid oklch(0.55 0.28 292 / .4);
+      background: oklch(0.55 0.28 292 / .05); padding: 3rem; text-align: center;
+    }
+    .form-success-icon {
+      width: 3rem; height: 3rem; border: 2px solid var(--blue);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;
+    }
+    .form-success-icon svg { width: 1.25rem; height: 1.25rem; stroke: var(--blue); fill: none; stroke-width: 2.5; }
+    .form-success h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; margin-bottom: .75rem; }
+    .form-success p { color: var(--muted); font-size: .875rem; }
+
+    /* ── Footer ── */
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 4rem 2.5rem; }
+    .footer-inner { max-width: 90rem; margin: 0 auto; }
+    .footer-top {
+      display: flex; flex-direction: column; gap: 2.5rem;
+      padding-bottom: 3rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem;
+    }
+    @media (min-width: 768px) { .footer-top { flex-direction: row; align-items: flex-end; justify-content: space-between; } }
+    footer img { height: 5rem; width: auto; margin-bottom: .5rem; }
+    .footer-tagline { font-size: .875rem; color: var(--muted); font-style: italic; }
+    .footer-nav { display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; list-style: none; }
+    .footer-nav a { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-nav a:hover { color: var(--fg); }
+    .footer-nav a.gold { color: var(--gold); }
+    .footer-bottom { display: flex; flex-direction: column; gap: 1rem; font-size: .75rem; color: var(--muted); }
+    @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
+    .footer-bottom a { color: var(--gold); text-decoration: underline; text-underline-offset: 4px; }
+    .footer-watermark { display: flex; justify-content: center; overflow: hidden; margin-top: 2rem; opacity: .25; pointer-events: none; }
+    .footer-watermark img { width: 70vw; max-width: 48rem; height: auto; }
+
+    /* ── Mobile ── */
+    @media (max-width: 640px) {
+      .pod-hero-content { padding-top: 9rem; }
+      .section { padding: 4rem 1.25rem; }
+      #topics, #popular, #sponsorship, #pod-newsletter, #guest { padding-left: 1.25rem; padding-right: 1.25rem; }
+      #navbar { padding: 0 1.25rem; }
+      .section-inner { padding: 0 1.25rem; }
+      #search-bar { padding: 1rem 1.25rem; top: 0; }
+      .featured-body { padding: 1.5rem; }
+      .stat-grid { grid-template-columns: 1fr; }
+    }
+    /* ── Music-specific additions ── */
+    @keyframes goldGlow { 0%,100% { box-shadow: 0 0 20px oklch(0.72 0.18 55 / .4); } 50% { box-shadow: 0 0 40px oklch(0.72 0.18 55 / .7); } }
+
+    /* Override section label colour for music page */
+    .music-gold-label { color: var(--gold) !important; }
+
+    /* Search bar filter pill active state — gold for music */
+    .filter-pill.active { background: var(--gold); border-color: var(--gold); color: #0a0a0a; }
+    .filter-pill:hover { border-color: oklch(0.72 0.18 55 / .5); color: var(--fg); }
+    #searchInput:focus { border-color: var(--gold); }
+
+    /* Featured picks */
+    .picks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .pick-card { border: 1px solid var(--border); background: var(--card); overflow: hidden; transition: border-color .3s, background .3s; cursor: pointer; }
+    .pick-card:hover { border-color: oklch(0.72 0.18 55 / .5); background: var(--secondary); }
+    .pick-artwork { position: relative; aspect-ratio: 1; overflow: hidden; background: linear-gradient(135deg, oklch(0.72 0.18 55 / .15), oklch(0.55 0.28 292 / .1)); display: flex; align-items: center; justify-content: center; }
+    .pick-artwork .display { font-size: 3rem; color: oklch(0.72 0.18 55 / .3); }
+    .pick-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: oklch(0.1 0 0 / .6); opacity: 0; transition: opacity .2s; }
+    .pick-card:hover .pick-play-overlay { opacity: 1; }
+    .pick-play-btn { width: 4rem; height: 4rem; border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; transition: background .2s; }
+    .pick-card:hover .pick-play-btn { background: var(--gold); }
+    .pick-play-btn svg { width: 1.4rem; height: 1.4rem; fill: var(--gold); transition: fill .2s; }
+    .pick-card:hover .pick-play-btn svg { fill: #0a0a0a; }
+    .pick-genre-tag { position: absolute; bottom: .75rem; left: .75rem; background: var(--bg); border: 1px solid var(--border); font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); padding: .25rem .6rem; font-weight: 600; }
+    .pick-suq-tag { position: absolute; top: .75rem; right: .75rem; background: var(--gold); color: #0a0a0a; font-size: .55rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; padding: .25rem .6rem; }
+    .pick-body { padding: 1.25rem; }
+    .pick-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.15rem; text-transform: uppercase; color: var(--fg); margin-bottom: .25rem; }
+    .pick-artist { font-size: .8rem; color: var(--muted); margin-bottom: .5rem; }
+    .pick-meta { display: flex; gap: 1rem; }
+    .pick-meta span { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+
+    /* Trending */
+    .trending-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    @media (max-width: 768px) { .trending-grid { grid-template-columns: 1fr; } }
+    .trending-card { display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem; border: 1px solid var(--border); background: var(--bg); transition: border-color .2s, background .2s; cursor: pointer; }
+    .trending-card:hover { border-color: oklch(0.72 0.18 55 / .4); background: var(--secondary); }
+    .trending-rank { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2rem; color: var(--border); line-height: 1; flex-shrink: 0; width: 2.5rem; text-align: center; transition: color .2s; }
+    .trending-card:hover .trending-rank { color: var(--gold); }
+    .trending-thumb { width: 3.5rem; height: 3.5rem; flex-shrink: 0; background: linear-gradient(135deg, oklch(0.72 0.18 55 / .2), oklch(0.55 0.28 292 / .1)); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+    .trending-thumb svg { width: 1rem; height: 1rem; fill: oklch(0.72 0.18 55 / .6); }
+    .trending-info { flex: 1; min-width: 0; }
+    .trending-genre { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+    .trending-song { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .trending-artist { font-size: .75rem; color: var(--muted); }
+    .trending-play { width: 2.25rem; height: 2.25rem; flex-shrink: 0; border: 1px solid oklch(0.72 0.18 55 / .3); display: flex; align-items: center; justify-content: center; transition: all .2s; }
+    .trending-card:hover .trending-play { background: var(--gold); border-color: var(--gold); }
+    .trending-play svg { width: .75rem; height: .75rem; fill: var(--gold); transition: fill .2s; }
+    .trending-card:hover .trending-play svg { fill: #0a0a0a; }
+
+    /* Genre grid */
+    .genre-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .75rem; }
+    .genre-card { position: relative; aspect-ratio: 1; overflow: hidden; border: 1px solid var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; transition: border-color .3s; background: var(--card); }
+    .genre-card:hover { border-color: oklch(0.72 0.18 55 / .5); }
+    .genre-bg { position: absolute; inset: 0; background: linear-gradient(135deg, oklch(0.72 0.18 55 / .1), oklch(0.55 0.28 292 / .08)); }
+    .genre-icon { font-size: 2rem; margin-bottom: .75rem; position: relative; z-index: 1; }
+    .genre-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; color: var(--fg); position: relative; z-index: 1; text-align: center; padding: 0 .5rem; }
+    .genre-count { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin-top: .25rem; position: relative; z-index: 1; }
+
+    /* Mood grid */
+    .mood-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: .75rem; }
+    .mood-card { padding: 1.5rem; border: 1px solid var(--border); background: var(--bg); cursor: pointer; transition: border-color .2s, background .2s; text-decoration: none; display: flex; flex-direction: column; gap: .5rem; }
+    .mood-card:hover { border-color: oklch(0.72 0.18 55 / .4); background: oklch(0.72 0.18 55 / .04); }
+    .mood-emoji { font-size: 1.75rem; }
+    .mood-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.1rem; text-transform: uppercase; color: var(--fg); }
+    .mood-desc { font-size: .75rem; color: var(--muted); line-height: 1.5; }
+    .mood-count { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-top: auto; }
+
+    /* Artist spotlight */
+    .spotlight-card { display: grid; grid-template-columns: 1fr 1.4fr; border: 1px solid var(--border); background: var(--card); overflow: hidden; }
+    @media (max-width: 768px) { .spotlight-card { grid-template-columns: 1fr; } }
+    .spotlight-img { position: relative; overflow: hidden; min-height: 28rem; background: linear-gradient(135deg, oklch(0.72 0.18 55 / .2), oklch(0.55 0.28 292 / .1)); display: flex; align-items: center; justify-content: center; }
+    .spotlight-img-overlay { position: absolute; inset: 0; background: linear-gradient(to right, transparent 60%, var(--card) 100%), linear-gradient(to top, var(--card) 0%, transparent 40%); }
+    .spotlight-body { padding: 3rem; display: flex; flex-direction: column; justify-content: center; }
+    .spotlight-genre { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 1rem; }
+    .spotlight-name { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: .5rem; }
+    .spotlight-quote { font-size: 1rem; color: var(--muted); line-height: 1.7; font-style: italic; margin-bottom: 2rem; border-left: 2px solid var(--gold); padding-left: 1rem; }
+    .spotlight-bio { font-size: .875rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem; }
+    .spotlight-track { display: flex; align-items: center; gap: 1rem; padding: .75rem 0; border-bottom: 1px solid var(--border); }
+    .spotlight-track:last-child { border-bottom: none; }
+    .spotlight-track-num { font-size: .7rem; color: var(--muted); width: 1.5rem; flex-shrink: 0; }
+    .spotlight-track-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .95rem; text-transform: uppercase; flex: 1; }
+    .spotlight-track-dur { font-size: .7rem; color: var(--muted); }
+    .spotlight-links { display: flex; gap: .75rem; flex-wrap: wrap; }
+    .spotlight-link { display: flex; align-items: center; gap: .5rem; padding: .5rem .85rem; border: 1px solid var(--border); background: var(--bg); font-size: .65rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: all .2s; }
+    .spotlight-link:hover { border-color: var(--gold); color: var(--gold); }
+    .spotlight-link svg { width: .9rem; height: .9rem; fill: currentColor; }
+
+    /* Hidden gems */
+    .gems-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+    .gem-card { padding: 1.75rem; border: 1px solid oklch(0.72 0.18 55 / .2); background: var(--card); transition: border-color .2s, background .2s; cursor: pointer; }
+    .gem-card:hover { border-color: oklch(0.72 0.18 55 / .5); background: var(--secondary); }
+    .gem-icon { font-size: 1.5rem; margin-bottom: 1rem; width: 3rem; height: 3rem; border: 1px solid oklch(0.72 0.18 55 / .3); display: flex; align-items: center; justify-content: center; }
+    .gem-artist { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.3rem; text-transform: uppercase; color: var(--fg); margin-bottom: .25rem; }
+    .gem-genre { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: .75rem; }
+    .gem-desc { font-size: .825rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.25rem; }
+    .gem-cta { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--blue); font-weight: 700; }
+
+    /* New releases */
+    .releases-list { display: flex; flex-direction: column; gap: .5rem; }
+    .release-row { display: flex; align-items: center; gap: 1.5rem; padding: 1.1rem 1.25rem; border: 1px solid var(--border); background: var(--bg); transition: border-color .2s, background .2s; cursor: pointer; }
+    .release-row:hover { border-color: oklch(0.72 0.18 55 / .4); background: var(--secondary); }
+    .release-art { width: 3rem; height: 3rem; flex-shrink: 0; background: linear-gradient(135deg, oklch(0.72 0.18 55 / .2), oklch(0.55 0.28 292 / .1)); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+    .release-art svg { width: 1rem; height: 1rem; fill: oklch(0.72 0.18 55 / .5); }
+    .release-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; text-transform: uppercase; color: var(--fg); flex: 1; }
+    .release-artist { font-size: .8rem; color: var(--muted); flex: 1; }
+    .release-genre { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); min-width: 8rem; }
+    .release-new { background: var(--gold); color: #0a0a0a; font-size: .55rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; padding: .2rem .5rem; flex-shrink: 0; }
+    @media (max-width: 640px) { .release-genre { display: none; } }
+
+    /* Submit form */
+    .submit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    @media (max-width: 768px) { .submit-grid { grid-template-columns: 1fr; } }
+    .submit-criteria { list-style: none; display: flex; flex-direction: column; gap: .85rem; margin-bottom: 2.5rem; }
+    .submit-criteria li { display: flex; align-items: flex-start; gap: .85rem; font-size: .875rem; color: var(--muted); line-height: 1.5; }
+    .submit-criteria li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: .45rem; }
+
+    /* Music newsletter override */
+    #music-newsletter { background: var(--secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6rem 2.5rem; text-align: center; }
+    #music-newsletter .newsletter-form input:focus { border-color: var(--gold); }
+    .music-newsletter-success { display: none; padding: 1rem 2rem; border: 1px solid oklch(0.72 0.18 55 / .5); background: oklch(0.72 0.18 55 / .1); color: var(--gold); font-size: .875rem; font-weight: 600; letter-spacing: .05em; }
+    .music-newsletter-benefit::before { content: '✓'; color: var(--gold); font-weight: 700; margin-right: .5rem; }
+
+    /* ── Platform mini icons ── */
+    .platform-icons { display: flex; align-items: center; gap: .3rem; margin-top: .75rem; flex-wrap: wrap; }
+    .pf-icon { display: flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; opacity: .4; transition: opacity .2s, transform .15s; text-decoration: none; flex-shrink: 0; }
+    .pf-icon:hover { opacity: 1; transform: scale(1.2); }
+    .pf-icon svg { width: 1rem; height: 1rem; fill: currentColor; display: block; }
+    .pf-icon.spotify  { color: #1DB954; }
+    .pf-icon.apple    { color: #edece8; }
+    .pf-icon.youtube  { color: #FF0000; }
+    .pf-icon.soundcloud { color: #FF5500; }
+    /* Trending cards — icons sit between info and play button */
+    .trending-card .platform-icons { margin-top: 0; }
+    /* Release rows — icons inline */
+    .release-row .platform-icons { margin-top: 0; }
+    @media (max-width: 480px) { .pf-icon { width: 1.3rem; height: 1.3rem; } .pf-icon svg { width: .85rem; height: .85rem; } }
+
+    /* Form overrides for gold */
+    .form-gold input:focus, .form-gold textarea:focus, .form-gold select:focus { border-color: var(--gold); }
+    .form-gold label span { color: var(--gold); }
+    .form-success-gold { display: none; border: 1px solid oklch(0.72 0.18 55 / .4); background: oklch(0.72 0.18 55 / .05); padding: 3rem; text-align: center; }
+    .form-success-gold .form-success-icon { border-color: var(--gold); }
+    .form-success-gold .form-success-icon svg { stroke: var(--gold); }
+
+    .email-btn { display: inline-flex; align-items: center; gap: .55rem; padding: .65rem 1rem; border: 1px solid var(--border); background: var(--bg); color: var(--fg); font-size: .85rem; font-weight: 600; text-decoration: none; transition: border-color .2s, background .2s; }
+    .email-btn:hover { border-color: var(--gold); background: var(--secondary); }
+    .email-btn svg { width: 1rem; height: 1rem; stroke: var(--gold); fill: none; stroke-width: 2; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<header>
+  <nav id="navbar">
+    <a href="index.html" aria-label="Suq Media home">
+      <img src="public/images/logo.png" alt="Suq Media" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="podcast.html">Podcast</a></li>
+      <li><a href="music.html" class="active">Music</a></li>
+      <li class="nav-dropdown">
+        <a href="#">Services</a>
+        <ul class="dropdown-menu">
+          <li><a href="custom-apparel.html">Custom Apparel</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#merch">Merch</a></li>
+      <li><a href="studio-rental.html">Studio Rental</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="foundation">Foundation ↗</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#about" class="mobile-link">About</a>
+    <a href="podcast.html" class="mobile-link">Podcast</a>
+    <a href="music.html" class="mobile-link active">Music</a>
+    <span class="mobile-dropdown-label">Services</span>
+    <div class="mobile-dropdown-items">
+      <a href="custom-apparel.html" class="mobile-link">Custom Apparel</a>
+    </div>
+    <a href="index.html#merch" class="mobile-link">Merch</a>
+    <a href="studio-rental.html" class="mobile-link">Studio Rental</a>
+    <a href="contact.html" class="mobile-link">Contact</a>
+    <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="foundation">Foundation ↗</a>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<section id="pod-hero">
+  <div class="pod-hero-bg"></div>
+  <div class="pod-hero-overlay"></div>
+  <div class="pod-glow-blue"></div>
+  <div class="pod-glow-violet"></div>
+
+  <div class="pod-hero-content">
+    <div class="pod-hero-grid">
+      <div>
+        <p class="pod-hero-eyebrow fade-up">Suq Media Music</p>
+        <h1 class="display pod-hero-headline fade-up delay-1">
+          <span style="color:var(--fg);">Music</span><br>
+          <span style="color:var(--gold);">That</span><br>
+          <span style="color:var(--fg);">Means</span><br>
+          <span style="color:var(--blue);">Something.</span>
+        </h1>
+        <p class="pod-hero-sub fade-up delay-2">Real artists. Real stories. Independent music that inspires, heals, motivates and connects. Discover artists who still have something to say.</p>
+        <div class="pod-hero-platforms fade-up delay-3">
+          <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+            <svg class="icon" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+            <span class="name">Listen on Spotify</span>
+            <span class="arrow">↗</span>
+          </a>
+          <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+            <svg class="icon" viewBox="0 0 24 24" fill="#edece8"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+            <span class="name">Listen on Apple Music</span>
+            <span class="arrow">↗</span>
+          </a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="platform-link">
+            <svg class="icon" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            <span class="name">Watch on YouTube</span>
+            <span class="arrow">↗</span>
+          </a>
+        </div>
+        <div class="pod-hero-btns fade-up delay-3">
+          <a href="#featured" class="btn btn-blue glow-pulse">Explore Music</a>
+          <a href="#submit" class="btn btn-gold">Submit Your Music →</a>
+        </div>
+      </div>
+
+      <div class="pod-hero-artwork fade-up delay-2">
+        <div class="pod-artwork-main">
+          <div class="pod-artwork-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="pod-artwork-label">
+            <p class="display" style="font-size:1.5rem;color:var(--muted);margin-bottom:.5rem;">Now Curating</p>
+            <p class="display" style="font-size:2.5rem;color:var(--gold);margin-bottom:.75rem;">Independent</p>
+            <p class="display" style="font-size:1.75rem;color:var(--fg);margin-bottom:1.5rem;">Music</p>
+            <p style="font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);">Artists worth discovering</p>
+          </div>
+          <div class="pod-artwork-badge" style="background:var(--gold);color:#0a0a0a;">New Artists</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee-bar">
+    <div class="marquee-track">
+      <span>
+        <span class="marquee-item">Rock</span>
+        <span class="marquee-item">Alternative</span>
+        <span class="marquee-item">Hip Hop</span>
+        <span class="marquee-item">Folk</span>
+        <span class="marquee-item">Soul</span>
+        <span class="marquee-item">Country</span>
+        <span class="marquee-item">Jazz</span>
+        <span class="marquee-item">Electronic</span>
+        <span class="marquee-item">Singer-Songwriter</span>
+        <span class="marquee-item">Blues</span>
+        <span class="marquee-item">Classical</span>
+        <span class="marquee-item">Indigenous</span>
+        <span class="marquee-item">World Music</span>
+        <span class="marquee-item">Christian</span>
+      </span>
+      <span>
+        <span class="marquee-item">Rock</span>
+        <span class="marquee-item">Alternative</span>
+        <span class="marquee-item">Hip Hop</span>
+        <span class="marquee-item">Folk</span>
+        <span class="marquee-item">Soul</span>
+        <span class="marquee-item">Country</span>
+        <span class="marquee-item">Jazz</span>
+        <span class="marquee-item">Electronic</span>
+        <span class="marquee-item">Singer-Songwriter</span>
+        <span class="marquee-item">Blues</span>
+        <span class="marquee-item">Classical</span>
+        <span class="marquee-item">Indigenous</span>
+        <span class="marquee-item">World Music</span>
+        <span class="marquee-item">Christian</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ── Search & Filter ── -->
+<div id="search-bar">
+  <div class="search-inner">
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="searchInput" placeholder="Search artists, songs, genres, moods…" />
+    </div>
+    <div class="filter-pills">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="rock">Rock</button>
+      <button class="filter-pill" data-filter="folk">Folk</button>
+      <button class="filter-pill" data-filter="hiphop">Hip Hop</button>
+      <button class="filter-pill" data-filter="soul">Soul</button>
+      <button class="filter-pill" data-filter="country">Country</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Featured Picks ── -->
+<div class="section" id="featured" style="max-width:90rem;">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;flex-wrap:wrap;gap:1rem;">
+    <div>
+      <p class="section-label">Suq Media Picks</p>
+      <h2 class="display" style="font-size:clamp(2rem,4vw,3.5rem);">Curated <span style="color:var(--gold);">For You</span></h2>
+    </div>
+    <a href="#" class="btn btn-ghost">View All Picks</a>
+  </div>
+  <div class="picks-grid" id="picksGrid">
+    <div class="pick-card" data-genre="folk"><div class="pick-artwork"><p class="display">♪</p><div class="pick-play-overlay"><div class="pick-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><span class="pick-genre-tag">Folk</span><span class="pick-suq-tag">Suq Pick</span></div><div class="pick-body"><p class="pick-title">Dust &amp; Light</p><p class="pick-artist">River James · Independent</p><div class="pick-meta"><span>Folk</span><span>3:47</span></div></div></div>
+    <div class="pick-card" data-genre="soul"><div class="pick-artwork"><p class="display">♪</p><div class="pick-play-overlay"><div class="pick-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><span class="pick-genre-tag">Soul</span><span class="pick-suq-tag">Suq Pick</span></div><div class="pick-body"><p class="pick-title">Worth The Wait</p><p class="pick-artist">Maya Cole · Independent</p><div class="pick-meta"><span>Soul</span><span>4:12</span></div></div></div>
+    <div class="pick-card" data-genre="rock"><div class="pick-artwork"><p class="display">♪</p><div class="pick-play-overlay"><div class="pick-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><span class="pick-genre-tag">Alternative</span><span class="pick-suq-tag">Suq Pick</span></div><div class="pick-body"><p class="pick-title">Between The Lines</p><p class="pick-artist">The Current · Independent</p><div class="pick-meta"><span>Alternative</span><span>3:58</span></div></div></div>
+    <div class="pick-card" data-genre="hiphop"><div class="pick-artwork"><p class="display">♪</p><div class="pick-play-overlay"><div class="pick-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><span class="pick-genre-tag">Hip Hop</span><span class="pick-suq-tag">Suq Pick</span></div><div class="pick-body"><p class="pick-title">Real Talk</p><p class="pick-artist">Marcus Wav · Independent</p><div class="pick-meta"><span>Hip Hop</span><span>3:22</span></div></div></div>
+    <div class="pick-card" data-genre="country"><div class="pick-artwork"><p class="display">♪</p><div class="pick-play-overlay"><div class="pick-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><span class="pick-genre-tag">Country</span><span class="pick-suq-tag">Suq Pick</span></div><div class="pick-body"><p class="pick-title">Long Road Home</p><p class="pick-artist">Cale Brixton · Independent</p><div class="pick-meta"><span>Country</span><span>4:03</span></div></div></div>
+    <div class="pick-card" data-genre="soul"><div class="pick-artwork"><p class="display">♪</p><div class="pick-play-overlay"><div class="pick-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><span class="pick-genre-tag">Blues</span><span class="pick-suq-tag">Suq Pick</span></div><div class="pick-body"><p class="pick-title">Slow Burn</p><p class="pick-artist">Ellie Voss · Independent</p><div class="pick-meta"><span>Blues</span><span>5:14</span></div></div></div>
+  </div>
+</div>
+
+<!-- ── Trending ── -->
+<section style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:6rem 2.5rem;">
+  <div style="max-width:90rem;margin:0 auto;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;flex-wrap:wrap;gap:1rem;">
+      <div><p class="section-label">Trending This Week</p><h2 class="display" style="font-size:clamp(2rem,4vw,3.5rem);">Top <span style="color:var(--gold);">10</span></h2></div>
+      <a href="#" class="btn btn-ghost">Full Chart</a>
+    </div>
+    <div class="trending-grid">
+      <div class="trending-card"><span class="trending-rank">01</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Folk</p><p class="trending-song">Dust &amp; Light</p><p class="trending-artist">River James</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">02</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Soul</p><p class="trending-song">Worth The Wait</p><p class="trending-artist">Maya Cole</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">03</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Alternative</p><p class="trending-song">Between The Lines</p><p class="trending-artist">The Current</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">04</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Hip Hop</p><p class="trending-song">Real Talk</p><p class="trending-artist">Marcus Wav</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">05</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Country</p><p class="trending-song">Long Road Home</p><p class="trending-artist">Cale Brixton</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">06</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Blues</p><p class="trending-song">Slow Burn</p><p class="trending-artist">Ellie Voss</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">07</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Singer-Songwriter</p><p class="trending-song">Glass Houses</p><p class="trending-artist">Nora Bell</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">08</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Electronic</p><p class="trending-song">Open Signal</p><p class="trending-artist">AXON</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">09</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Jazz</p><p class="trending-song">After Hours</p><p class="trending-artist">Dean Solano</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="trending-card"><span class="trending-rank">10</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Pop</p><p class="trending-song">Ordinary Day</p><p class="trending-artist">Leah Skye</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Browse By Genre ── -->
+<div class="section" style="max-width:90rem;border-top:1px solid var(--border);">
+  <p class="section-label">Browse By Genre</p>
+  <h2 class="display" style="font-size:clamp(2.5rem,5vw,4rem);margin-bottom:.75rem;">Find Your <span style="color:var(--gold);">Sound</span></h2>
+  <p style="color:var(--muted);line-height:1.7;max-width:36rem;margin-bottom:3.5rem;">Every genre. Every mood. Music for every moment.</p>
+  <div class="genre-grid">
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎸</span><p class="genre-name">Rock</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🌿</span><p class="genre-name">Alternative</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🤠</span><p class="genre-name">Country</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🪵</span><p class="genre-name">Folk</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎤</span><p class="genre-name">Hip Hop</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">⚡</span><p class="genre-name">Electronic</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">✨</span><p class="genre-name">Pop</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎷</span><p class="genre-name">Blues</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎺</span><p class="genre-name">Jazz</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🕊️</span><p class="genre-name">Soul</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎻</span><p class="genre-name">Classical</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎹</span><p class="genre-name">Instrumental</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">✝️</span><p class="genre-name">Christian</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🪶</span><p class="genre-name">Indigenous</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎙️</span><p class="genre-name">Singer-Songwriter</p><p class="genre-count">Coming Soon</p></a>
+    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🌍</span><p class="genre-name">World Music</p><p class="genre-count">Coming Soon</p></a>
+  </div>
+</div>
+
+<!-- ── Discover By Mood ── -->
+<section style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:6rem 2.5rem;">
+  <div style="max-width:90rem;margin:0 auto;">
+    <p class="section-label">Discover By Mood</p>
+    <h2 class="display" style="font-size:clamp(2.5rem,5vw,4rem);margin-bottom:.75rem;">How Are You <span style="color:var(--gold);">Feeling?</span></h2>
+    <p style="color:var(--muted);line-height:1.7;max-width:36rem;margin-bottom:3.5rem;">Let the music meet you where you are.</p>
+    <div class="mood-grid">
+      <a href="#" class="mood-card"><span class="mood-emoji">🔥</span><p class="mood-name">Motivation</p><p class="mood-desc">Music to move mountains and push past limits</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">🌊</span><p class="mood-name">Deep Thinking</p><p class="mood-desc">Slow down and let the music make you think</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">🙏</span><p class="mood-name">Faith</p><p class="mood-desc">Music rooted in belief, hope and spiritual depth</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">💚</span><p class="mood-name">Healing</p><p class="mood-desc">Songs for the broken places within us</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">💔</span><p class="mood-name">Heartbreak</p><p class="mood-desc">Feel it fully. Music for the hard moments</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">🏔️</span><p class="mood-name">Adventure</p><p class="mood-desc">Soundtrack for the open road and new horizons</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">🧠</span><p class="mood-name">Focus</p><p class="mood-desc">Deep work music that doesn't get in the way</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">⚡</span><p class="mood-name">Energy</p><p class="mood-desc">High-octane tracks to get you moving</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">🌙</span><p class="mood-name">Reflection</p><p class="mood-desc">Late night listening for quiet introspection</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">🌅</span><p class="mood-name">Freedom</p><p class="mood-desc">Music that feels like wide open space</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">❤️</span><p class="mood-name">Love</p><p class="mood-desc">From first sparks to deep devotion</p><p class="mood-count">Coming Soon</p></a>
+      <a href="#" class="mood-card"><span class="mood-emoji">🕊️</span><p class="mood-name">Soulful</p><p class="mood-desc">Music that reaches somewhere deep inside you</p><p class="mood-count">Coming Soon</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Artist Spotlight ── -->
+<div class="section" style="max-width:90rem;border-top:1px solid var(--border);">
+  <p class="section-label">Artist Spotlight</p>
+  <h2 class="display" style="font-size:clamp(2.5rem,5vw,4rem);margin-bottom:3rem;">Featured <span style="color:var(--gold);">Artist</span></h2>
+  <div class="spotlight-card">
+    <div class="spotlight-img">
+      <div style="text-align:center;padding:2rem;position:relative;z-index:1;">
+        <p class="display" style="font-size:1.5rem;color:var(--muted);">Artist Photo</p>
+        <p class="display" style="font-size:2rem;color:var(--gold);margin-top:.5rem;">Coming Soon</p>
+      </div>
+      <div class="spotlight-img-overlay"></div>
+    </div>
+    <div class="spotlight-body">
+      <p class="spotlight-genre">Folk · Singer-Songwriter</p>
+      <h2 class="display spotlight-name">River <span style="color:var(--gold);">James</span></h2>
+      <blockquote class="spotlight-quote">"I write songs because some things can't be said in ordinary language."</blockquote>
+      <p class="spotlight-bio">River James is an independent folk artist whose music blends raw storytelling with cinematic instrumentation. Drawing from personal experiences of loss, healing and hope, his songs have quietly amassed a dedicated following of listeners who feel deeply understood.</p>
+      <div style="margin-bottom:2rem;">
+        <div class="spotlight-track"><span class="spotlight-track-num">01</span><span class="spotlight-track-title">Dust &amp; Light</span><span class="spotlight-track-dur">3:47</span></div>
+        <div class="spotlight-track"><span class="spotlight-track-num">02</span><span class="spotlight-track-title">The Weight of Home</span><span class="spotlight-track-dur">4:22</span></div>
+        <div class="spotlight-track"><span class="spotlight-track-num">03</span><span class="spotlight-track-title">Before The Storm</span><span class="spotlight-track-dur">3:59</span></div>
+      </div>
+      <div class="spotlight-links">
+        <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="spotlight-link"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Spotify</a>
+        <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" class="spotlight-link"><svg viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>Apple Music</a>
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="spotlight-link"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube</a>
+        <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer" class="spotlight-link"><svg viewBox="0 0 24 24" fill="#FF5500"><path d="M1.175 12.225c-.017 0-.034.002-.05.003.015-1.265.702-2.378 1.73-3.003-.162-.383-.253-.8-.253-1.237 0-1.773 1.438-3.21 3.211-3.21.21 0 .415.021.614.061C6.983 3.66 8.41 3 9.988 3c2.755 0 4.99 2.235 4.99 4.99 0 .065-.002.13-.004.195.165-.033.335-.051.508-.051 1.515 0 2.743 1.228 2.743 2.743 0 1.515-1.228 2.743-2.743 2.743H1.918A1.918 1.918 0 0 1 0 11.702c0-1.059.859-1.918 1.918-1.918.087 0 .173.006.257.016z"/></svg>SoundCloud</a>
+        <a href="https://bandcamp.com" target="_blank" rel="noopener noreferrer" class="spotlight-link"><svg viewBox="0 0 24 24" fill="#1DA0C3"><path d="M0 18.75l7.437-13.5H24l-7.438 13.5z"/></svg>Bandcamp</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Hidden Gems ── -->
+<div class="section" style="max-width:90rem;border-top:1px solid var(--border);">
+  <p class="section-label">Hidden Gems</p>
+  <h2 class="display" style="font-size:clamp(2.5rem,5vw,4rem);margin-bottom:.75rem;">Artists You Haven't <span style="color:var(--gold);">Heard Yet</span></h2>
+  <p style="color:var(--muted);line-height:1.7;max-width:44rem;margin-bottom:3.5rem;">The most important music is often the least heard. These are the artists worth your time.</p>
+  <div class="gems-grid">
+    <div class="gem-card"><div class="gem-icon">💎</div><p class="gem-artist">Nora Bell</p><p class="gem-genre">Singer-Songwriter</p><p class="gem-desc">Intimate, confessional songwriting that makes you feel less alone at 2am.</p><p class="gem-cta">Discover →</p></div>
+    <div class="gem-card"><div class="gem-icon">💎</div><p class="gem-artist">Dean Solano</p><p class="gem-genre">Jazz</p><p class="gem-desc">Late-night jazz with a cinematic quality that transports you somewhere beautiful.</p><p class="gem-cta">Discover →</p></div>
+    <div class="gem-card"><div class="gem-icon">💎</div><p class="gem-artist">Ellie Voss</p><p class="gem-genre">Blues</p><p class="gem-desc">Raw, soulful blues from an artist who has clearly lived every note she sings.</p><p class="gem-cta">Discover →</p></div>
+    <div class="gem-card"><div class="gem-icon">💎</div><p class="gem-artist">AXON</p><p class="gem-genre">Electronic</p><p class="gem-desc">Atmospheric electronic music built for headphones and deep listening.</p><p class="gem-cta">Discover →</p></div>
+    <div class="gem-card"><div class="gem-icon">💎</div><p class="gem-artist">Cale Brixton</p><p class="gem-genre">Country</p><p class="gem-desc">Honest, unhurried country that sounds like a campfire at the edge of everything.</p><p class="gem-cta">Discover →</p></div>
+    <div class="gem-card"><div class="gem-icon">💎</div><p class="gem-artist">Leah Skye</p><p class="gem-genre">Pop</p><p class="gem-desc">Melodic, emotionally intelligent pop from an artist who refuses to be ordinary.</p><p class="gem-cta">Discover →</p></div>
+  </div>
+</div>
+
+<!-- ── New Releases ── -->
+<section style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:6rem 2.5rem;">
+  <div style="max-width:90rem;margin:0 auto;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;flex-wrap:wrap;gap:1rem;">
+      <div><p class="section-label">New Releases</p><h2 class="display" style="font-size:clamp(2rem,4vw,3.5rem);">Just <span style="color:var(--gold);">Dropped</span></h2></div>
+      <a href="#" class="btn btn-ghost">All Releases</a>
+    </div>
+    <div class="releases-list">
+      <div class="release-row"><div class="release-art"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><p class="release-title">Dust &amp; Light</p><p class="release-artist">River James</p><p class="release-genre">Folk</p><span class="release-new">New</span></div>
+      <div class="release-row"><div class="release-art"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><p class="release-title">Worth The Wait</p><p class="release-artist">Maya Cole</p><p class="release-genre">Soul</p><span class="release-new">New</span></div>
+      <div class="release-row"><div class="release-art"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><p class="release-title">Between The Lines</p><p class="release-artist">The Current</p><p class="release-genre">Alternative</p><span class="release-new">New</span></div>
+      <div class="release-row"><div class="release-art"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><p class="release-title">Real Talk</p><p class="release-artist">Marcus Wav</p><p class="release-genre">Hip Hop</p><span class="release-new">New</span></div>
+      <div class="release-row"><div class="release-art"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><p class="release-title">Long Road Home</p><p class="release-artist">Cale Brixton</p><p class="release-genre">Country</p><span class="release-new">New</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Submit Your Music ── -->
+<div class="section" id="submit" style="max-width:90rem;border-top:1px solid var(--border);">
+  <div class="submit-grid">
+    <div>
+      <p class="section-label">Artist Submissions</p>
+      <h2 class="display" style="font-size:clamp(2.5rem,5vw,4.5rem);margin-bottom:1.5rem;">
+        <span style="display:block;color:var(--fg);">Get Featured</span>
+        <span style="display:block;color:var(--gold);">On Suq Media</span>
+      </h2>
+      <p style="color:var(--muted);line-height:1.7;max-width:32rem;margin-bottom:2rem;">We're always looking for independent artists with something real to say. If your music carries purpose, emotion and authenticity — we want to hear it.</p>
+      <ul class="submit-criteria">
+        <li>Independent or emerging artist with original music</li>
+        <li>Music that carries genuine emotion, story or purpose</li>
+        <li>Any genre — we value authenticity over category</li>
+        <li>Available on at least one major streaming platform</li>
+        <li>Open to being featured and interviewed on Suq Media</li>
+      </ul>
+      <div style="padding:1.5rem;border:1px solid var(--border);background:var(--card);">
+        <p style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;">Contact</p>
+        <a class="email-btn" href="mailto:info@suqmedia.com"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>info@suqmedia.com</a>
+      </div>
+    </div>
+    <div>
+      <form id="submitForm">
+        <div class="form-group"><label for="artistName">Artist / Band Name <span>*</span></label><input id="artistName" name="artist" type="text" required placeholder="Your artist name" /></div>
+        <div class="form-group"><label for="artistEmail">Email <span>*</span></label><input id="artistEmail" name="email" type="email" required placeholder="your@email.com" /></div>
+        <div class="form-group">
+          <label for="artistGenre">Genre <span>*</span></label>
+          <select id="artistGenre" name="genre" required>
+            <option value="" disabled selected>Select your genre</option>
+            <option>Rock</option><option>Alternative</option><option>Country</option><option>Folk</option>
+            <option>Hip Hop</option><option>Electronic</option><option>Pop</option><option>Blues</option>
+            <option>Jazz</option><option>Soul</option><option>Classical</option><option>Instrumental</option>
+            <option>Christian</option><option>Indigenous</option><option>Singer-Songwriter</option>
+            <option>World Music</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group"><label for="artistLink">Spotify / Apple Music / YouTube Link <span>*</span></label><input id="artistLink" name="link" type="url" required placeholder="https://" /></div>
+        <div class="form-group"><label for="artistSocial">Instagram or Website</label><input id="artistSocial" name="social" type="url" placeholder="https://" /></div>
+        <div class="form-group"><label for="artistBio">Tell Us About Your Music <span>*</span></label><textarea id="artistBio" name="bio" required rows="4" placeholder="Who are you, what's your story, and what makes your music worth hearing?"></textarea></div>
+        <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;animation:goldGlow 3s ease-in-out infinite;">Submit Your Music →</button>
+      </form>
+      <div class="form-success" id="submitSuccess">
+        <div class="form-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h3 class="display">Submission Received</h3>
+        <p>Thanks for sharing your music with us. We'll be in touch if it's a good fit.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Newsletter ── -->
+<section id="music-newsletter">
+  <p class="section-label" style="display:flex;justify-content:center;">Stay Connected</p>
+  <h2 class="display" style="font-size:clamp(2rem,5vw,3.5rem);margin-bottom:1rem;">
+    <span style="color:var(--fg);">Discover Music</span><br><span style="color:var(--gold);">Worth Listening To</span>
+  </h2>
+  <p style="color:var(--muted);line-height:1.7;max-width:28rem;margin:0 auto 1rem;">New artist discoveries, curated playlists, interviews and featured releases — straight to your inbox.</p>
+  <div class="newsletter-benefits" style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem;">
+    <span class="music-newsletter-benefit">New artist discoveries</span>
+    <span class="music-newsletter-benefit">Curated playlists</span>
+    <span class="music-newsletter-benefit">Exclusive interviews</span>
+    <span class="music-newsletter-benefit">No spam, ever</span>
+  </div>
+  <form class="newsletter-form" id="musicNewsletterForm">
+    <input type="email" placeholder="Enter your email address" required />
+    <button type="submit" class="btn btn-gold" style="padding:.85rem 1.5rem;">Subscribe</button>
+  </form>
+  <div class="music-newsletter-success" id="musicNewsletterSuccess">You're in. New music discoveries coming your way.</div>
+  <p style="font-size:.7rem;color:var(--muted);margin-top:1rem;">No spam. Unsubscribe at any time.</p>
+</section>
+
+<!-- ── Final CTA ── -->
+<section style="position:relative;overflow:hidden;padding:10rem 2.5rem;text-align:center;">
+  <div style="position:absolute;inset:0;background:url('public/images/music-bg.jpg') center/cover no-repeat;opacity:.3;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,oklch(0.72 0.18 55/.1) 0%,transparent 60%),linear-gradient(to bottom,var(--bg) 0%,transparent 30%,var(--bg) 100%);"></div>
+  <div style="position:relative;z-index:10;max-width:60rem;margin:0 auto;">
+    <p class="section-label" style="display:flex;justify-content:center;">Start Listening</p>
+    <h2 class="display" style="font-size:clamp(3rem,8vw,7rem);margin-bottom:1.5rem;">
+      <span style="color:var(--fg);">Songs</span><br>
+      <span style="color:var(--gold);">Worth</span><br>
+      <span style="color:var(--fg);">Hearing.</span>
+    </h2>
+    <p style="color:var(--muted);font-size:1.1rem;line-height:1.7;max-width:38rem;margin:0 auto 3rem;">Independent music. Real artists. Stories that stay with you.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="btn btn-white">Listen on Spotify</a>
+      <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Apple Music</a>
+      <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="btn btn-gold">Watch on YouTube →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="public/images/logo.png" alt="Suq Media" />
+        <p class="footer-tagline">Creativity. Culture. Healing. Hope.</p>
+      </div>
+      <ul class="footer-nav">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="podcast.html">Podcast</a></li>
+        <li><a href="music.html">Music</a></li>
+        <li><a href="index.html#merch">Merch</a></li>
+        <li><a href="studio-rental.html">Studio Rental</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="gold">Foundation ↗</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> Suq Media. All rights reserved.</p>
+      <p style="max-width:28rem;text-align:right;">40% of profits support the <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">Markin K Kossowski Foundation for Hope</a>.</p>
+    </div>
+  </div>
+  <div class="footer-watermark" aria-hidden="true">
+    <img src="public/images/logo.png" alt="" />
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Hamburger
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburgerBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburgerBtn.setAttribute('aria-expanded', open);
+    hamburgerBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+      hamburgerBtn.setAttribute('aria-label', 'Open menu');
+    });
+  });
+
+  // Filter pills
+  const pills = document.querySelectorAll('.filter-pill');
+  const cards = document.querySelectorAll('.pick-card');
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const filter = pill.dataset.filter;
+      cards.forEach(card => {
+        card.style.display = (filter === 'all' || card.dataset.genre === filter) ? '' : 'none';
+      });
+    });
+  });
+
+  // Search
+  document.getElementById('searchInput').addEventListener('input', function() {
+    const q = this.value.toLowerCase();
+    cards.forEach(card => {
+      card.style.display = card.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+    if (q) pills.forEach(p => p.classList.remove('active'));
+  });
+
+  // ── Platform icons injection ──
+  const pfIcons = `<div class="platform-icons">
+    <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="pf-icon spotify" title="Listen on Spotify"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></a>
+    <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" class="pf-icon apple" title="Listen on Apple Music"><svg viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg></a>
+    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="pf-icon youtube" title="Watch on YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+    <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer" class="pf-icon soundcloud" title="Listen on SoundCloud"><svg viewBox="0 0 24 24"><path d="M1.175 12.225c-.017 0-.034.002-.05.003.015-1.265.702-2.378 1.73-3.003-.162-.383-.253-.8-.253-1.237 0-1.773 1.438-3.21 3.211-3.21.21 0 .415.021.614.061C6.983 3.66 8.41 3 9.988 3c2.755 0 4.99 2.235 4.99 4.99 0 .065-.002.13-.004.195.165-.033.335-.051.508-.051 1.515 0 2.743 1.228 2.743 2.743 0 1.515-1.228 2.743-2.743 2.743H1.918A1.918 1.918 0 0 1 0 11.702c0-1.059.859-1.918 1.918-1.918.087 0 .173.006.257.016z"/></svg></a>
+  </div>`;
+
+  // Inject into Featured Picks
+  document.querySelectorAll('.pick-body').forEach(el => {
+    el.insertAdjacentHTML('beforeend', pfIcons);
+  });
+
+  // Inject into Trending cards (before the play button)
+  document.querySelectorAll('.trending-card').forEach(card => {
+    const play = card.querySelector('.trending-play');
+    if (play) play.insertAdjacentHTML('beforebegin', pfIcons);
+  });
+
+  // Inject into Hidden Gems (replace the Discover → text)
+  document.querySelectorAll('.gem-card').forEach(card => {
+    const cta = card.querySelector('.gem-cta');
+    if (cta) {
+      const frag = document.createRange().createContextualFragment(pfIcons);
+      cta.replaceWith(frag);
+    }
+  });
+
+  // Inject into New Releases (before the New badge)
+  document.querySelectorAll('.release-row').forEach(row => {
+    const badge = row.querySelector('.release-new');
+    if (badge) badge.insertAdjacentHTML('beforebegin', pfIcons);
+  });
+
+  // Submit form
+  document.getElementById('submitForm').addEventListener('submit', e => {
+    e.preventDefault();
+    e.target.style.display = 'none';
+    document.getElementById('submitSuccess').style.display = 'block';
+  });
+
+  // Newsletter form
+  document.getElementById('musicNewsletterForm').addEventListener('submit', e => {
+    e.preventDefault();
+    e.target.style.display = 'none';
+    document.getElementById('musicNewsletterSuccess').style.display = 'inline-flex';
+  });
+</script>
+</body>
+</html>

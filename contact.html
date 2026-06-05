@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — SUQ Media | Let's Build Something Worth Talking About</title>
+  <meta name="description" content="Get in touch with SUQ Media — podcasts, music, studio rental, media production, brand partnerships, custom apparel and content creation. Start a conversation, book the studio, or partner with us." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0a;
+      --card:      #111111;
+      --secondary: #181818;
+      --border:    #262626;
+      --fg:        #edece8;
+      --muted:     #7a7a7a;
+      --blue:      oklch(0.55 0.28 292);
+      --gold:      oklch(0.72 0.18 55);
+      --violet:    oklch(0.42 0.28 292);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--fg); overflow-x: hidden; }
+    section[id], div[id] { scroll-margin-top: 6rem; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp  { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes glow    { 0%,100% { box-shadow: 0 0 20px oklch(0.55 0.28 292 / .4); } 50% { box-shadow: 0 0 42px oklch(0.55 0.28 292 / .7); } }
+    @keyframes pulseDot { 0%,100% { opacity: .35; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
+    @keyframes lightSweep { 0% { transform: translateX(-30%); opacity: .4; } 50% { opacity: .9; } 100% { transform: translateX(30%); opacity: .4; } }
+
+    .fade-up    { animation: fadeUp .8s ease both; }
+    .delay-1    { animation-delay: .1s; }
+    .delay-2    { animation-delay: .25s; }
+    .delay-3    { animation-delay: .4s; }
+    .glow-pulse { animation: glow 3s ease-in-out infinite; }
+
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal.d1 { transition-delay: .08s; }
+    .reveal.d2 { transition-delay: .16s; }
+    .reveal.d3 { transition-delay: .24s; }
+
+    /* ── Utils ── */
+    .section-label { font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; color: var(--blue); font-weight: 700; margin-bottom: 1.5rem; }
+    .display { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; text-transform: uppercase; line-height: 1; }
+    .blue { color: var(--blue); }
+    .gold { color: var(--gold); }
+
+    .btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1rem 2rem; font-size: .75rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; transition: all .2s; cursor: pointer; border: none; }
+    .btn-blue  { background: var(--blue); color: #fff; }
+    .btn-blue:hover  { opacity: .85; }
+    .btn-gold  { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+    .btn-gold:hover  { background: oklch(0.72 0.18 55 / .1); }
+    .btn-white { background: var(--fg); color: var(--bg); }
+    .btn-white:hover { opacity: .85; }
+    .btn-ghost { border: 1px solid var(--border); color: var(--fg); background: transparent; }
+    .btn-ghost:hover { border-color: oklch(0.55 0.28 292 / .5); background: oklch(0.55 0.28 292 / .05); }
+
+    /* ── Navbar (shared system) ── */
+    #navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; transition: all .4s; padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; height: 9rem; }
+    #navbar.scrolled { height: 5rem; background: oklch(0.1 0 0 / .9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    #navbar img { height: 6rem; width: auto; transition: height .4s; }
+    #navbar.scrolled img { height: 3rem; }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a.active { color: var(--blue); }
+    .nav-links a.foundation { color: var(--gold); border: 1px solid oklch(0.72 0.18 55 / .4); padding: .4rem .75rem; }
+    .nav-links a.foundation:hover { background: oklch(0.72 0.18 55 / .1); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > a { display: inline-flex; align-items: center; gap: .35rem; cursor: pointer; }
+    .nav-dropdown > a::after { content: '▾'; font-size: .55rem; transition: transform .2s; }
+    .nav-dropdown:hover > a::after { transform: rotate(180deg); }
+    .dropdown-menu { position: absolute; top: calc(100% + 1rem); left: 0; background: oklch(0.1 0 0 / .95); backdrop-filter: blur(12px); border: 1px solid var(--border); min-width: 12rem; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all .2s; z-index: 200; list-style: none; }
+    .nav-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-menu li a { display: block; padding: .85rem 1.25rem; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s, background .2s; border-bottom: 1px solid var(--border); }
+    .dropdown-menu li:last-child a { border-bottom: none; }
+    .dropdown-menu li a:hover { color: var(--fg); background: var(--secondary); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: .5rem; background: none; border: none; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--fg); transition: all .3s; }
+    .mobile-menu { display: none; flex-direction: column; gap: 1rem; padding: 1rem 2.5rem 1.5rem; background: var(--card); border-bottom: 1px solid var(--border); position: fixed; top: 5rem; left: 0; right: 0; z-index: 99; }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: .85rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; }
+    .mobile-menu a.active { color: var(--blue); }
+    .mobile-menu a.foundation { color: var(--gold); }
+    .mobile-menu .mobile-dropdown-label { font-size: .85rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); }
+    .mobile-menu .mobile-dropdown-items { display: flex; flex-direction: column; gap: .75rem; padding-left: 1rem; border-left: 2px solid var(--border); }
+    .mobile-menu .mobile-dropdown-items a { font-size: .75rem; }
+    @media (max-width: 1024px) { .nav-links { display: none; } .hamburger { display: flex; } }
+
+    /* ── Layout helpers ── */
+    .section { padding: 8rem 2.5rem; max-width: 90rem; margin: 0 auto; }
+    .section-full { padding: 8rem 0; position: relative; overflow: hidden; }
+    .section-inner { position: relative; z-index: 10; max-width: 90rem; margin: 0 auto; padding: 0 2.5rem; }
+    .lead { color: var(--muted); line-height: 1.7; }
+    .sec-head { max-width: 46rem; margin-bottom: 4rem; }
+    .sec-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+    .sec-head.center .section-label { display: flex; justify-content: center; }
+    .sec-head h2 { font-size: clamp(2.25rem, 5vw, 4rem); margin-bottom: 1.25rem; }
+    .sec-head p { color: var(--muted); line-height: 1.7; font-size: 1rem; }
+
+    /* ── Hero ── */
+    #ct-hero { position: relative; min-height: 92vh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .ct-hero-bg { position: absolute; inset: 0; background: url('public/images/about-bg.jpg') center/cover no-repeat; opacity: .45; }
+    .ct-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 0%, transparent 60%), linear-gradient(to right, var(--bg) 0%, oklch(0.1 0 0 / .5) 55%, transparent 100%); }
+    .ct-glow-blue { position: absolute; top: -3rem; left: -3rem; width: 32rem; height: 32rem; background: var(--blue); opacity: .14; filter: blur(100px); pointer-events: none; }
+    .ct-glow-gold { position: absolute; bottom: 1rem; right: -4rem; width: 26rem; height: 26rem; background: var(--gold); opacity: .10; filter: blur(95px); pointer-events: none; }
+    .ct-light-sweep { position: absolute; top: 0; left: 25%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, oklch(0.55 0.28 292 / .07), transparent); filter: blur(40px); animation: lightSweep 9s ease-in-out infinite; pointer-events: none; }
+    .ct-hero-content { position: relative; z-index: 10; max-width: 90rem; margin: 0 auto; padding: 12rem 2.5rem 6rem; width: 100%; }
+    .ct-hero-eyebrow { font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; color: var(--blue); font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: .75rem; }
+    .ct-hero-eyebrow::before { content: ''; width: 2rem; height: 1px; background: var(--blue); }
+    .ct-hero-headline { font-size: clamp(3rem, 8vw, 7rem); margin-bottom: 2rem; max-width: 20ch; }
+    .ct-hero-sub { font-size: 1.1rem; color: var(--muted); line-height: 1.7; max-width: 40rem; margin-bottom: 1.5rem; }
+    .ct-hero-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2.5rem; max-width: 44rem; }
+    .ct-tag { font-size: .62rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 600; color: var(--muted); border: 1px solid var(--border); padding: .35rem .7rem; background: oklch(0.1 0 0 / .4); }
+    .ct-tag::before { content: '+'; color: var(--blue); margin-right: .4rem; }
+    .ct-hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* ── Contact options ── */
+    #options { border-top: 1px solid var(--border); }
+    .opt-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    @media (max-width: 1000px) { .opt-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .opt-grid { grid-template-columns: 1fr; } }
+    .opt-card { display: flex; flex-direction: column; padding: 1.75rem; border: 1px solid var(--border); background: oklch(0.1 0 0 / .55); backdrop-filter: blur(6px); transition: border-color .25s, box-shadow .25s, transform .25s; }
+    .opt-card:hover { border-color: oklch(0.55 0.28 292 / .5); box-shadow: 0 0 30px oklch(0.55 0.28 292 / .12); transform: translateY(-4px); }
+    .opt-ic { width: 2.75rem; height: 2.75rem; border: 1px solid oklch(0.55 0.28 292 / .35); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; transition: background .25s; }
+    .opt-card:hover .opt-ic { background: oklch(0.55 0.28 292 / .1); }
+    .opt-ic svg { width: 1.35rem; height: 1.35rem; stroke: var(--blue); fill: none; stroke-width: 1.6; }
+    .opt-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; margin-bottom: .5rem; }
+    .opt-card p { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; flex: 1; }
+    .opt-cta { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 700; color: var(--blue); text-decoration: none; display: inline-flex; align-items: center; gap: .4rem; transition: gap .2s; cursor: pointer; }
+    .opt-card:hover .opt-cta { gap: .7rem; }
+
+    /* ── Main form ── */
+    #contact-form { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .cf-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 4rem; align-items: start; }
+    @media (max-width: 900px) { .cf-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+    .cf-aside h2 { font-size: clamp(2rem, 4vw, 3.25rem); margin-bottom: 1.5rem; }
+    .cf-aside .lead { margin-bottom: 2rem; }
+    .cf-points { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .cf-points li { display: flex; align-items: flex-start; gap: .85rem; font-size: .875rem; color: var(--muted); line-height: 1.5; }
+    .cf-points li svg { width: 1.1rem; height: 1.1rem; stroke: var(--blue); fill: none; stroke-width: 2; flex-shrink: 0; margin-top: .1rem; }
+    .cf-card { border: 1px solid var(--border); background: oklch(0.08 0 0 / .6); backdrop-filter: blur(8px); padding: 2.5rem; }
+    @media (max-width: 480px) { .cf-card { padding: 1.5rem; } }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
+    /* Floating label fields */
+    .float { position: relative; margin-bottom: 1.25rem; }
+    .float input, .float textarea { width: 100%; padding: 1.5rem 1rem .6rem; background: var(--bg); border: 1px solid var(--border); color: var(--fg); font-size: .9rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s; }
+    .float textarea { resize: none; min-height: 8rem; padding-top: 1.6rem; }
+    .float label { position: absolute; left: 1rem; top: 1.05rem; color: var(--muted); font-size: .9rem; pointer-events: none; transition: all .18s ease; }
+    .float input:focus, .float textarea:focus { border-color: var(--blue); }
+    .float:focus-within label, .float input:not(:placeholder-shown) + label,
+    .float textarea:not(:placeholder-shown) + label {
+      top: .45rem; font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--blue); font-weight: 700;
+    }
+    .float label .req { color: var(--blue); }
+    /* Validation states (only after interaction) */
+    .float input:user-invalid, .float textarea:user-invalid { border-color: oklch(0.6 0.2 25 / .8); }
+    .float input:user-valid, .float textarea:user-valid { border-color: oklch(0.55 0.28 292 / .55); }
+
+    /* Select groups (label above) */
+    .fg { margin-bottom: 1.25rem; }
+    .fg label { display: block; font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: .5rem; }
+    .fg label .req { color: var(--blue); }
+    .fg select { width: 100%; padding: .85rem 1rem; background: var(--bg); border: 1px solid var(--border); color: var(--fg); font-size: .9rem; font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237a7a7a' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1rem; }
+    .fg select:focus { border-color: var(--blue); }
+    .fg select option { background: var(--bg); }
+
+    .cf-trust { display: flex; align-items: center; gap: .6rem; margin-top: 1.25rem; font-size: .78rem; color: var(--muted); }
+    .cf-trust svg { width: 1rem; height: 1rem; stroke: var(--blue); fill: none; stroke-width: 2; flex-shrink: 0; }
+    .form-success { display: none; border: 1px solid oklch(0.55 0.28 292 / .4); background: oklch(0.55 0.28 292 / .05); padding: 3rem; text-align: center; }
+    .form-success-icon { width: 3rem; height: 3rem; border: 2px solid var(--blue); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+    .form-success-icon svg { width: 1.25rem; height: 1.25rem; stroke: var(--blue); fill: none; stroke-width: 2.5; }
+    .form-success h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; margin-bottom: .75rem; }
+    .form-success p { color: var(--muted); font-size: .875rem; }
+
+    /* ── Studio / location ── */
+    #location { border-top: 1px solid var(--border); }
+    .loc-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 3rem; align-items: stretch; }
+    @media (max-width: 900px) { .loc-grid { grid-template-columns: 1fr; } }
+    .loc-media { position: relative; min-height: 22rem; overflow: hidden; border: 1px solid var(--border); }
+    .loc-media img { width: 100%; height: 100%; object-fit: cover; opacity: .7; position: absolute; inset: 0; }
+    .loc-media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, oklch(0.55 0.28 292 / .15), transparent 55%), linear-gradient(to top, oklch(0.05 0 0 / .85), transparent 60%); }
+    /* Stylized map */
+    .loc-map { position: relative; aspect-ratio: 16/10; border: 1px solid var(--border); overflow: hidden; background: #0d0d10; margin-bottom: 1.5rem; }
+    .loc-map svg { width: 100%; height: 100%; display: block; }
+    .loc-map .map-pin { position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .4rem; }
+    .loc-map .pin-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 6px oklch(0.55 0.28 292 / .2), 0 0 22px oklch(0.55 0.28 292 / .6); animation: pulseDot 2.6s ease-in-out infinite; }
+    .loc-map .pin-label { font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 700; color: var(--fg); background: oklch(0.05 0 0 / .8); border: 1px solid var(--border); padding: .25rem .6rem; }
+    .loc-map .map-note { position: absolute; bottom: .65rem; right: .75rem; z-index: 2; font-size: .55rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .loc-info { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2rem; }
+    @media (max-width: 480px) { .loc-info { grid-template-columns: 1fr; } }
+    .loc-block .lk { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--blue); font-weight: 700; margin-bottom: .5rem; }
+    .loc-block .lv { font-size: .9rem; color: var(--fg); line-height: 1.6; }
+    .loc-block .lv span { color: var(--muted); }
+    .loc-feats { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+    .loc-feats li { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--muted); border: 1px solid var(--border); padding: .3rem .6rem; }
+    .loc-cta { margin-top: 2rem; }
+
+    /* ── Social ── */
+    #social { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .soc-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+    @media (max-width: 900px) { .soc-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { .soc-grid { grid-template-columns: repeat(2, 1fr); } }
+    .soc-card { display: flex; flex-direction: column; align-items: center; gap: .85rem; padding: 1.75rem 1rem; border: 1px solid var(--border); background: var(--bg); text-decoration: none; transition: border-color .25s, transform .25s, background .25s; text-align: center; }
+    .soc-card:hover { border-color: oklch(0.55 0.28 292 / .5); transform: translateY(-4px); background: var(--secondary); }
+    .soc-ic { width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); transition: border-color .25s, transform .25s; }
+    .soc-card:hover .soc-ic { border-color: var(--blue); transform: scale(1.08); }
+    .soc-ic svg { width: 1.4rem; height: 1.4rem; fill: var(--fg); transition: fill .25s; display: block; }
+    .soc-card:hover .soc-ic svg { fill: var(--blue); }
+    .soc-count { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.5rem; color: var(--fg); line-height: 1; }
+    .soc-name { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .soc-note { text-align: center; margin-top: 1.5rem; font-size: .68rem; color: var(--muted); letter-spacing: .05em; }
+
+    /* ── FAQ ── */
+    .faq-list { max-width: 52rem; margin: 0 auto; }
+    .faq-item { border: 1px solid var(--border); background: var(--card); margin-bottom: .75rem; transition: border-color .2s; }
+    .faq-item[open] { border-color: oklch(0.55 0.28 292 / .4); }
+    .faq-item summary { padding: 1.25rem 1.5rem; cursor: pointer; font-weight: 600; font-size: .95rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; list-style: none; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 1.4rem; color: var(--blue); font-weight: 400; line-height: 1; flex-shrink: 0; }
+    .faq-item[open] summary::after { content: '\2013'; }
+    .faq-a { padding: 0 1.5rem 1.4rem; color: var(--muted); line-height: 1.7; font-size: .9rem; }
+
+    /* ── Final CTA ── */
+    #final { position: relative; overflow: hidden; padding: 9rem 2.5rem; text-align: center; }
+    .final-bg { position: absolute; inset: 0; background: url('public/images/community-bg.jpg') center/cover no-repeat; opacity: .25; }
+    .final-overlay { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, oklch(0.55 0.28 292 / .14), transparent 60%), linear-gradient(to bottom, var(--bg) 0%, transparent 35%, var(--bg) 100%); }
+    .final-inner { position: relative; z-index: 10; max-width: 56rem; margin: 0 auto; }
+    .final-inner h2 { font-size: clamp(2.5rem, 7vw, 6rem); margin-bottom: 1.5rem; }
+    .final-inner p { color: var(--muted); font-size: 1.15rem; line-height: 1.7; max-width: 38rem; margin: 0 auto 2.5rem; }
+    .final-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Footer ── */
+    footer { background: var(--card); border-top: 1px solid var(--border); padding: 4rem 2.5rem; }
+    .footer-inner { max-width: 90rem; margin: 0 auto; }
+    .footer-top { display: flex; flex-direction: column; gap: 2.5rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+    @media (min-width: 768px) { .footer-top { flex-direction: row; align-items: flex-end; justify-content: space-between; } }
+    footer img { height: 5rem; width: auto; margin-bottom: .5rem; }
+    .footer-tagline { font-size: .875rem; color: var(--muted); font-style: italic; }
+    .footer-nav { display: flex; flex-wrap: wrap; gap: 1.5rem 2rem; list-style: none; }
+    .footer-nav a { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-nav a:hover { color: var(--fg); }
+    .footer-nav a.gold { color: var(--gold); }
+    .footer-bottom { display: flex; flex-direction: column; gap: 1rem; font-size: .75rem; color: var(--muted); }
+    @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; align-items: center; } }
+    .footer-bottom a { color: var(--gold); text-decoration: underline; text-underline-offset: 4px; }
+    .footer-watermark { display: flex; justify-content: center; overflow: hidden; margin-top: 2rem; opacity: .25; pointer-events: none; }
+    .footer-watermark img { width: 70vw; max-width: 48rem; height: auto; }
+
+    /* ── Mobile ── */
+    @media (max-width: 640px) {
+      .ct-hero-content { padding-top: 9rem; }
+      .section { padding: 4.5rem 1.25rem; }
+      .section-full { padding: 4.5rem 0; }
+      #contact-form, #social, #final { padding-left: 1.25rem; padding-right: 1.25rem; }
+      #navbar { padding: 0 1.25rem; }
+      .section-inner { padding: 0 1.25rem; }
+      .sec-head { margin-bottom: 2.5rem; }
+    }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
+    }
+    .email-btn { display: inline-flex; align-items: center; gap: .55rem; padding: .65rem 1rem; border: 1px solid var(--border); background: var(--bg); color: var(--fg); font-size: .85rem; font-weight: 600; text-decoration: none; transition: border-color .2s, background .2s; }
+    .email-btn:hover { border-color: var(--blue); background: var(--secondary); }
+    .email-btn svg { width: 1rem; height: 1rem; stroke: var(--blue); fill: none; stroke-width: 2; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<header>
+  <nav id="navbar">
+    <a href="index.html" aria-label="SUQ Media home">
+      <img src="public/images/logo.png" alt="SUQ Media" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="podcast.html">Podcast</a></li>
+      <li><a href="music.html">Music</a></li>
+      <li class="nav-dropdown">
+        <a href="#">Services</a>
+        <ul class="dropdown-menu">
+          <li><a href="custom-apparel.html">Custom Apparel</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#merch">Merch</a></li>
+      <li><a href="studio-rental.html">Studio Rental</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+      <li><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="foundation">Foundation ↗</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#about" class="mobile-link">About</a>
+    <a href="podcast.html" class="mobile-link">Podcast</a>
+    <a href="music.html" class="mobile-link">Music</a>
+    <span class="mobile-dropdown-label">Services</span>
+    <div class="mobile-dropdown-items">
+      <a href="custom-apparel.html" class="mobile-link">Custom Apparel</a>
+    </div>
+    <a href="index.html#merch" class="mobile-link">Merch</a>
+    <a href="studio-rental.html" class="mobile-link">Studio Rental</a>
+    <a href="contact.html" class="mobile-link active">Contact</a>
+    <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="foundation">Foundation ↗</a>
+  </div>
+</header>
+
+<!-- ══ 1. HERO ══ -->
+<section id="ct-hero">
+  <div class="ct-hero-bg"></div>
+  <div class="ct-hero-overlay"></div>
+  <div class="ct-glow-blue"></div>
+  <div class="ct-glow-gold"></div>
+  <div class="ct-light-sweep"></div>
+
+  <div class="ct-hero-content">
+    <p class="ct-hero-eyebrow fade-up">SUQ Media — Contact</p>
+    <h1 class="display ct-hero-headline fade-up delay-1">
+      Let's Build Something <span class="blue">Worth</span> <span class="gold">Talking About</span>
+    </h1>
+    <p class="ct-hero-sub fade-up delay-2">
+      Whatever you're creating, we want to hear about it. Tell us about your project and the SUQ Media team will
+      help you bring it to life.
+    </p>
+    <div class="ct-hero-tags fade-up delay-2">
+      <span class="ct-tag">Podcasts</span>
+      <span class="ct-tag">Music</span>
+      <span class="ct-tag">Studio Rental</span>
+      <span class="ct-tag">Media Production</span>
+      <span class="ct-tag">Creative Partnerships</span>
+      <span class="ct-tag">Brand Collaborations</span>
+      <span class="ct-tag">Custom Apparel</span>
+      <span class="ct-tag">Content Creation</span>
+    </div>
+    <div class="ct-hero-btns fade-up delay-3">
+      <a href="#contact-form" class="btn btn-blue glow-pulse">Contact Us</a>
+      <a href="studio-rental.html#inquire" class="btn btn-gold">Book The Studio</a>
+      <a href="#contact-form" class="btn btn-ghost" data-inquiry="Business Partnership">Partner With Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 2. CONTACT OPTIONS ══ -->
+<section class="section" id="options">
+  <div class="sec-head reveal">
+    <p class="section-label">01 — How Can We Help?</p>
+    <h2 class="display">Find The <span class="blue">Right Door</span></h2>
+    <p>Pick what fits your inquiry and we'll route you to the right place — or just send us a message below.</p>
+  </div>
+  <div class="opt-grid">
+    <div class="opt-card reveal"><div class="opt-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h3>General Inquiries</h3><p>Questions, ideas, or not sure where to start? Reach out and we'll point you the right way.</p><a class="opt-cta" href="#contact-form" data-inquiry="General Inquiry">Send a Message →</a></div>
+    <div class="opt-card reveal d1"><div class="opt-ic"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM5 10v2a7 7 0 0 0 14 0v-2M12 19v4M8 23h8"/></svg></div><h3>Podcast Guest Requests</h3><p>Have a story worth sharing? Apply to be a guest on the SUQ Media podcast.</p><a class="opt-cta" href="podcast.html#guest">Apply to Guest →</a></div>
+    <div class="opt-card reveal d2"><div class="opt-ic"><svg viewBox="0 0 24 24"><rect x="1" y="5" width="15" height="14" rx="2"/><path d="M23 7l-7 5 7 5V7z"/></svg></div><h3>Studio Bookings</h3><p>Book the studio for podcast, music, video or content sessions.</p><a class="opt-cta" href="studio-rental.html#inquire">Book the Studio →</a></div>
+    <div class="opt-card reveal d3"><div class="opt-ic"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Brand Partnerships</h3><p>Collaborate with SUQ Media on content, campaigns and creative projects.</p><a class="opt-cta" href="#contact-form" data-inquiry="Business Partnership">Start a Partnership →</a></div>
+    <div class="opt-card reveal"><div class="opt-ic"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h3>Music Submissions</h3><p>Independent artist with something real to say? Submit your music for a feature.</p><a class="opt-cta" href="music.html#submit">Submit Music →</a></div>
+    <div class="opt-card reveal d1"><div class="opt-ic"><svg viewBox="0 0 24 24"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></div><h3>Custom Apparel</h3><p>Build a premium apparel line — concept to manufacturing to delivery.</p><a class="opt-cta" href="custom-apparel.html#intake">Start a Project →</a></div>
+    <div class="opt-card reveal d2"><div class="opt-ic"><svg viewBox="0 0 24 24"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.5"/></svg></div><h3>Media &amp; Press</h3><p>Press, interviews and media requests for SUQ Media and our creators.</p><a class="opt-cta" href="#contact-form" data-inquiry="General Inquiry">Contact Press →</a></div>
+    <div class="opt-card reveal d3"><div class="opt-ic"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg></div><h3>Sponsorship</h3><p>Reach an engaged, intentional audience by partnering with our content.</p><a class="opt-cta" href="#contact-form" data-inquiry="Sponsorship">Become a Sponsor →</a></div>
+  </div>
+</section>
+
+<!-- ══ 3. MAIN CONTACT FORM ══ -->
+<section class="section-full" id="contact-form">
+  <div class="section-inner">
+    <div class="cf-grid">
+      <div class="cf-aside reveal">
+        <p class="section-label">02 — Start A Conversation</p>
+        <h2 class="display">Tell Us What <span class="blue">You're Building</span></h2>
+        <p class="lead">The more we know, the faster we can help. Fill out the form and the right person on our team will
+          get back to you.</p>
+        <ul class="cf-points">
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Serious inquiries reviewed by our team</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Podcasts, music, studio, apparel &amp; partnerships</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Typical response within 1–2 business days</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Every project supports the Foundation</li>
+        </ul>
+        <div class="cf-trust" style="margin-top:2rem;">
+          <a class="email-btn" href="mailto:info@suqmedia.com"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>info@suqmedia.com</a>
+        </div>
+      </div>
+
+      <div class="cf-card reveal d1">
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="float"><input id="ct-name" name="name" type="text" required placeholder=" " /><label for="ct-name">Full Name <span class="req">*</span></label></div>
+            <div class="float"><input id="ct-company" name="company" type="text" placeholder=" " /><label for="ct-company">Company / Brand</label></div>
+          </div>
+          <div class="form-row">
+            <div class="float"><input id="ct-email" name="email" type="email" required placeholder=" " /><label for="ct-email">Email <span class="req">*</span></label></div>
+            <div class="float"><input id="ct-phone" name="phone" type="tel" placeholder=" " /><label for="ct-phone">Phone Number</label></div>
+          </div>
+          <div class="form-row">
+            <div class="fg">
+              <label for="ct-type">Inquiry Type <span class="req">*</span></label>
+              <select id="ct-type" name="type" required>
+                <option value="" disabled selected>Select an option</option>
+                <option>Podcast</option>
+                <option>Studio Rental</option>
+                <option>Music</option>
+                <option>Apparel</option>
+                <option>Business Partnership</option>
+                <option>Sponsorship</option>
+                <option>General Inquiry</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label for="ct-budget">Budget Range</label>
+              <select id="ct-budget" name="budget">
+                <option value="" disabled selected>Select a range</option>
+                <option>Under $1,000</option>
+                <option>$1,000 – $5,000</option>
+                <option>$5,000 – $15,000</option>
+                <option>$15,000+</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+          </div>
+          <div class="float"><textarea id="ct-message" name="message" required placeholder=" "></textarea><label for="ct-message">Message <span class="req">*</span></label></div>
+          <button type="submit" class="btn btn-blue glow-pulse" style="width:100%;justify-content:center;">Send Message →</button>
+        </form>
+        <div class="cf-trust">
+          <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg>
+          <span>Every serious inquiry is reviewed by the SUQ Media team.</span>
+        </div>
+        <div class="form-success" id="contactSuccess">
+          <div class="form-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h3 class="display">Message Received</h3>
+          <p>Thanks for reaching out. The right person on our team will be in touch soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 4. STUDIO / LOCATION ══ -->
+<section class="section" id="location">
+  <div class="sec-head reveal">
+    <p class="section-label">03 — Find Us</p>
+    <h2 class="display">The <span class="blue">Studio</span></h2>
+    <p>A premium creative hub built for podcasts, music and content. Come create something with us.</p>
+  </div>
+  <div class="loc-grid">
+    <div class="loc-media reveal">
+      <img src="public/images/studio-bg.jpg" alt="The SUQ Media studio space" loading="lazy" />
+    </div>
+    <div class="reveal d1">
+      <div class="loc-map">
+        <svg viewBox="0 0 400 250" aria-hidden="true">
+          <rect width="400" height="250" fill="#0d0d10"/>
+          <g stroke="#1c1c22" stroke-width="2">
+            <line x1="0" y1="60" x2="400" y2="80"/><line x1="0" y1="140" x2="400" y2="120"/>
+            <line x1="0" y1="200" x2="400" y2="190"/><line x1="80" y1="0" x2="100" y2="250"/>
+            <line x1="200" y1="0" x2="190" y2="250"/><line x1="310" y1="0" x2="330" y2="250"/>
+          </g>
+          <g stroke="#15151a" stroke-width="6"><path d="M0 110 L200 120 L400 100" fill="none"/><path d="M190 0 L200 120 L210 250" fill="none"/></g>
+        </svg>
+        <div class="map-pin"><span class="pin-dot"></span><span class="pin-label">SUQ Media Studio</span></div>
+        <span class="map-note">Map preview · directions on booking</span>
+      </div>
+      <div class="loc-info">
+        <div class="loc-block"><p class="lk">Location</p><p class="lv">SUQ Media Studio<br><span>Calgary, Alberta — exact address shared on booking</span></p></div>
+        <div class="loc-block"><p class="lk">Hours</p><p class="lv">By appointment<br><span>Mon – Sat · Flexible session times</span></p></div>
+        <div class="loc-block"><p class="lk">Parking</p><p class="lv">On-site &amp; street parking<br><span>Easy load-in for gear</span></p></div>
+        <div class="loc-block"><p class="lk">Contact</p><p class="lv"><a class="email-btn" href="mailto:info@suqmedia.com"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>info@suqmedia.com</a></p></div>
+      </div>
+      <div class="loc-block" style="margin-top:1.5rem;">
+        <p class="lk">Studio Features</p>
+        <ul class="loc-feats">
+          <li>Podcast Production</li><li>Professional Audio</li><li>Multi-Camera Setup</li>
+          <li>Guest Seating</li><li>Custom Lighting</li><li>Content Production Space</li>
+        </ul>
+      </div>
+      <a href="studio-rental.html" class="btn btn-blue loc-cta">Explore Studio Rental →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 5. SOCIAL ══ -->
+<section class="section-full" id="social">
+  <div class="section-inner">
+    <div class="sec-head center reveal">
+      <p class="section-label">04 — Stay Connected</p>
+      <h2 class="display">Follow The <span class="blue">Movement</span></h2>
+      <p>Behind-the-scenes, new drops, episodes and stories from the SUQ Media community.</p>
+    </div>
+    <div class="soc-grid">
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="soc-card reveal" aria-label="Instagram">
+        <span class="soc-ic"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></span>
+        <span class="soc-count">12.4K</span><span class="soc-name">Instagram</span>
+      </a>
+      <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="soc-card reveal d1" aria-label="YouTube">
+        <span class="soc-ic"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></span>
+        <span class="soc-count">8.6K</span><span class="soc-name">YouTube</span>
+      </a>
+      <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="soc-card reveal d2" aria-label="TikTok">
+        <span class="soc-ic"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></span>
+        <span class="soc-count">21.3K</span><span class="soc-name">TikTok</span>
+      </a>
+      <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="soc-card reveal" aria-label="Spotify">
+        <span class="soc-ic"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg></span>
+        <span class="soc-count">4.1K</span><span class="soc-name">Spotify</span>
+      </a>
+      <a href="https://podcasts.apple.com" target="_blank" rel="noopener noreferrer" class="soc-card reveal d1" aria-label="Apple Podcasts">
+        <span class="soc-ic"><svg viewBox="0 0 24 24"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg></span>
+        <span class="soc-count">2.9K</span><span class="soc-name">Apple Podcasts</span>
+      </a>
+      <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="soc-card reveal d2" aria-label="X">
+        <span class="soc-ic"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
+        <span class="soc-count">6.7K</span><span class="soc-name">X / Twitter</span>
+      </a>
+    </div>
+    <p class="soc-note">Follower counts shown are placeholders — to be updated with live numbers.</p>
+  </div>
+</section>
+
+<!-- ══ 6. FAQ ══ -->
+<section class="section" id="faq">
+  <div class="sec-head center reveal">
+    <p class="section-label">05 — FAQ</p>
+    <h2 class="display">Questions, <span class="blue">Answered</span></h2>
+  </div>
+  <div class="faq-list reveal d1">
+    <details class="faq-item"><summary>How do I book the studio?</summary><div class="faq-a">Head to the <a href="studio-rental.html" style="color:var(--blue);">Studio Rental</a> page, pick a session, and send a booking request with your preferred date. We'll confirm availability and lock in your time.</div></details>
+    <details class="faq-item"><summary>Can I appear on a podcast?</summary><div class="faq-a">Yes — we're always looking for guests with real stories and lived experience. Apply through the <a href="podcast.html#guest" style="color:var(--blue);">Become a Guest</a> form and our team will review it.</div></details>
+    <details class="faq-item"><summary>Do you work with brands?</summary><div class="faq-a">Absolutely. From content and campaigns to sponsorships and custom apparel, we partner with brands of all sizes. Choose "Business Partnership" in the form above and tell us what you have in mind.</div></details>
+    <details class="faq-item"><summary>Can I submit music?</summary><div class="faq-a">If you're an independent artist with something real to say, we'd love to hear it. Submit through the <a href="music.html#submit" style="color:var(--blue);">Music</a> page and we'll be in touch if it's a fit.</div></details>
+    <details class="faq-item"><summary>Do you offer production services?</summary><div class="faq-a">Yes — podcast and music production, multi-camera video, content creation and full creative production. Tell us about your project in the contact form and we'll map out the right approach.</div></details>
+    <details class="faq-item"><summary>How quickly do you respond?</summary><div class="faq-a">We typically respond to serious inquiries within 1–2 business days. Every message is reviewed by the SUQ Media team.</div></details>
+  </div>
+</section>
+
+<!-- ══ 7. FINAL CTA ══ -->
+<section id="final">
+  <div class="final-bg"></div>
+  <div class="final-overlay"></div>
+  <div class="final-inner reveal">
+    <p class="section-label" style="display:flex;justify-content:center;">Let's Create</p>
+    <h2 class="display"><span style="color:var(--fg);">Have An Idea</span><br><span class="blue">Worth Building?</span></h2>
+    <p>Let's create something people actually care about. Reach out and let's make it real.</p>
+    <div class="final-btns">
+      <a href="#contact-form" class="btn btn-blue glow-pulse">Start The Conversation</a>
+      <a href="studio-rental.html#inquire" class="btn btn-gold">Book The Studio</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="public/images/logo.png" alt="SUQ Media" />
+        <p class="footer-tagline">Creativity. Culture. Healing. Hope.</p>
+      </div>
+      <ul class="footer-nav">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="podcast.html">Podcast</a></li>
+        <li><a href="music.html">Music</a></li>
+        <li><a href="custom-apparel.html">Custom Apparel</a></li>
+        <li><a href="index.html#merch">Merch</a></li>
+        <li><a href="studio-rental.html">Studio Rental</a></li>
+        <li><a href="contact.html" class="gold">Contact</a></li>
+        <li><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="gold">Foundation ↗</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> SUQ Media. All rights reserved.</p>
+      <p style="max-width:28rem;text-align:right;">40% of profits support the <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">Markin K Kossowski Foundation for Hope</a>.</p>
+    </div>
+  </div>
+  <div class="footer-watermark" aria-hidden="true">
+    <img src="public/images/logo.png" alt="" />
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Hamburger
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburgerBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    hamburgerBtn.setAttribute('aria-expanded', open);
+    hamburgerBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
+      hamburgerBtn.setAttribute('aria-label', 'Open menu');
+    });
+  });
+
+  // Prefill inquiry type from any [data-inquiry] trigger, then focus the form
+  const typeSelect = document.getElementById('ct-type');
+  document.querySelectorAll('[data-inquiry]').forEach(el => {
+    el.addEventListener('click', () => {
+      const val = el.getAttribute('data-inquiry');
+      const opt = [...typeSelect.options].find(o => o.value === val);
+      if (opt) { typeSelect.value = val; }
+      setTimeout(() => document.getElementById('ct-name').focus({ preventScroll: true }), 600);
+    });
+  });
+
+  // Contact form
+  document.getElementById('contactForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!e.target.checkValidity()) { e.target.reportValidity(); return; }
+    e.target.style.display = 'none';
+    document.querySelector('#contactForm + .cf-trust').style.display = 'none';
+    document.getElementById('contactSuccess').style.display = 'block';
+    document.getElementById('contactSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  // Scroll reveal
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reveals = document.querySelectorAll('.reveal');
+  if (prefersReduced || !('IntersectionObserver' in window)) {
+    reveals.forEach(el => el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    reveals.forEach(el => io.observe(el));
+  }
+</script>
+</body>
+</html>
