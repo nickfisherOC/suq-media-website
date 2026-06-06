@@ -394,6 +394,9 @@
 
       <div class="cf-card reveal d1">
         <form id="contactForm" novalidate>
+          <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+            <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
           <div class="form-row">
             <div class="float"><input id="ct-name" name="name" type="text" required placeholder=" " /><label for="ct-name">Full Name <span class="req">*</span></label></div>
             <div class="float"><input id="ct-company" name="company" type="text" placeholder=" " /><label for="ct-company">Company / Brand</label></div>
@@ -430,6 +433,7 @@
           </div>
           <div class="float"><textarea id="ct-message" name="message" required placeholder=" "></textarea><label for="ct-message">Message <span class="req">*</span></label></div>
           <button type="submit" class="btn btn-blue glow-pulse" style="width:100%;justify-content:center;">Send Message →</button>
+          <p id="contactError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
         </form>
         <div class="cf-trust">
           <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg>
@@ -623,14 +627,57 @@
     });
   });
 
-  // Contact form
-  document.getElementById('contactForm').addEventListener('submit', e => {
+  // Contact form → Growtheon inbound webhook
+  const GROWTHEON_WEBHOOK = 'https://auth.growtheon.co/functions/v1/webhook-trigger/Fo4Zd--meNK0iJ7c9yzYL8fl8oYmx3an';
+  const contactForm = document.getElementById('contactForm');
+  function showContactSuccess() {
+    contactForm.style.display = 'none';
+    const trust = document.querySelector('#contactForm + .cf-trust');
+    if (trust) trust.style.display = 'none';
+    const ok = document.getElementById('contactSuccess');
+    ok.style.display = 'block';
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  contactForm.addEventListener('submit', async e => {
     e.preventDefault();
-    if (!e.target.checkValidity()) { e.target.reportValidity(); return; }
-    e.target.style.display = 'none';
-    document.querySelector('#contactForm + .cf-trust').style.display = 'none';
-    document.getElementById('contactSuccess').style.display = 'block';
-    document.getElementById('contactSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
+    // Honeypot: if a bot filled the hidden field, fake success without sending
+    if (contactForm.website && contactForm.website.value) { showContactSuccess(); return; }
+    const fullName = document.getElementById('ct-name').value.trim();
+    const sp = fullName.indexOf(' ');
+    const payload = {
+      form_source: 'Contact – General',
+      name: fullName,
+      first_name: sp === -1 ? fullName : fullName.slice(0, sp),
+      last_name: sp === -1 ? '' : fullName.slice(sp + 1),
+      email: document.getElementById('ct-email').value.trim(),
+      phone: document.getElementById('ct-phone').value.trim(),
+      company: document.getElementById('ct-company').value.trim(),
+      inquiry_type: document.getElementById('ct-type').value,
+      budget: document.getElementById('ct-budget').value,
+      message: document.getElementById('ct-message').value.trim(),
+      page_url: location.href
+    };
+    const errEl = document.getElementById('contactError');
+    errEl.style.display = 'none';
+    const btn = contactForm.querySelector('button[type="submit"]');
+    const originalLabel = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    try {
+      const res = await fetch(GROWTHEON_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      let accepted = res.ok;
+      try { const data = await res.json(); if (data && typeof data.request_accepted === 'boolean') accepted = data.request_accepted; } catch (_) {}
+      if (!accepted) throw new Error('Webhook did not accept the submission');
+      showContactSuccess();
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+      errEl.textContent = "Sorry — we couldn't send your message just now. Please try again, or email info@suqmedia.com.";
+      errEl.style.display = 'block';
+    }
   });
 
   // Scroll reveal
