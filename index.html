@@ -1316,6 +1316,9 @@
     </div>
     <div>
       <form id="contactForm">
+        <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+          <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+        </div>
         <div class="form-group">
           <label for="name">Name <span>*</span></label>
           <input id="name" name="name" type="text" required placeholder="Your name" />
@@ -1325,16 +1328,20 @@
           <input id="email" name="email" type="email" required placeholder="your@email.com" />
         </div>
         <div class="form-group">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" />
+        </div>
+        <div class="form-group">
           <label for="interest">What are you interested in? <span>*</span></label>
           <select id="interest" name="interest" required>
             <option value="" disabled selected>Select an option</option>
-            <option>Podcast Production</option>
-            <option>Music Production</option>
-            <option>Studio Rental</option>
-            <option>Custom Apparel</option>
-            <option>Merch</option>
-            <option>Collaboration</option>
-            <option>Foundation / Community Impact</option>
+            <option value="option1">Podcast Production</option>
+            <option value="option2">Music Production</option>
+            <option value="option3">Studio Rental</option>
+            <option value="option4">Custom Apparel</option>
+            <option value="option5">Merch</option>
+            <option value="option6">Collaboration</option>
+            <option value="option7">Foundation / Community Impact</option>
           </select>
         </div>
         <div class="form-group">
@@ -1342,6 +1349,7 @@
           <textarea id="message" name="message" required rows="5" placeholder="Tell us about your project..."></textarea>
         </div>
         <button type="submit" class="btn btn-blue glow-pulse" style="width:100%;justify-content:center;">Send Message</button>
+        <p id="formError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
       </form>
       <div class="form-success" id="formSuccess">
         <div class="form-success-icon">
@@ -1415,11 +1423,61 @@
     document.getElementById('newsletterSuccess').style.display = 'inline-flex';
   });
 
-  // Contact form
-  document.getElementById('contactForm').addEventListener('submit', e => {
+  // Homepage contact form → CRM (LeadRescue) form endpoint
+  const HOME_FORM_ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
+  const HOME_PUBLISHABLE_KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
+  const HOME_FORM_ID = '74ad8337-45cd-4d22-86a9-541b7894882d';
+  const contactForm = document.getElementById('contactForm');
+  const homeStart = Date.now();
+  function showHomeSuccess() {
+    contactForm.style.display = 'none';
+    const ok = document.getElementById('formSuccess');
+    ok.style.display = 'block';
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  contactForm.addEventListener('submit', async e => {
     e.preventDefault();
-    e.target.style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
+    if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
+    // Honeypot: bots fill the hidden field; humans don't
+    if (contactForm.website && contactForm.website.value) { showHomeSuccess(); return; }
+    const data = {
+      'full-name-field_1781122417675_xuyy2w': document.getElementById('name').value.trim(),
+      'phone-field_1781123705241_0m51ay': document.getElementById('phone').value.trim(),
+      'email-field_1781122428994_rupks7': document.getElementById('email').value.trim(),
+      'select-field_1781122435823_1h7fz8': document.getElementById('interest').value,
+      'textarea-field_1781122562131_t2mdv6': document.getElementById('message').value.trim()
+    };
+    const payload = {
+      formId: HOME_FORM_ID,
+      data: data,
+      deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+      pageUrl: location.href,
+      referrer: document.referrer,
+      completionTimeSeconds: Math.round((Date.now() - homeStart) / 1000)
+    };
+    const errEl = document.getElementById('formError');
+    errEl.style.display = 'none';
+    const btn = contactForm.querySelector('button[type="submit"]');
+    const originalLabel = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    try {
+      const res = await fetch(HOME_FORM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'apikey': HOME_PUBLISHABLE_KEY,
+          'authorization': 'Bearer ' + HOME_PUBLISHABLE_KEY,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      showHomeSuccess();
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+      errEl.textContent = "Sorry, we couldn't send your message just now. Please try again, or email info@suqmedia.com.";
+      errEl.style.display = 'block';
+    }
   });
 </script>
 </body>

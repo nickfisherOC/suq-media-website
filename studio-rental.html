@@ -729,6 +729,9 @@
       </div>
       <div>
         <form id="bookingForm">
+          <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+            <label>Leave this field empty<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+          </div>
           <div class="form-row">
             <div class="form-group"><label for="bk-name">Name <span>*</span></label><input id="bk-name" name="name" type="text" required placeholder="Your name" /></div>
             <div class="form-group"><label for="bk-phone">Phone</label><input id="bk-phone" name="phone" type="tel" placeholder="(555) 555-5555" /></div>
@@ -739,26 +742,26 @@
               <label for="bk-type">Session Type <span>*</span></label>
               <select id="bk-type" name="type" required>
                 <option value="" disabled selected>Select a session</option>
-                <option>Podcast Recording</option>
-                <option>Music Recording</option>
-                <option>Video Podcast</option>
-                <option>Photo / Video Shoot</option>
-                <option>Livestream</option>
-                <option>Social Content</option>
-                <option>Creative Session</option>
-                <option>Other</option>
+                <option value="option1">Podcast Recording</option>
+                <option value="option2">Music Recording</option>
+                <option value="option3">Video Podcast</option>
+                <option value="option4">Photo / Video Shoot</option>
+                <option value="option5">Livestream</option>
+                <option value="option6">Social Content</option>
+                <option value="option7">Creative Session</option>
+                <option value="option8">Other</option>
               </select>
             </div>
             <div class="form-group">
               <label for="bk-package">Package</label>
               <select id="bk-package" name="package">
                 <option value="" disabled selected>Select a package</option>
-                <option>Podcast Session</option>
-                <option>Music Recording</option>
-                <option>Half-Day Rental</option>
-                <option>Full-Day Rental</option>
-                <option>Content Creator</option>
-                <option>Not sure / Custom</option>
+                <option value="option1">Podcast Session</option>
+                <option value="option2">Music Recording</option>
+                <option value="option3">Half-Day Rental</option>
+                <option value="option4">Full-Day Rental</option>
+                <option value="option5">Content Creator</option>
+                <option value="option6">Not sure / Custom</option>
               </select>
             </div>
           </div>
@@ -768,6 +771,7 @@
           </div>
           <div class="form-group"><label for="bk-message">Tell Us About Your Session <span>*</span></label><textarea id="bk-message" name="message" required rows="4" placeholder="What are you creating? How many people, and what do you need from the space?"></textarea></div>
           <button type="submit" class="btn btn-blue glow-pulse" style="width:100%;justify-content:center;">Request Booking →</button>
+          <p id="bookingError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
         </form>
         <div class="form-success" id="bookingSuccess">
           <div class="form-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -834,12 +838,63 @@
     });
   });
 
-  // Booking form
-  document.getElementById('bookingForm').addEventListener('submit', e => {
+  // Studio booking form → CRM (LeadRescue) form endpoint
+  const STUDIO_FORM_ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
+  const STUDIO_PUBLISHABLE_KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
+  const STUDIO_FORM_ID = '63a462a1-3732-4685-9023-207e25e517eb';
+  const bookingForm = document.getElementById('bookingForm');
+  const bookingStart = Date.now();
+  function showBookingSuccess() {
+    bookingForm.style.display = 'none';
+    const ok = document.getElementById('bookingSuccess');
+    ok.style.display = 'block';
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  bookingForm.addEventListener('submit', async e => {
     e.preventDefault();
-    e.target.style.display = 'none';
-    document.getElementById('bookingSuccess').style.display = 'block';
-    document.getElementById('bookingSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!bookingForm.checkValidity()) { bookingForm.reportValidity(); return; }
+    // Honeypot: bots fill the hidden field; humans don't
+    if (bookingForm.company && bookingForm.company.value) { showBookingSuccess(); return; }
+    const data = {
+      'full-name-field_1781111105893_ci6138': document.getElementById('bk-name').value.trim(),
+      'phone-field_1781111117142_wefi03': document.getElementById('bk-phone').value.trim(),
+      'email-field_1781111125809_y1b7mj': document.getElementById('bk-email').value.trim(),
+      'select-field_1781111195076_lm3y3n': document.getElementById('bk-type').value,
+      'select-field_1781111290198_aoeluq': document.getElementById('bk-package').value,
+      'text-field_1781111463157_9j8rnv': document.getElementById('bk-date').value,
+      'textarea-field_1781111508685_mywsyr': document.getElementById('bk-message').value.trim()
+    };
+    const payload = {
+      formId: STUDIO_FORM_ID,
+      data: data,
+      deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+      pageUrl: location.href,
+      referrer: document.referrer,
+      completionTimeSeconds: Math.round((Date.now() - bookingStart) / 1000)
+    };
+    const errEl = document.getElementById('bookingError');
+    errEl.style.display = 'none';
+    const btn = bookingForm.querySelector('button[type="submit"]');
+    const originalLabel = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    try {
+      const res = await fetch(STUDIO_FORM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'apikey': STUDIO_PUBLISHABLE_KEY,
+          'authorization': 'Bearer ' + STUDIO_PUBLISHABLE_KEY,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      showBookingSuccess();
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+      errEl.textContent = "Sorry, we couldn't submit your booking request just now. Please try again, or email info@suqmedia.com.";
+      errEl.style.display = 'block';
+    }
   });
 
   // Gallery lightbox

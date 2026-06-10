@@ -1093,23 +1093,28 @@
     </div>
     <div>
       <form id="submitForm">
+        <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+          <label>Leave this field empty<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+        </div>
         <div class="form-group"><label for="artistName">Artist / Band Name <span>*</span></label><input id="artistName" name="artist" type="text" required placeholder="Your artist name" /></div>
         <div class="form-group"><label for="artistEmail">Email <span>*</span></label><input id="artistEmail" name="email" type="email" required placeholder="your@email.com" /></div>
+        <div class="form-group"><label for="artistPhone">Phone</label><input id="artistPhone" name="phone" type="tel" placeholder="(555) 555-5555" /></div>
         <div class="form-group">
           <label for="artistGenre">Genre <span>*</span></label>
           <select id="artistGenre" name="genre" required>
             <option value="" disabled selected>Select your genre</option>
-            <option>Rock</option><option>Alternative</option><option>Country</option><option>Folk</option>
-            <option>Hip Hop</option><option>Electronic</option><option>Pop</option><option>Blues</option>
-            <option>Jazz</option><option>Soul</option><option>Classical</option><option>Instrumental</option>
-            <option>Christian</option><option>Indigenous</option><option>Singer-Songwriter</option>
-            <option>World Music</option><option>Other</option>
+            <option value="option1">Rock</option><option value="option2">Alternative</option><option value="option3">Country</option><option value="option4">Folk</option>
+            <option value="option5">Hip Hop</option><option value="option6">Electronic</option><option value="option7">Pop</option><option value="option8">Blues</option>
+            <option value="option9">Jazz</option><option value="option10">Soul</option><option value="option12">Classical</option><option value="option11">Instrumental</option>
+            <option value="option13">Christian</option><option value="option14">Indigenous</option><option value="option15">Singer-Songwriter</option>
+            <option value="option16">World Music</option><option value="option17">Other</option>
           </select>
         </div>
         <div class="form-group"><label for="artistLink">Spotify / Apple Music / YouTube Link <span>*</span></label><input id="artistLink" name="link" type="url" required placeholder="https://" /></div>
         <div class="form-group"><label for="artistSocial">Instagram or Website</label><input id="artistSocial" name="social" type="url" placeholder="https://" /></div>
         <div class="form-group"><label for="artistBio">Tell Us About Your Music <span>*</span></label><textarea id="artistBio" name="bio" required rows="4" placeholder="Who are you, what's your story, and what makes your music worth hearing?"></textarea></div>
         <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;animation:goldGlow 3s ease-in-out infinite;">Submit Your Music →</button>
+        <p id="submitError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
       </form>
       <div class="form-success" id="submitSuccess">
         <div class="form-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1272,11 +1277,63 @@
     if (badge) badge.insertAdjacentHTML('beforebegin', pfIcons);
   });
 
-  // Submit form
-  document.getElementById('submitForm').addEventListener('submit', e => {
+  // Music submission form → CRM (LeadRescue) form endpoint
+  const MUSIC_FORM_ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
+  const MUSIC_PUBLISHABLE_KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
+  const MUSIC_FORM_ID = 'bafa50a9-3750-400b-9f84-1e7f278996ec';
+  const submitForm = document.getElementById('submitForm');
+  const submitStart = Date.now();
+  function showSubmitSuccess() {
+    submitForm.style.display = 'none';
+    const ok = document.getElementById('submitSuccess');
+    ok.style.display = 'block';
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  submitForm.addEventListener('submit', async e => {
     e.preventDefault();
-    e.target.style.display = 'none';
-    document.getElementById('submitSuccess').style.display = 'block';
+    if (!submitForm.checkValidity()) { submitForm.reportValidity(); return; }
+    // Honeypot: bots fill the hidden field; humans don't
+    if (submitForm.company && submitForm.company.value) { showSubmitSuccess(); return; }
+    const data = {
+      'full-name-field_1781109947250_mtakq8': document.getElementById('artistName').value.trim(),
+      'email-field_1781109984674_oot3k6': document.getElementById('artistEmail').value.trim(),
+      'phone-field_1781123871607_e01fn5': document.getElementById('artistPhone').value.trim(),
+      'select-field_1781110010848_whbscs': document.getElementById('artistGenre').value,
+      'website-field_1781110288867_xcuiq8': document.getElementById('artistLink').value.trim(),
+      'website-field_1781110314489_rreb5h': document.getElementById('artistSocial').value.trim(),
+      'textarea-field_1781111581568_68zccx': document.getElementById('artistBio').value.trim()
+    };
+    const payload = {
+      formId: MUSIC_FORM_ID,
+      data: data,
+      deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+      pageUrl: location.href,
+      referrer: document.referrer,
+      completionTimeSeconds: Math.round((Date.now() - submitStart) / 1000)
+    };
+    const errEl = document.getElementById('submitError');
+    errEl.style.display = 'none';
+    const btn = submitForm.querySelector('button[type="submit"]');
+    const originalLabel = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    try {
+      const res = await fetch(MUSIC_FORM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'apikey': MUSIC_PUBLISHABLE_KEY,
+          'authorization': 'Bearer ' + MUSIC_PUBLISHABLE_KEY,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      showSubmitSuccess();
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+      errEl.textContent = "Sorry, we couldn't submit your music just now. Please try again, or email info@suqmedia.com.";
+      errEl.style.display = 'block';
+    }
   });
 
   // Newsletter form

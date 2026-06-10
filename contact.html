@@ -410,24 +410,24 @@
               <label for="ct-type">Inquiry Type <span class="req">*</span></label>
               <select id="ct-type" name="type" required>
                 <option value="" disabled selected>Select an option</option>
-                <option>Podcast</option>
-                <option>Studio Rental</option>
-                <option>Music</option>
-                <option>Apparel</option>
-                <option>Business Partnership</option>
-                <option>Sponsorship</option>
-                <option>General Inquiry</option>
+                <option value="option1">Podcast</option>
+                <option value="option2">Studio Rental</option>
+                <option value="option3">Music</option>
+                <option value="option4">Apparel</option>
+                <option value="option5">Business Partnership</option>
+                <option value="option6">Sponsorship</option>
+                <option value="option7">General Inquiry</option>
               </select>
             </div>
             <div class="fg">
               <label for="ct-budget">Budget Range</label>
               <select id="ct-budget" name="budget">
                 <option value="" disabled selected>Select a range</option>
-                <option>Under $1,000</option>
-                <option>$1,000 – $5,000</option>
-                <option>$5,000 – $15,000</option>
-                <option>$15,000+</option>
-                <option>Not sure yet</option>
+                <option value="option1">Under $1,000</option>
+                <option value="option2">$1,000 – $5,000</option>
+                <option value="option3">$5,000 – $15,000</option>
+                <option value="option4">$15,000+</option>
+                <option value="option5">Not sure yet</option>
               </select>
             </div>
           </div>
@@ -627,9 +627,12 @@
     });
   });
 
-  // Contact form → Growtheon inbound webhook
-  const GROWTHEON_WEBHOOK = 'https://auth.growtheon.co/functions/v1/webhook-trigger/Fo4Zd--meNK0iJ7c9yzYL8fl8oYmx3an';
+  // Contact form → Growtheon (LeadRescue) form endpoint
+  const GROWTHEON_FORM_ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
+  const GROWTHEON_PUBLISHABLE_KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
+  const GROWTHEON_FORM_ID = 'd526891a-d633-47d8-984c-7f9cf1b6dba1';
   const contactForm = document.getElementById('contactForm');
+  const contactStart = Date.now();
   function showContactSuccess() {
     contactForm.style.display = 'none';
     const trust = document.querySelector('#contactForm + .cf-trust');
@@ -643,20 +646,22 @@
     if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
     // Honeypot: if a bot filled the hidden field, fake success without sending
     if (contactForm.website && contactForm.website.value) { showContactSuccess(); return; }
-    const fullName = document.getElementById('ct-name').value.trim();
-    const sp = fullName.indexOf(' ');
+    const data = {
+      'full_name': document.getElementById('ct-name').value.trim(),
+      'company-field_1781109529008_lyj43k': document.getElementById('ct-company').value.trim(),
+      'email_address': document.getElementById('ct-email').value.trim(),
+      'phone_number': document.getElementById('ct-phone').value.trim(),
+      'select-field_1781109574987_3ennjr': document.getElementById('ct-type').value,
+      'select-field_1781109744867_0cry8c': document.getElementById('ct-budget').value,
+      'message': document.getElementById('ct-message').value.trim()
+    };
     const payload = {
-      form_source: 'Contact – General',
-      name: fullName,
-      first_name: sp === -1 ? fullName : fullName.slice(0, sp),
-      last_name: sp === -1 ? '' : fullName.slice(sp + 1),
-      email: document.getElementById('ct-email').value.trim(),
-      phone: document.getElementById('ct-phone').value.trim(),
-      company: document.getElementById('ct-company').value.trim(),
-      inquiry_type: document.getElementById('ct-type').value,
-      budget: document.getElementById('ct-budget').value,
-      message: document.getElementById('ct-message').value.trim(),
-      page_url: location.href
+      formId: GROWTHEON_FORM_ID,
+      data: data,
+      deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+      pageUrl: location.href,
+      referrer: document.referrer,
+      completionTimeSeconds: Math.round((Date.now() - contactStart) / 1000)
     };
     const errEl = document.getElementById('contactError');
     errEl.style.display = 'none';
@@ -664,14 +669,17 @@
     const originalLabel = btn ? btn.textContent : '';
     if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
     try {
-      const res = await fetch(GROWTHEON_WEBHOOK, {
+      const res = await fetch(GROWTHEON_FORM_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'apikey': GROWTHEON_PUBLISHABLE_KEY,
+          'authorization': 'Bearer ' + GROWTHEON_PUBLISHABLE_KEY,
+          'content-type': 'application/json'
+        },
         body: JSON.stringify(payload)
       });
-      let accepted = res.ok;
-      try { const data = await res.json(); if (data && typeof data.request_accepted === 'boolean') accepted = data.request_accepted; } catch (_) {}
-      if (!accepted) throw new Error('Webhook did not accept the submission');
+      const result = await res.json().catch(() => ({}));
+      if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
       showContactSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

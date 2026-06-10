@@ -832,36 +832,42 @@
     <div class="reveal d1">
       <div class="intake-form-wrap">
         <form id="intakeForm">
+          <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+            <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
           <div class="form-row">
             <div class="form-group"><label for="ca-name">Name <span>*</span></label><input id="ca-name" name="name" type="text" required placeholder="Your name" /></div>
             <div class="form-group"><label for="ca-brand">Company / Brand</label><input id="ca-brand" name="brand" type="text" placeholder="Brand name" /></div>
           </div>
-          <div class="form-group"><label for="ca-email">Email <span>*</span></label><input id="ca-email" name="email" type="email" required placeholder="your@email.com" /></div>
+          <div class="form-row">
+            <div class="form-group"><label for="ca-email">Email <span>*</span></label><input id="ca-email" name="email" type="email" required placeholder="your@email.com" /></div>
+            <div class="form-group"><label for="ca-phone">Phone</label><input id="ca-phone" name="phone" type="tel" placeholder="(555) 555-5555" /></div>
+          </div>
           <div class="form-row">
             <div class="form-group">
               <label for="ca-type">Project Type <span>*</span></label>
               <select id="ca-type" name="type" required>
                 <option value="" disabled selected>Select a project type</option>
-                <option>Custom Streetwear</option>
-                <option>Corporate / Branded Apparel</option>
-                <option>Event &amp; Merch Program</option>
-                <option>Athletic / Performance Wear</option>
-                <option>Hospitality / Uniforms</option>
-                <option>Podcast / Creator Merch</option>
-                <option>Full Brand Build</option>
-                <option>Other</option>
+                <option value="option1">Custom Streetwear</option>
+                <option value="option2">Corporate / Branded Apparel</option>
+                <option value="option3">Event &amp; Merch Program</option>
+                <option value="option4">Athletic / Performance Wear</option>
+                <option value="option5">Hospitality / Uniforms</option>
+                <option value="option6">Podcast / Creator Merch</option>
+                <option value="option7">Full Brand Build</option>
+                <option value="option8">Other</option>
               </select>
             </div>
             <div class="form-group">
               <label for="ca-qty">Estimated Quantity</label>
               <select id="ca-qty" name="quantity">
                 <option value="" disabled selected>Select a range</option>
-                <option>Under 100 units</option>
-                <option>100 – 500 units</option>
-                <option>500 – 1,000 units</option>
-                <option>1,000 – 5,000 units</option>
-                <option>5,000+ units</option>
-                <option>Not sure yet</option>
+                <option value="option1">Under 100 units</option>
+                <option value="option2">100 – 500 units</option>
+                <option value="option3">500 – 1,000 units</option>
+                <option value="option4">1,000 – 5,000 units</option>
+                <option value="option5">5,000+ units</option>
+                <option value="option6">Not sure yet</option>
               </select>
             </div>
           </div>
@@ -869,15 +875,16 @@
             <label for="ca-timeline">Target Timeline</label>
             <select id="ca-timeline" name="timeline">
               <option value="" disabled selected>Select a timeline</option>
-              <option>ASAP / Rush</option>
-              <option>1 – 2 months</option>
-              <option>3 – 4 months</option>
-              <option>Flexible</option>
-              <option>Just exploring</option>
+              <option value="option1">ASAP / Rush</option>
+              <option value="option2">1 – 2 months</option>
+              <option value="option3">3 – 4 months</option>
+              <option value="option4">Flexible</option>
+              <option value="option5">Just exploring</option>
             </select>
           </div>
           <div class="form-group"><label for="ca-message">Project Details <span>*</span></label><textarea id="ca-message" name="message" required rows="4" placeholder="Tell us about your product, vision, fabrics, references and goals…"></textarea></div>
           <button type="submit" class="btn btn-gold glow-pulse" style="width:100%; justify-content:center;">Submit Project Brief →</button>
+          <p id="intakeError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
         </form>
         <div class="form-success" id="intakeSuccess">
           <div class="form-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -944,12 +951,64 @@
     });
   });
 
-  // Intake form
-  document.getElementById('intakeForm').addEventListener('submit', e => {
+  // Custom apparel intake form → CRM (LeadRescue) form endpoint
+  const APPAREL_FORM_ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
+  const APPAREL_PUBLISHABLE_KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
+  const APPAREL_FORM_ID = 'ffc5bbd9-9fec-4991-bf36-ace1b741fa87';
+  const intakeForm = document.getElementById('intakeForm');
+  const intakeStart = Date.now();
+  function showIntakeSuccess() {
+    intakeForm.style.display = 'none';
+    const ok = document.getElementById('intakeSuccess');
+    ok.style.display = 'block';
+    ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  intakeForm.addEventListener('submit', async e => {
     e.preventDefault();
-    e.target.style.display = 'none';
-    document.getElementById('intakeSuccess').style.display = 'block';
-    document.getElementById('intakeSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!intakeForm.checkValidity()) { intakeForm.reportValidity(); return; }
+    // Honeypot: bots fill the hidden field; humans don't
+    if (intakeForm.website && intakeForm.website.value) { showIntakeSuccess(); return; }
+    const data = {
+      'first-name-field_1781110444597_nzvudq': document.getElementById('ca-name').value.trim(),
+      'company-field_1781110450648_li0u23': document.getElementById('ca-brand').value.trim(),
+      'email-field_1781110459157_vm916b': document.getElementById('ca-email').value.trim(),
+      'phone-field_1781123833090_cfgdai': document.getElementById('ca-phone').value.trim(),
+      'select-field_1781110494945_q28f69': document.getElementById('ca-type').value,
+      'select-field_1781110661193_k9b70o': document.getElementById('ca-qty').value,
+      'select-field_1781110789205_11tfng': document.getElementById('ca-timeline').value,
+      'textarea-field_1781111620488_bino7k': document.getElementById('ca-message').value.trim()
+    };
+    const payload = {
+      formId: APPAREL_FORM_ID,
+      data: data,
+      deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+      pageUrl: location.href,
+      referrer: document.referrer,
+      completionTimeSeconds: Math.round((Date.now() - intakeStart) / 1000)
+    };
+    const errEl = document.getElementById('intakeError');
+    errEl.style.display = 'none';
+    const btn = intakeForm.querySelector('button[type="submit"]');
+    const originalLabel = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+    try {
+      const res = await fetch(APPAREL_FORM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'apikey': APPAREL_PUBLISHABLE_KEY,
+          'authorization': 'Bearer ' + APPAREL_PUBLISHABLE_KEY,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      showIntakeSuccess();
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+      errEl.textContent = "Sorry, we couldn't submit your brief just now. Please try again, or email info@suqmedia.com.";
+      errEl.style.display = 'block';
+    }
   });
 
   // Scroll reveal
