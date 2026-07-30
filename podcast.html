@@ -1101,7 +1101,7 @@
 
   <!-- Full-width banner image with colour overlay -->
   <div class="hosts-banner">
-    <img src="public/images/hosts-banner.jpg" alt="Kerry and Krzysztof — Suq Media Hosts" />
+    <img src="public/images/podcastwideshot.jpg" alt="Kerry and Krzysztof — Suq Media Hosts" />
     <div class="hosts-banner-glow"></div>
     <div class="hosts-banner-overlay"></div>
   </div>
@@ -1319,12 +1319,16 @@
     <span class="newsletter-benefit">No spam, ever</span>
   </div>
   <form class="newsletter-form" id="podNewsletterForm">
-    <input type="email" placeholder="Enter your email address" required />
+    <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+      <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+    <input id="podNewsletterEmail" type="email" placeholder="Enter your email address" required />
     <button type="submit" class="btn btn-blue" style="padding:.85rem 1.5rem;">Subscribe</button>
   </form>
   <div class="newsletter-success" id="podNewsletterSuccess">
     You're in. We'll let you know when new episodes drop.
   </div>
+  <p id="podNewsletterError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
   <p class="privacy-note">No spam. Unsubscribe at any time.</p>
 </section>
 
@@ -1363,6 +1367,7 @@
         <li><a href="index.html#about">About</a></li>
         <li><a href="podcast.html">Podcast</a></li>
         <li><a href="music.html">Music</a></li>
+        <li><a href="custom-apparel.html">Custom Apparel</a></li>
         <li><a href="index.html#merch">Merch</a></li>
         <li><a href="studio-rental.html">Studio Rental</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -1497,11 +1502,55 @@
     }
   });
 
-  // Newsletter form
-  document.getElementById('podNewsletterForm').addEventListener('submit', e => {
-    e.preventDefault();
-    e.target.style.display = 'none';
+  // Newsletter form → CRM (LeadRescue) form endpoint
+  const NEWSLETTER_FORM_ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
+  const NEWSLETTER_PUBLISHABLE_KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
+  const NEWSLETTER_FORM_ID = 'f44f3915-582a-4f0d-8542-56320ad80487';
+  const podNewsletterForm = document.getElementById('podNewsletterForm');
+  const podNewsletterStart = Date.now();
+  function showPodNewsletterSuccess() {
+    podNewsletterForm.style.display = 'none';
     document.getElementById('podNewsletterSuccess').style.display = 'inline-flex';
+  }
+  podNewsletterForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!podNewsletterForm.checkValidity()) { podNewsletterForm.reportValidity(); return; }
+    // Honeypot: bots fill the hidden field; humans don't
+    if (podNewsletterForm.website && podNewsletterForm.website.value) { showPodNewsletterSuccess(); return; }
+    const data = {
+      'email-field_1781111782654_p3lbqa': document.getElementById('podNewsletterEmail').value.trim()
+    };
+    const payload = {
+      formId: NEWSLETTER_FORM_ID,
+      data: data,
+      deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+      pageUrl: location.href,
+      referrer: document.referrer,
+      completionTimeSeconds: Math.round((Date.now() - podNewsletterStart) / 1000)
+    };
+    const errEl = document.getElementById('podNewsletterError');
+    errEl.style.display = 'none';
+    const btn = podNewsletterForm.querySelector('button[type="submit"]');
+    const originalLabel = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Subscribing…'; }
+    try {
+      const res = await fetch(NEWSLETTER_FORM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'apikey': NEWSLETTER_PUBLISHABLE_KEY,
+          'authorization': 'Bearer ' + NEWSLETTER_PUBLISHABLE_KEY,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      showPodNewsletterSuccess();
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+      errEl.textContent = "Sorry, we couldn't sign you up just now. Please try again, or email info@suqmedia.com.";
+      errEl.style.display = 'block';
+    }
   });
 </script>
 </body>

@@ -1139,10 +1139,14 @@
     <span class="music-newsletter-benefit">No spam, ever</span>
   </div>
   <form class="newsletter-form" id="musicNewsletterForm">
-    <input type="email" placeholder="Enter your email address" required />
+    <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+      <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+    <input id="musicNewsletterEmail" type="email" placeholder="Enter your email address" required />
     <button type="submit" class="btn btn-gold" style="padding:.85rem 1.5rem;">Subscribe</button>
   </form>
   <div class="music-newsletter-success" id="musicNewsletterSuccess">You're in. New music discoveries coming your way.</div>
+  <p id="musicNewsletterError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
   <p style="font-size:.7rem;color:var(--muted);margin-top:1rem;">No spam. Unsubscribe at any time.</p>
 </section>
 
@@ -1178,6 +1182,7 @@
         <li><a href="index.html#about">About</a></li>
         <li><a href="podcast.html">Podcast</a></li>
         <li><a href="music.html">Music</a></li>
+        <li><a href="custom-apparel.html">Custom Apparel</a></li>
         <li><a href="index.html#merch">Merch</a></li>
         <li><a href="studio-rental.html">Studio Rental</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -1336,11 +1341,55 @@
     }
   });
 
-  // Newsletter form
-  document.getElementById('musicNewsletterForm').addEventListener('submit', e => {
-    e.preventDefault();
-    e.target.style.display = 'none';
+  // Newsletter form → CRM (LeadRescue) form endpoint
+  const NEWSLETTER_FORM_ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
+  const NEWSLETTER_PUBLISHABLE_KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
+  const NEWSLETTER_FORM_ID = 'f44f3915-582a-4f0d-8542-56320ad80487';
+  const musicNewsletterForm = document.getElementById('musicNewsletterForm');
+  const musicNewsletterStart = Date.now();
+  function showMusicNewsletterSuccess() {
+    musicNewsletterForm.style.display = 'none';
     document.getElementById('musicNewsletterSuccess').style.display = 'inline-flex';
+  }
+  musicNewsletterForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!musicNewsletterForm.checkValidity()) { musicNewsletterForm.reportValidity(); return; }
+    // Honeypot: bots fill the hidden field; humans don't
+    if (musicNewsletterForm.website && musicNewsletterForm.website.value) { showMusicNewsletterSuccess(); return; }
+    const data = {
+      'email-field_1781111782654_p3lbqa': document.getElementById('musicNewsletterEmail').value.trim()
+    };
+    const payload = {
+      formId: NEWSLETTER_FORM_ID,
+      data: data,
+      deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+      pageUrl: location.href,
+      referrer: document.referrer,
+      completionTimeSeconds: Math.round((Date.now() - musicNewsletterStart) / 1000)
+    };
+    const errEl = document.getElementById('musicNewsletterError');
+    errEl.style.display = 'none';
+    const btn = musicNewsletterForm.querySelector('button[type="submit"]');
+    const originalLabel = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Subscribing…'; }
+    try {
+      const res = await fetch(NEWSLETTER_FORM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'apikey': NEWSLETTER_PUBLISHABLE_KEY,
+          'authorization': 'Bearer ' + NEWSLETTER_PUBLISHABLE_KEY,
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json().catch(() => ({}));
+      if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      showMusicNewsletterSuccess();
+    } catch (err) {
+      if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
+      errEl.textContent = "Sorry, we couldn't sign you up just now. Please try again, or email info@suqmedia.com.";
+      errEl.style.display = 'block';
+    }
   });
 </script>
 </body>
