@@ -762,6 +762,18 @@
     .email-btn { display: inline-flex; align-items: center; gap: .55rem; padding: .65rem 1rem; border: 1px solid var(--border); background: var(--bg); color: var(--fg); font-size: .85rem; font-weight: 600; text-decoration: none; transition: border-color .2s, background .2s; }
     .email-btn:hover { border-color: var(--blue); background: var(--secondary); }
     .email-btn svg { width: 1rem; height: 1rem; stroke: var(--blue); fill: none; stroke-width: 2; flex-shrink: 0; }
+
+    /* ── Partners ── */
+    #partners { background: var(--bg); border-top: 1px solid var(--border); padding: 5rem 2.5rem; }
+    #partners .partners-inner { max-width: 90rem; margin: 0 auto; text-align: center; }
+    #partners .section-label { display: flex; justify-content: center; }
+    #partners h2 { font-size: clamp(1.75rem, 4vw, 3rem); margin-bottom: .75rem; }
+    #partners .partners-lead { color: var(--muted); line-height: 1.7; max-width: 34rem; margin: 0 auto 3rem; font-size: .95rem; }
+    .partners-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+    @media (max-width: 900px) { .partners-grid { grid-template-columns: repeat(2, 1fr); } }
+    .partner-tile { background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; padding: 1.75rem 2rem; min-height: 8.5rem; transition: border-color .25s, transform .25s, box-shadow .25s; }
+    .partner-tile:hover { border-color: oklch(0.55 0.28 292 / .5); transform: translateY(-4px); box-shadow: 0 0 30px oklch(0.55 0.28 292 / .12); }
+    .partner-tile img { max-width: 100%; max-height: 3.5rem; width: auto; height: auto; object-fit: contain; display: block; }
   </style>
 </head>
 <body>
@@ -1363,6 +1375,21 @@
         <h3 class="display">Message Received</h3>
         <p>We'll be in touch soon. Thanks for reaching out.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Partners ── -->
+<section id="partners">
+  <div class="partners-inner">
+    <p class="section-label">Community Partners</p>
+    <h2 class="display">Proud To <span style="color:var(--blue);">Partner With</span></h2>
+    <p class="partners-lead">Working alongside organizations creating real change across our community.</p>
+    <div class="partners-grid">
+      <div class="partner-tile"><img src="public/images/partner-wins.png" alt="Women in Need Society (WINS)" loading="lazy" /></div>
+      <div class="partner-tile"><img src="public/images/partner-racs.png" alt="Recovery Acres Calgary Society" loading="lazy" /></div>
+      <div class="partner-tile"><img src="public/images/partner-arusha.webp" alt="Arusha Centre" loading="lazy" /></div>
+      <div class="partner-tile"><img src="public/images/partner-community-kitchen.jpg" alt="Community Kitchen" loading="lazy" /></div>
     </div>
   </div>
 </section>
