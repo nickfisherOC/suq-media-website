@@ -769,9 +769,8 @@
     #partners .section-label { display: flex; justify-content: center; }
     #partners h2 { font-size: clamp(1.75rem, 4vw, 3rem); margin-bottom: .75rem; }
     #partners .partners-lead { color: var(--muted); line-height: 1.7; max-width: 34rem; margin: 0 auto 3rem; font-size: .95rem; }
-    .partners-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
-    @media (max-width: 900px) { .partners-grid { grid-template-columns: repeat(2, 1fr); } }
-    .partner-tile { background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; padding: 1.75rem 2rem; min-height: 8.5rem; transition: border-color .25s, transform .25s, box-shadow .25s; }
+    .partners-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.25rem; }
+    .partner-tile { background: #fff; border: 1px solid var(--border); flex: 1 1 200px; max-width: 240px; display: flex; align-items: center; justify-content: center; padding: 1.75rem 2rem; min-height: 8.5rem; transition: border-color .25s, transform .25s, box-shadow .25s; }
     .partner-tile:hover { border-color: oklch(0.55 0.28 292 / .5); transform: translateY(-4px); box-shadow: 0 0 30px oklch(0.55 0.28 292 / .12); }
     .partner-tile img { max-width: 100%; max-height: 3.5rem; width: auto; height: auto; object-fit: contain; display: block; }
   </style>
@@ -1214,7 +1213,7 @@
         </div>
         <h3 class="founder-name">Kerry</h3>
         <p class="founder-role" style="color:var(--gold);">Co-Founder</p>
-        <p class="founder-bio">Kerry's journey through addiction, healing, self-discovery and personal transformation has shaped the heart behind Suq Media. With 23 years clean and sober, 13 years of postsecondary education and a lifetime of real-world experiences, she brings raw honesty, emotional depth and a passion for understanding the human condition.</p>
+        <p class="founder-bio">Kerry's journey through addiction, healing, self-discovery and personal transformation has shaped the heart behind Suq Media. With 24 years clean and sober, 13 years of postsecondary education and a lifetime of real-world experiences, she brings raw honesty, emotional depth and a passion for understanding the human condition.</p>
         <p class="founder-focus">Through storytelling, wellness, and meaningful conversations, Kerry hopes to inspire growth, emotional maturity, and hope in others while challenging mainstream narratives around healing and personal evolution.</p>
       </div>
       <!-- Krzysztof -->
@@ -1390,6 +1389,7 @@
       <div class="partner-tile"><img src="public/images/partner-racs.png" alt="Recovery Acres Calgary Society" loading="lazy" /></div>
       <div class="partner-tile"><img src="public/images/partner-arusha.webp" alt="Arusha Centre" loading="lazy" /></div>
       <div class="partner-tile"><img src="public/images/partner-community-kitchen.jpg" alt="Community Kitchen" loading="lazy" /></div>
+      <div class="partner-tile"><img src="public/images/partner-outsiders.png" alt="Outsiders" loading="lazy" /></div>
     </div>
   </div>
 </section>
