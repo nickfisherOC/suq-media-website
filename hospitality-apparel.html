@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ══════════════════════════════════════════════════════════
+       INDUSTRY CONTENT · META
+       ══════════════════════════════════════════════════════════ -->
+  <title>Hospitality Uniforms &amp; Custom Apparel | SUQ MEDIA</title>
+  <meta name="description" content="Custom uniforms and branded apparel for restaurants, hotels, bars and hospitality teams. Outfit your crew with professional apparel from SUQ MEDIA." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Hospitality Uniforms &amp; Custom Apparel | SUQ MEDIA" />
+  <meta property="og:description" content="Professional custom apparel for restaurants, hotels, bars and hospitality teams. Look consistent, on-brand and professional. Get a custom quote." />
+  <meta property="og:image" content="https://suqmedia.com/public/images/logo.png" />
+
+  <!-- ══════════════════════════════════════════════════════════
+       META PIXEL — paste your Pixel base code here (fires PageView).
+       This page already exposes clean hooks for the key events:
+         • Landing page view  -> Pixel PageView (base code)
+         • CTA click          -> trackCustom 'CTAClick'   (.cta-quote)
+         • Form start         -> trackCustom 'FormStart'   (first field focus)
+         • Successful submit   -> track 'Lead'             (on success)
+       No Pixel ID is invented — add yours in the base code below.
+       ══════════════════════════════════════════════════════════ -->
+  <!-- <script>!function(f,b,e,v,n,t,s){...fbq('init','YOUR_PIXEL_ID');fbq('track','PageView');</script> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="public/landing/landing.css" />
+
+  <!-- Page-specific styling (minimal — hospitality layout only) -->
+  <style>
+    /* Filled orange primary CTA (high-visibility, on-brand gold) */
+    .btn-orange { background: var(--gold); color: #0a0a0a; }
+    .btn-orange:hover { opacity: .9; background: var(--gold); }
+
+    /* Hero supporting line */
+    .hosp-tags { margin-top: 1.75rem; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+    /* Product range — simple visual row (no big cards) */
+    .range-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 62rem; margin: 0 auto; }
+    .range-item { flex: 1 1 8.5rem; max-width: 12rem; text-align: center; padding: 2.25rem 1rem; border: 1px solid var(--border); background: var(--card); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.4rem; text-transform: uppercase; letter-spacing: .03em; color: var(--fg); transition: border-color .25s, background .25s, transform .25s; }
+    .range-item:hover { border-color: oklch(0.72 0.18 55 / .5); background: var(--secondary); transform: translateY(-3px); }
+    @media (max-width: 560px) { .range-item { flex-basis: 42%; font-size: 1.2rem; padding: 1.6rem .75rem; } }
+
+    /* Pain-point statement */
+    #pain { text-align: center; }
+    #pain .pain-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, oklch(0.72 0.18 55 / .10), transparent 60%); }
+    .pain-headline { font-size: clamp(2.75rem, 8vw, 6rem); margin-bottom: 1.5rem; }
+    .pain-copy { color: var(--muted); font-size: 1.15rem; line-height: 1.7; max-width: 40rem; margin: 0 auto 2.5rem; }
+
+    /* Purpose / trust line near the form */
+    .hosp-purpose { margin-top: 1.75rem; font-size: .78rem; color: var(--muted); line-height: 1.6; }
+    .hosp-purpose a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Image-slot placeholder (until hospitality photography is added) */
+    .scene-ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, oklch(0.24 0.06 55) 0%, oklch(0.1 0 0) 62%); }
+    .scene-ph span { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .85rem; letter-spacing: .22em; text-transform: uppercase; color: oklch(0.72 0.18 55 / .6); }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar (shared) ── -->
+<header>
+  <nav id="navbar">
+    <a href="index.html" aria-label="SUQ Media home">
+      <img src="public/images/logo.png" alt="SUQ Media" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="podcast.html">Podcast</a></li>
+      <li><a href="music.html">Music</a></li>
+      <li class="nav-dropdown">
+        <a href="custom-apparel.html" class="active">Services</a>
+        <ul class="dropdown-menu">
+          <li><a href="custom-apparel.html">Custom Apparel</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#merch">Merch</a></li>
+      <li><a href="studio-rental.html">Studio Rental</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="#quote" class="foundation cta-quote" data-cta="nav" style="color:var(--gold);border-color:oklch(0.72 0.18 55 / .4);">Get A Quote</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#about" class="mobile-link">About</a>
+    <a href="podcast.html" class="mobile-link">Podcast</a>
+    <a href="music.html" class="mobile-link">Music</a>
+    <span class="mobile-dropdown-label">Services</span>
+    <div class="mobile-dropdown-items">
+      <a href="custom-apparel.html" class="mobile-link">Custom Apparel</a>
+    </div>
+    <a href="index.html#merch" class="mobile-link">Merch</a>
+    <a href="studio-rental.html" class="mobile-link">Studio Rental</a>
+    <a href="contact.html" class="mobile-link">Contact</a>
+    <a href="#quote" class="mobile-link cta-quote" data-cta="nav-mobile" style="color:var(--gold);">Get A Quote</a>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════════
+     1. HERO
+     Hero image path is relative to landing.css (../images/).
+     ══════════════════════════════════════════════════════════════ -->
+<section id="lp-hero">
+  <div class="lp-hero-bg" style="--lp-hero-image:url('../images/hospitality-hero.jpg');"></div>
+  <div class="lp-hero-overlay"></div>
+  <div class="lp-glow-blue"></div>
+  <div class="lp-glow-gold"></div>
+
+  <div class="lp-hero-content">
+    <div class="lp-hero-copy">
+      <p class="lp-hero-eyebrow fade-up">SUQ Media — Hospitality Apparel</p>
+      <h1 class="display lp-hero-headline fade-up delay-1">
+        Your Team Is Part Of <span class="gold">Your Brand.</span>
+      </h1>
+      <p class="lp-hero-sub fade-up delay-2">
+        Custom apparel built for restaurants, hotels and hospitality teams that want to look professional, stay
+        consistent and represent their brand properly.
+      </p>
+      <div class="lp-hero-btns fade-up delay-3">
+        <a href="#quote" class="btn btn-orange cta-quote" data-cta="hero">Get a Custom Quote</a>
+      </div>
+      <p class="hosp-tags fade-up delay-3">Restaurants • Hotels • Bars • Hospitality Teams</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     2. SHORT VALUE STORY  (copy left, image right)
+     ══════════════════════════════════════════════════════════════ -->
+<section id="value">
+  <div class="scene-band">
+    <div class="scene-inner reveal">
+      <div class="scene-copy">
+        <p class="section-label">Why It Matters</p>
+        <h2 class="display">Look Professional. <span class="blue">Stay Consistent.</span></h2>
+        <p class="lead" style="margin-bottom:2.5rem;">
+          From front-of-house to back-of-house, every member of your team represents your business. SUQ Media creates
+          quality branded apparel that keeps your crew looking consistent across every shift and every department.
+        </p>
+        <a href="#quote" class="btn btn-orange cta-quote" data-cta="value">Get a Custom Quote</a>
+      </div>
+      <!-- Swap this placeholder for a photo: <img src="public/images/hospitality-team.jpg" alt="Hospitality team in coordinated branded apparel" loading="lazy" /> -->
+      <div class="scene-figure">
+        <div class="scene-ph"><span>Hospitality Team Photo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     3. SIMPLE PRODUCT RANGE
+     ══════════════════════════════════════════════════════════════ -->
+<section class="section" id="range">
+  <div class="sec-head center reveal">
+    <p class="section-label">The Range</p>
+    <h2 class="display">Apparel Built Around <span class="blue">Your Team.</span></h2>
+    <p>From everyday uniforms to complete team apparel programs, we can build around your brand, staff and operating needs.</p>
+  </div>
+  <div class="range-row reveal">
+    <span class="range-item">Shirts</span>
+    <span class="range-item">Polos</span>
+    <span class="range-item">Hoodies</span>
+    <span class="range-item">Aprons</span>
+    <span class="range-item">Hats</span>
+    <span class="range-item">Workwear</span>
+  </div>
+  <div style="text-align:center;margin-top:3rem;" class="reveal">
+    <a href="#quote" class="btn btn-orange cta-quote" data-cta="range">Get a Custom Quote</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     4. PAIN POINT / DIFFERENTIATOR
+     ══════════════════════════════════════════════════════════════ -->
+<section class="section-full" id="pain" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--card);">
+  <div class="pain-bg"></div>
+  <div class="section-inner reveal">
+    <p class="section-label" style="justify-content:center;display:flex;">The Difference</p>
+    <h2 class="display pain-headline">Cheap Uniforms <span class="gold">Get Expensive.</span></h2>
+    <p class="pain-copy">
+      Uniforms that fade, shrink or wear out quickly cost more to replace — and make your team look inconsistent.
+      Invest in apparel designed to represent your business properly.
+    </p>
+    <a href="#quote" class="btn btn-orange cta-quote" data-cta="pain">Get a Custom Quote</a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     5. QUOTE FORM  (reuses the LIVE Custom Apparel backend)
+     ══════════════════════════════════════════════════════════════ -->
+<section id="quote">
+  <div class="quote-bg"></div>
+  <div class="quote-overlay"></div>
+  <div class="quote-inner">
+    <div class="quote-grid">
+      <div class="quote-aside reveal">
+        <p class="section-label">Get Started</p>
+        <h2 class="display">Outfit <span class="blue">Your Team.</span></h2>
+        <p class="lead">Tell us a little about your business and what you need. We'll help you put together the right
+          apparel solution for your team.</p>
+        <ul class="quote-points">
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Free, no-obligation quote</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Built around your brand &amp; staff</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Quality apparel designed to last</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Restaurants, hotels, bars &amp; hospitality teams</li>
+        </ul>
+        <a class="email-btn" href="mailto:info@suqmedia.com"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>info@suqmedia.com</a>
+        <p class="hosp-purpose">40% of SUQ Media profits support the <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">Markin K Kossowski Foundation for Hope</a>.</p>
+      </div>
+
+      <div class="reveal d1">
+        <form id="hospitalityForm" data-form="quote" novalidate>
+          <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+            <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="h-name">Name <span>*</span></label><input id="h-name" name="name" type="text" required placeholder="Your name" /></div>
+            <div class="form-group"><label for="h-brand">Company / Brand</label><input id="h-brand" name="brand" type="text" placeholder="Business name" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="h-email">Email <span>*</span></label><input id="h-email" name="email" type="email" required placeholder="you@business.com" /></div>
+            <div class="form-group"><label for="h-phone">Phone</label><input id="h-phone" name="phone" type="tel" placeholder="(555) 555-5555" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="h-type">Project Type <span>*</span></label>
+              <select id="h-type" name="type" required>
+                <option value="" disabled selected>Select a project type</option>
+                <option value="option5">Hospitality / Uniforms</option>
+                <option value="option2">Corporate / Branded Apparel</option>
+                <option value="option3">Event &amp; Merch Program</option>
+                <option value="option7">Full Brand Build</option>
+                <option value="option8">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="h-qty">Estimated Quantity</label>
+              <select id="h-qty" name="quantity">
+                <option value="" disabled selected>Select a range</option>
+                <option value="option1">Under 100 units</option>
+                <option value="option2">100 – 500 units</option>
+                <option value="option3">500 – 1,000 units</option>
+                <option value="option4">1,000 – 5,000 units</option>
+                <option value="option5">5,000+ units</option>
+                <option value="option6">Not sure yet</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="h-timeline">Target Timeline</label>
+            <select id="h-timeline" name="timeline">
+              <option value="" disabled selected>Select a timeline</option>
+              <option value="option1">ASAP / Rush</option>
+              <option value="option2">1 – 2 months</option>
+              <option value="option3">3 – 4 months</option>
+              <option value="option4">Flexible</option>
+              <option value="option5">Just exploring</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="h-message">Project Details <span>*</span></label><textarea id="h-message" name="message" required rows="4" placeholder="Tell us about your team, the apparel you need, and any deadlines…"></textarea></div>
+          <button type="submit" class="btn btn-orange" style="width:100%;justify-content:center;">Get My Custom Quote →</button>
+          <p id="hospitalityError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
+        </form>
+        <div class="cf-trust">
+          <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg>
+          <span>Every serious inquiry is reviewed by the SUQ Media team.</span>
+        </div>
+        <div class="form-success" id="hospitalitySuccess">
+          <div class="form-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h3 class="display">Request Received</h3>
+          <p>Thanks for reaching out. We'll review your details and get back to you with the right apparel solution shortly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer (shared) ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="public/images/logo.png" alt="SUQ Media" />
+        <p class="footer-tagline">Creativity. Culture. Healing. Hope.</p>
+      </div>
+      <ul class="footer-nav">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="podcast.html">Podcast</a></li>
+        <li><a href="music.html">Music</a></li>
+        <li><a href="custom-apparel.html">Custom Apparel</a></li>
+        <li><a href="index.html#merch">Merch</a></li>
+        <li><a href="studio-rental.html">Studio Rental</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="gold">Foundation ↗</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> SUQ Media. All rights reserved.</p>
+      <p style="max-width:28rem;text-align:right;">40% of profits support the <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">Markin K Kossowski Foundation for Hope</a>.</p>
+    </div>
+  </div>
+  <div class="footer-watermark" aria-hidden="true">
+    <img src="public/images/logo.png" alt="" />
+  </div>
+</footer>
+
+<!-- ── Sticky mobile CTA ── -->
+<div class="sticky-cta">
+  <a href="#quote" class="btn btn-orange cta-quote" data-cta="sticky">Get a Custom Quote</a>
+</div>
+
+<script src="public/landing/landing.js"></script>
+<script>
+  /* ── Quote form → LIVE Custom Apparel backend (Growtheon) ──
+     Same endpoint, form ID and field keys as custom-apparel.html. */
+  (function () {
+    var form = document.getElementById('hospitalityForm');
+    if (!form) return;
+    var ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
+    var KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
+    var FORM_ID = 'ffc5bbd9-9fec-4991-bf36-ace1b741fa87';
+    var start = Date.now();
+    var started = false;
+
+    // Tracking helper — fires Meta Pixel (if present) + a DOM event for GTM.
+    function track(ev, std) {
+      try {
+        if (window.fbq) { window.fbq(std ? 'track' : 'trackCustom', ev); }
+      } catch (e) {}
+      document.dispatchEvent(new CustomEvent('suq:' + ev));
+    }
+
+    // Form start (first field focus)
+    form.addEventListener('focusin', function () {
+      if (!started) { started = true; track('FormStart'); }
+    });
+
+    // CTA clicks
+    document.querySelectorAll('.cta-quote').forEach(function (a) {
+      a.addEventListener('click', function () { track('CTAClick'); });
+    });
+
+    function showSuccess() {
+      form.style.display = 'none';
+      var trust = document.querySelector('#hospitalityForm + .cf-trust');
+      if (trust) trust.style.display = 'none';
+      var ok = document.getElementById('hospitalitySuccess');
+      if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    }
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      if (form.website && form.website.value) { showSuccess(); return; } // honeypot
+      var val = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+      var data = {
+        'first-name-field_1781110444597_nzvudq': val('h-name'),
+        'company-field_1781110450648_li0u23': val('h-brand'),
+        'email-field_1781110459157_vm916b': val('h-email'),
+        'phone-field_1781123833090_cfgdai': val('h-phone'),
+        'select-field_1781110494945_q28f69': document.getElementById('h-type').value,
+        'select-field_1781110661193_k9b70o': document.getElementById('h-qty').value,
+        'select-field_1781110789205_11tfng': document.getElementById('h-timeline').value,
+        'textarea-field_1781111620488_bino7k': val('h-message')
+      };
+      var payload = {
+        formId: FORM_ID,
+        data: data,
+        deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+        pageUrl: location.href,
+        referrer: document.referrer,
+        completionTimeSeconds: Math.round((Date.now() - start) / 1000)
+      };
+      var errEl = document.getElementById('hospitalityError');
+      if (errEl) errEl.style.display = 'none';
+      var btn = form.querySelector('button[type="submit"]');
+      var label = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      try {
+        var res = await fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'apikey': KEY, 'authorization': 'Bearer ' + KEY, 'content-type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        var result = await res.json().catch(function () { return {}; });
+        if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+        track('Lead', true); // Meta standard 'Lead' event on success
+        showSuccess();
+      } catch (err) {
+        if (btn) { btn.disabled = false; btn.textContent = label; }
+        if (errEl) {
+          errEl.textContent = "Sorry, we couldn't submit your request just now. Please try again, or email info@suqmedia.com.";
+          errEl.style.display = 'block';
+        }
+      }
+    });
+  })();
+</script>
+</body>
+</html>

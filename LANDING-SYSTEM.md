@@ -108,6 +108,20 @@ attribution required). Product cards still use placeholders pending real shots.
 a paid license is preferred. Keep faces genuine and business-casual, and use
 the same shot *type* across industries so every page feels like one system.
 
+## Pages built
+
+- **`mortgage-broker-apparel.html`** — mortgage brokerages. Quote form uses the
+  `window.SUQ_QUOTE` config (preview mode until a LeadRescue form is wired).
+- **`hospitality-apparel.html`** — restaurants / hotels / bars / hospitality,
+  for Meta ad traffic. Short, conversion-first (hero → value → range → pain →
+  form). Its quote form reuses the **live Custom Apparel backend directly**
+  (Growtheon form `ffc5bbd9-9fec-4991-bf36-ace1b741fa87`, same field keys as
+  `custom-apparel.html`) — so submissions land in the existing CRM, no wiring
+  needed. Meta-Pixel hooks are in place (`.cta-quote` → CTAClick, first field
+  focus → FormStart, success → `Lead`); paste the Pixel base code in `<head>`.
+  Two photo slots (`hospitality-hero.jpg` hero background, `hospitality-team.jpg`
+  value section) await real hospitality photography — placeholders until then.
+
 ## Planned industries
 
 `/mortgage-broker-apparel` (built) · dental-clinic-uniforms ·
