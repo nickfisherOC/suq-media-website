@@ -122,6 +122,21 @@ the same shot *type* across industries so every page feels like one system.
   Two photo slots (`hospitality-hero.jpg` hero background, `hospitality-team.jpg`
   value section) await real hospitality photography — placeholders until then.
 
+- **`crew-hoodies.html`** — custom **printed** crew hoodies for construction,
+  trades and automotive businesses (Meta ad traffic). Bold/industrial tone,
+  short conversion flow (hero → industry → offer → showcase → 3-step → form →
+  final CTA). **Printed apparel only — no embroidery mentioned; no pricing /
+  turnaround / shipping claims.** Its quote form is **purpose-built** (not the
+  apparel backend): fields are Name, Company, Email, Phone, Industry, Approx.
+  Hoodies, Preferred Colour, Logo Upload (file), Additional Info. It runs in
+  **preview mode** via the self-contained `CREW_FORM` config at the bottom of
+  the page — set `formId` + each field key (build the Growtheon form with Logo
+  as a **File Upload**) to go live; logo is sent as a base64 data URL like the
+  mortgage page. Meta-Pixel hooks in place (`.cta-quote` → CTAClick, first
+  focus → FormStart, success → `Lead`). Hero photo slot (`crew-hero.jpg`) and 5
+  showcase slots await real construction/automotive/trades photography —
+  branded gradient placeholders until then.
+
 ## Planned industries
 
 `/mortgage-broker-apparel` (built) · dental-clinic-uniforms ·

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Custom Crew Hoodies | Construction &amp; Automotive Apparel | SUQ MEDIA</title>
+  <meta name="description" content="Custom printed crew hoodies for construction companies, automotive shops, trades and businesses. Put your brand on your whole crew — bulk orders, professional quality, local service. Get a crew quote from SUQ Media." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Custom Crew Hoodies | Construction &amp; Automotive Apparel | SUQ MEDIA" />
+  <meta property="og:description" content="We put your brand on your crew. Custom printed hoodies for construction, trades and automotive teams. Get a crew quote." />
+  <meta property="og:image" content="https://suqmedia.com/public/images/logo.png" />
+
+  <!-- ══════════════════════════════════════════════════════════
+       META PIXEL — paste your Pixel base code here (fires PageView).
+       Clean hooks already exposed on this page:
+         • CTA click        -> trackCustom 'CTAClick'  (.cta-quote)
+         • Form start        -> trackCustom 'FormStart' (first field focus)
+         • Successful submit -> track 'Lead'            (on success)
+       No Pixel ID is invented — add yours below.
+       ══════════════════════════════════════════════════════════ -->
+  <!-- <script>!function(f,b,e,v,n,t,s){...fbq('init','YOUR_PIXEL_ID');fbq('track','PageView');</script> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="public/landing/landing.css" />
+
+  <style>
+    /* Filled orange primary CTA */
+    .btn-orange { background: var(--gold); color: #0a0a0a; }
+    .btn-orange:hover { opacity: .9; background: var(--gold); }
+
+    .crew-tags { margin-top: 1.75rem; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+    /* Offer highlights */
+    .hl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .85rem 2rem; max-width: 60rem; margin: 0 auto 3.5rem; }
+    @media (max-width: 760px) { .hl-grid { grid-template-columns: 1fr; } }
+    .hl { display: flex; align-items: flex-start; gap: .75rem; font-size: .95rem; color: var(--fg); line-height: 1.4; }
+    .hl svg { width: 1.15rem; height: 1.15rem; stroke: var(--gold); fill: none; stroke-width: 2.2; flex-shrink: 0; margin-top: .15rem; }
+
+    /* Quantity tiles */
+    .qty-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 60rem; margin: 0 auto; }
+    .qty-tile { flex: 1 1 10rem; max-width: 13rem; text-align: center; padding: 2rem 1rem; border: 1px solid var(--border); background: var(--card); transition: border-color .25s, background .25s, transform .25s; }
+    .qty-tile:hover { border-color: oklch(0.72 0.18 55 / .5); background: var(--secondary); transform: translateY(-3px); }
+    .qty-tile .n { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2.75rem; line-height: 1; color: var(--gold); }
+    .qty-tile .l { font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-top: .6rem; }
+
+    /* Visual showcase grid */
+    #showcase { border-top: 1px solid var(--border); }
+    .showcase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    @media (max-width: 860px) { .showcase-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .showcase-grid { grid-template-columns: 1fr; } }
+    .showcase-item { position: relative; overflow: hidden; min-height: 19rem; border: 1px solid var(--border); display: flex; align-items: flex-end; }
+    .showcase-item.tall { grid-row: span 2; min-height: 39rem; }
+    @media (max-width: 860px) { .showcase-item.tall { grid-row: span 1; min-height: 19rem; } }
+    .showcase-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .showcase-ph { position: absolute; inset: 0; background: linear-gradient(150deg, oklch(0.24 0.06 55 / .9) 0%, oklch(0.1 0 0) 62%); }
+    .showcase-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, oklch(0.05 0 0 / .9) 0%, transparent 55%); }
+    .showcase-lbl { position: relative; z-index: 2; padding: 1.25rem 1.35rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.15rem; text-transform: uppercase; letter-spacing: .04em; color: var(--fg); }
+
+    /* 3-step process */
+    #process .steps { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 760px) { #process .steps { grid-template-columns: 1fr; gap: 1.5rem; } }
+    #process .steps::before { left: 16.66%; right: 16.66%; }
+    @media (max-width: 760px) { #process .steps::before { display: none; } }
+
+    /* Café/quote background override handled via landing.css defaults */
+    #quote .quote-bg { background-image: url('public/images/merch-bg.jpg'); }
+
+    /* File upload */
+    .file-drop { position: relative; border: 1px dashed var(--border); background: var(--bg); padding: 1rem; display: flex; align-items: center; gap: .8rem; cursor: pointer; transition: border-color .2s, background .2s; }
+    .file-drop:hover { border-color: oklch(0.72 0.18 55 / .5); background: oklch(0.72 0.18 55 / .04); }
+    .file-drop input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .file-drop svg { width: 1.3rem; height: 1.3rem; stroke: var(--gold); fill: none; stroke-width: 1.7; flex-shrink: 0; }
+    .file-drop .fd-text { font-size: .8rem; color: var(--muted); line-height: 1.4; }
+    .file-drop .fd-name { color: var(--fg); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar (shared) ── -->
+<header>
+  <nav id="navbar">
+    <a href="index.html" aria-label="SUQ Media home">
+      <img src="public/images/logo.png" alt="SUQ Media" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="podcast.html">Podcast</a></li>
+      <li><a href="music.html">Music</a></li>
+      <li class="nav-dropdown">
+        <a href="custom-apparel.html" class="active">Services</a>
+        <ul class="dropdown-menu">
+          <li><a href="custom-apparel.html">Custom Apparel</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#merch">Merch</a></li>
+      <li><a href="studio-rental.html">Studio Rental</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="#quote" class="foundation cta-quote" data-cta="nav" style="color:var(--gold);border-color:oklch(0.72 0.18 55 / .4);">Get A Quote</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#about" class="mobile-link">About</a>
+    <a href="podcast.html" class="mobile-link">Podcast</a>
+    <a href="music.html" class="mobile-link">Music</a>
+    <span class="mobile-dropdown-label">Services</span>
+    <div class="mobile-dropdown-items">
+      <a href="custom-apparel.html" class="mobile-link">Custom Apparel</a>
+    </div>
+    <a href="index.html#merch" class="mobile-link">Merch</a>
+    <a href="studio-rental.html" class="mobile-link">Studio Rental</a>
+    <a href="contact.html" class="mobile-link">Contact</a>
+    <a href="#quote" class="mobile-link cta-quote" data-cta="nav-mobile" style="color:var(--gold);">Get A Quote</a>
+  </div>
+</header>
+
+<!-- ══ 1. HERO ══ -->
+<section id="lp-hero">
+  <!-- Hero image (path relative to landing.css). Drop crew-hero.jpg into public/images to use it. -->
+  <div class="lp-hero-bg" style="--lp-hero-image:url('../images/crew-hero.jpg');"></div>
+  <div class="lp-hero-overlay"></div>
+  <div class="lp-glow-gold"></div>
+  <div class="lp-glow-blue"></div>
+
+  <div class="lp-hero-content">
+    <div class="lp-hero-copy">
+      <p class="lp-hero-eyebrow fade-up">SUQ Media — Custom Crew Hoodies</p>
+      <h1 class="display lp-hero-headline fade-up delay-1">
+        Your Crew Should Look Like <span class="gold">Your Crew.</span>
+      </h1>
+      <p class="lp-hero-sub fade-up delay-2">
+        Custom printed hoodies for construction crews, automotive shops, trades and businesses that want their team
+        looking professional and representing their brand.
+      </p>
+      <div class="lp-hero-btns fade-up delay-3">
+        <a href="#quote" class="btn btn-orange cta-quote" data-cta="hero">Get a Crew Quote</a>
+      </div>
+      <p class="crew-tags fade-up delay-3">Construction • Trades • Automotive • Crews</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 2. INDUSTRY ══ -->
+<section class="section" id="industry">
+  <div class="sec-head center reveal">
+    <p class="section-label">Who It's For</p>
+    <h2 class="display">Built For Crews That <span class="gold">Get Shit Done.</span></h2>
+  </div>
+  <div class="grid-auto cols-4">
+    <div class="benefit-card reveal"><div class="benefit-ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg></div><h3>Construction</h3><p>Contractors, roofing, concrete, framing, excavation and general construction.</p></div>
+    <div class="benefit-card reveal d1"><div class="benefit-ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.7-.7-2.5z"/></svg></div><h3>Trades</h3><p>Electrical, plumbing, HVAC, landscaping and other skilled trades.</p></div>
+    <div class="benefit-card reveal d2"><div class="benefit-ic"><svg viewBox="0 0 24 24"><path d="M5 13l1.5-4.5A2 2 0 0 1 8.4 7h7.2a2 2 0 0 1 1.9 1.5L19 13M5 13h14v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H8v1a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/><circle cx="7.5" cy="15.5" r="1"/><circle cx="16.5" cy="15.5" r="1"/></svg></div><h3>Automotive</h3><p>Mechanics, detailing shops, body shops, tire shops, performance shops and dealerships.</p></div>
+    <div class="benefit-card reveal d3"><div class="benefit-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Your Crew</h3><p>If you've got a team and a logo, we can put your brand on your crew.</p></div>
+  </div>
+</section>
+
+<!-- ══ 3. OFFER ══ -->
+<section class="section-full" id="offer" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--card);">
+  <div class="section-inner">
+    <div class="sec-head center reveal">
+      <p class="section-label">The Offer</p>
+      <h2 class="display">One Crew. <span class="gold">One Brand.</span></h2>
+      <p>SUQ Media produces custom printed hoodies for businesses and crews — built around your branding and ready for your whole team.</p>
+    </div>
+    <div class="hl-grid reveal">
+      <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Custom printed with your company branding</div>
+      <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Multiple sizes for your crew</div>
+      <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Bulk ordering</div>
+      <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Professional-quality apparel</div>
+      <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Local service</div>
+      <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Small crews through large companies</div>
+    </div>
+    <div class="qty-row reveal">
+      <div class="qty-tile"><p class="n">10+</p><p class="l">Hoodies</p></div>
+      <div class="qty-tile"><p class="n">25+</p><p class="l">Hoodies</p></div>
+      <div class="qty-tile"><p class="n">50+</p><p class="l">Hoodies</p></div>
+      <div class="qty-tile"><p class="n">100+</p><p class="l">Hoodies</p></div>
+    </div>
+    <div style="text-align:center;margin-top:3rem;" class="reveal">
+      <a href="#quote" class="btn btn-orange cta-quote" data-cta="offer">Get a Crew Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 4. VISUAL SHOWCASE ══
+     Drop real photos into public/images and swap each .showcase-ph for:
+     <img src="public/images/crew-xxx.jpg" alt="..." loading="lazy" /> -->
+<section class="section" id="showcase">
+  <div class="sec-head center reveal">
+    <p class="section-label">The Work</p>
+    <h2 class="display">Your Logo. Your Hoodies. <span class="gold">Your Crew.</span></h2>
+  </div>
+  <div class="showcase-grid reveal">
+    <div class="showcase-item tall"><div class="showcase-ph"></div><span class="showcase-lbl">Construction Crew</span></div>
+    <div class="showcase-item"><div class="showcase-ph"></div><span class="showcase-lbl">Automotive Shop</span></div>
+    <div class="showcase-item"><div class="showcase-ph"></div><span class="showcase-lbl">Print Closeup</span></div>
+    <div class="showcase-item"><div class="showcase-ph"></div><span class="showcase-lbl">Tradespeople</span></div>
+    <div class="showcase-item"><div class="showcase-ph"></div><span class="showcase-lbl">Branded Hoodie</span></div>
+  </div>
+</section>
+
+<!-- ══ 5. SIMPLE PROCESS ══ -->
+<section class="section-full" id="process" style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--card);">
+  <div class="section-inner">
+    <div class="sec-head center reveal">
+      <p class="section-label">How It Works</p>
+      <h2 class="display">Three Steps To A <span class="gold">Decked-Out Crew.</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="step-ic"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div><p class="step-num">Step 01</p><h3>Tell Us About Your Crew</h3><p>Tell us approximately how many hoodies you need.</p></div>
+      <div class="step reveal d1"><div class="step-ic"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5-5 5 5M12 5v12"/></svg></div><p class="step-num">Step 02</p><h3>Send Us Your Logo</h3><p>We'll work with your branding to create your custom printed hoodies.</p></div>
+      <div class="step reveal d2"><div class="step-ic"><svg viewBox="0 0 24 24"><path d="M20.4 14.5 16 10 4 22M9 11l3 3M14 4l6 6-2 2-6-6zM17 7l-3-3"/></svg></div><p class="step-num">Step 03</p><h3>Get Your Crew Decked Out</h3><p>We produce your order and get your crew representing your business.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 6. QUOTE FORM ══ -->
+<section id="quote">
+  <div class="quote-bg"></div>
+  <div class="quote-overlay"></div>
+  <div class="quote-inner">
+    <div class="quote-grid">
+      <div class="quote-aside reveal">
+        <p class="section-label">Get Started</p>
+        <h2 class="display">Let's Outfit <span class="gold">Your Crew.</span></h2>
+        <p class="lead">Tell us what you need and we'll get you a custom quote.</p>
+        <ul class="quote-points">
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Free, no-obligation quote</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Custom printed with your branding</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Small crews to large companies</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Local service</li>
+        </ul>
+        <a class="email-btn" href="mailto:info@suqmedia.com"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>info@suqmedia.com</a>
+      </div>
+
+      <div class="reveal d1">
+        <form id="crewForm" data-form="quote" novalidate>
+          <div style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+            <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="c-name">Name <span>*</span></label><input id="c-name" name="name" type="text" required placeholder="Your name" /></div>
+            <div class="form-group"><label for="c-company">Company Name <span>*</span></label><input id="c-company" name="company" type="text" required placeholder="Your business" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label for="c-email">Email <span>*</span></label><input id="c-email" name="email" type="email" required placeholder="you@business.com" /></div>
+            <div class="form-group"><label for="c-phone">Phone</label><input id="c-phone" name="phone" type="tel" placeholder="(555) 555-5555" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="c-industry">Industry <span>*</span></label>
+              <select id="c-industry" name="industry" required>
+                <option value="" disabled selected>Select your industry</option>
+                <option>Construction</option>
+                <option>Trades</option>
+                <option>Automotive</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="c-qty">Approx. Number of Hoodies <span>*</span></label>
+              <select id="c-qty" name="qty" required>
+                <option value="" disabled selected>Select a range</option>
+                <option>10 – 24</option>
+                <option>25 – 49</option>
+                <option>50 – 99</option>
+                <option>100+</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="c-colour">Preferred Hoodie Colour</label>
+            <input id="c-colour" name="colour" type="text" placeholder="e.g. black, charcoal, navy — or not sure yet" />
+          </div>
+          <div class="form-group">
+            <label for="c-logo">Logo Upload <span style="color:var(--muted);text-transform:none;letter-spacing:0;">(optional — or we'll request it after)</span></label>
+            <label class="file-drop" for="c-logo">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5-5 5 5M12 5v12"/></svg>
+              <span class="fd-text"><span class="fd-name" id="c-logo-name">PNG, JPG, PDF, AI, SVG</span></span>
+              <input id="c-logo" name="logo" type="file" accept=".png,.jpg,.jpeg,.pdf,.ai,.svg,.eps" />
+            </label>
+          </div>
+          <div class="form-group"><label for="c-message">Additional Information</label><textarea id="c-message" name="message" rows="4" placeholder="Anything else we should know — deadlines, sizes, design ideas…"></textarea></div>
+          <button type="submit" class="btn btn-orange" style="width:100%;justify-content:center;">Get My Crew Quote →</button>
+          <p id="crewError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
+        </form>
+        <div class="cf-trust">
+          <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg>
+          <span>Every serious inquiry is reviewed by the SUQ Media team.</span>
+        </div>
+        <div class="form-success" id="crewSuccess">
+          <div class="form-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h3 class="display">Request Received</h3>
+          <p>Thanks for reaching out. We'll review your details and get back to you with a custom crew quote shortly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 7. FINAL CTA ══ -->
+<section id="final">
+  <div class="final-bg"></div>
+  <div class="final-overlay"></div>
+  <div class="final-inner reveal">
+    <p class="section-label" style="display:flex;justify-content:center;">Let's Get Started</p>
+    <h2 class="display"><span style="color:var(--fg);">Ready To Put Your Brand On</span><br><span class="gold">Your Crew?</span></h2>
+    <p>Custom printed hoodies, built around your brand, ready for your whole team.</p>
+    <div class="final-btns">
+      <a href="#quote" class="btn btn-orange cta-quote" data-cta="final">Get a Crew Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer (shared) ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="public/images/logo.png" alt="SUQ Media" />
+        <p class="footer-tagline">Creativity. Culture. Healing. Hope.</p>
+      </div>
+      <ul class="footer-nav">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="podcast.html">Podcast</a></li>
+        <li><a href="music.html">Music</a></li>
+        <li><a href="custom-apparel.html">Custom Apparel</a></li>
+        <li><a href="index.html#merch">Merch</a></li>
+        <li><a href="studio-rental.html">Studio Rental</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="gold">Foundation ↗</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> SUQ Media. All rights reserved.</p>
+      <p style="max-width:28rem;text-align:right;">40% of profits support the <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">Markin K Kossowski Foundation for Hope</a>.</p>
+    </div>
+  </div>
+  <div class="footer-watermark" aria-hidden="true">
+    <img src="public/images/logo.png" alt="" />
+  </div>
+</footer>
+
+<!-- ── Sticky mobile CTA ── -->
+<div class="sticky-cta">
+  <a href="#quote" class="btn btn-orange cta-quote" data-cta="sticky">Get a Crew Quote</a>
+</div>
+
+<script src="public/landing/landing.js"></script>
+<script>
+  /* ── Crew quote form ──────────────────────────────────────────────
+     Purpose-built for this campaign. Runs in PREVIEW MODE (shows the
+     success state, does not send) until the Growtheon form is built and
+     the config below is filled in — then it posts to the CRM just like
+     the other SUQ landing pages.
+     To go live: build the Growtheon form (make Logo a File Upload), then
+     paste the form id + each field's key into CREW_FORM below. */
+  (function () {
+    var CREW_FORM = {
+      endpoint: 'https://auth.growtheon.co/functions/v1/handle-form-submission',
+      key: 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO',
+      formId: '',                 // ← paste Growtheon form id to go live
+      fields: {                   // ← paste each field's key from the Growtheon form
+        name:     '',
+        company:  '',
+        email:    '',
+        phone:    '',
+        industry: '',
+        quantity: '',
+        colour:   '',
+        logo:     '',             // must be a File Upload field in Growtheon
+        notes:    ''
+      }
+    };
+
+    var form = document.getElementById('crewForm');
+    if (!form) return;
+    var start = Date.now();
+    var started = false;
+
+    function track(ev, std) {
+      try { if (window.fbq) { window.fbq(std ? 'track' : 'trackCustom', ev); } } catch (e) {}
+      document.dispatchEvent(new CustomEvent('suq:' + ev));
+    }
+    form.addEventListener('focusin', function () { if (!started) { started = true; track('FormStart'); } });
+    document.querySelectorAll('.cta-quote').forEach(function (a) { a.addEventListener('click', function () { track('CTAClick'); }); });
+
+    // File name display
+    var fileInput = document.getElementById('c-logo');
+    var fileName = document.getElementById('c-logo-name');
+    if (fileInput && fileName) {
+      fileInput.addEventListener('change', function () {
+        fileName.textContent = fileInput.files && fileInput.files.length ? fileInput.files[0].name : 'PNG, JPG, PDF, AI, SVG';
+      });
+    }
+
+    function showSuccess() {
+      form.style.display = 'none';
+      var trust = document.querySelector('#crewForm + .cf-trust');
+      if (trust) trust.style.display = 'none';
+      var ok = document.getElementById('crewSuccess');
+      if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    }
+
+    function readFile(file) {
+      return new Promise(function (resolve, reject) {
+        var r = new FileReader();
+        r.onload = function () { resolve(r.result); };
+        r.onerror = reject;
+        r.readAsDataURL(file);
+      });
+    }
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      if (form.website && form.website.value) { showSuccess(); return; } // honeypot
+      var val = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+      var f = CREW_FORM.fields;
+
+      var errEl = document.getElementById('crewError');
+      if (errEl) errEl.style.display = 'none';
+      var btn = form.querySelector('button[type="submit"]');
+      var label = btn ? btn.textContent : '';
+
+      // PREVIEW MODE — no form id wired yet: show success, don't send.
+      if (!CREW_FORM.formId) {
+        console.info('[SUQ] Crew form in preview mode — set CREW_FORM.formId + field keys to go live.');
+        track('Lead', true);
+        showSuccess();
+        return;
+      }
+
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      try {
+        var data = {};
+        if (f.name)     data[f.name]     = val('c-name');
+        if (f.company)  data[f.company]  = val('c-company');
+        if (f.email)    data[f.email]    = val('c-email');
+        if (f.phone)    data[f.phone]    = val('c-phone');
+        if (f.industry) data[f.industry] = val('c-industry');
+        if (f.quantity) data[f.quantity] = val('c-qty');
+        if (f.colour)   data[f.colour]   = val('c-colour');
+        if (f.notes)    data[f.notes]    = val('c-message');
+        if (f.logo && fileInput && fileInput.files && fileInput.files.length) {
+          data[f.logo] = await readFile(fileInput.files[0]);
+        }
+        var payload = {
+          formId: CREW_FORM.formId,
+          data: data,
+          deviceType: window.matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop',
+          pageUrl: location.href,
+          referrer: document.referrer,
+          completionTimeSeconds: Math.round((Date.now() - start) / 1000)
+        };
+        var res = await fetch(CREW_FORM.endpoint, {
+          method: 'POST',
+          headers: { 'apikey': CREW_FORM.key, 'authorization': 'Bearer ' + CREW_FORM.key, 'content-type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        var result = await res.json().catch(function () { return {}; });
+        if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+        track('Lead', true);
+        showSuccess();
+      } catch (err) {
+        if (btn) { btn.disabled = false; btn.textContent = label; }
+        if (errEl) {
+          errEl.textContent = "Sorry, we couldn't submit your request just now. Please try again, or email info@suqmedia.com.";
+          errEl.style.display = 'block';
+        }
+      }
+    });
+  })();
+</script>
+</body>
+</html>
