@@ -33,6 +33,16 @@
 
     .crew-tags { margin-top: 1.75rem; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 
+    /* Hero image — let the crew read through more strongly than the default */
+    #lp-hero .lp-hero-bg { opacity: .85; }
+    #lp-hero .lp-hero-overlay {
+      background:
+        linear-gradient(to top, var(--bg) 0%, transparent 58%),
+        linear-gradient(to right, var(--bg) 0%, oklch(0.08 0 0 / .48) 44%, transparent 82%);
+    }
+    /* Keep copy crisp over the brighter image without darkening the crew */
+    #lp-hero .lp-hero-copy { text-shadow: 0 2px 20px oklch(0.05 0 0 / .6); }
+
     /* Offer highlights */
     .hl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .85rem 2rem; max-width: 60rem; margin: 0 auto 3.5rem; }
     @media (max-width: 760px) { .hl-grid { grid-template-columns: 1fr; } }
