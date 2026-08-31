@@ -48,12 +48,11 @@
 
     /* Visual showcase grid */
     #showcase { border-top: 1px solid var(--border); }
-    .showcase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-    @media (max-width: 860px) { .showcase-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 520px) { .showcase-grid { grid-template-columns: 1fr; } }
-    .showcase-item { position: relative; overflow: hidden; min-height: 19rem; border: 1px solid var(--border); display: flex; align-items: flex-end; }
-    .showcase-item.tall { grid-row: span 2; min-height: 39rem; }
-    @media (max-width: 860px) { .showcase-item.tall { grid-row: span 1; min-height: 19rem; } }
+    .showcase-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    @media (max-width: 620px) { .showcase-grid { grid-template-columns: 1fr; } }
+    .showcase-item { position: relative; overflow: hidden; min-height: 20rem; border: 1px solid var(--border); display: flex; align-items: flex-end; }
+    .showcase-item.tall { grid-row: span 2; min-height: 41rem; }
+    @media (max-width: 620px) { .showcase-item.tall { grid-row: span 1; min-height: 20rem; } }
     .showcase-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .showcase-ph { position: absolute; inset: 0; background: linear-gradient(150deg, oklch(0.24 0.06 55 / .9) 0%, oklch(0.1 0 0) 62%); }
     .showcase-item::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, oklch(0.05 0 0 / .9) 0%, transparent 55%); }
@@ -196,11 +195,9 @@
     <h2 class="display">Your Logo. Your Hoodies. <span class="gold">Your Crew.</span></h2>
   </div>
   <div class="showcase-grid reveal">
-    <div class="showcase-item tall"><div class="showcase-ph"></div><span class="showcase-lbl">Construction Crew</span></div>
-    <div class="showcase-item"><div class="showcase-ph"></div><span class="showcase-lbl">Automotive Shop</span></div>
-    <div class="showcase-item"><div class="showcase-ph"></div><span class="showcase-lbl">Print Closeup</span></div>
-    <div class="showcase-item"><div class="showcase-ph"></div><span class="showcase-lbl">Tradespeople</span></div>
-    <div class="showcase-item"><div class="showcase-ph"></div><span class="showcase-lbl">Branded Hoodie</span></div>
+    <div class="showcase-item tall"><img src="public/images/crew-construction.jpg" alt="Construction crew walking a job site in matching branded printed hoodies" loading="lazy" /><span class="showcase-lbl">On The Site</span></div>
+    <div class="showcase-item"><img src="public/images/crew-automotive.jpg" alt="Automotive shop crew in matching branded printed hoodies" loading="lazy" /><span class="showcase-lbl">In The Shop</span></div>
+    <div class="showcase-item"><img src="public/images/crew-print.jpg" alt="Close-up of a custom printed logo on the back of a crew hoodie" loading="lazy" /><span class="showcase-lbl">Print Detail</span></div>
   </div>
 </section>
 
