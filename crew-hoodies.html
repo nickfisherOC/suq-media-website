@@ -303,21 +303,21 @@
               <label for="c-industry">Industry <span>*</span></label>
               <select id="c-industry" name="industry" required>
                 <option value="" disabled selected>Select your industry</option>
-                <option>Construction</option>
-                <option>Trades</option>
-                <option>Automotive</option>
-                <option>Other</option>
+                <option value="option1">Construction</option>
+                <option value="option2">Trades</option>
+                <option value="option3">Automotive</option>
+                <option value="option4">Other</option>
               </select>
             </div>
             <div class="form-group">
               <label for="c-qty">Approx. Number of Hoodies <span>*</span></label>
               <select id="c-qty" name="qty" required>
                 <option value="" disabled selected>Select a range</option>
-                <option>10 – 24</option>
-                <option>25 – 49</option>
-                <option>50 – 99</option>
-                <option>100+</option>
-                <option>Not sure yet</option>
+                <option value="option1">10 – 24</option>
+                <option value="option2">25 – 49</option>
+                <option value="option3">50 – 99</option>
+                <option value="option4">100+</option>
+                <option value="option5">Not sure yet</option>
               </select>
             </div>
           </div>
@@ -412,17 +412,17 @@
     var CREW_FORM = {
       endpoint: 'https://auth.growtheon.co/functions/v1/handle-form-submission',
       key: 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO',
-      formId: '',                 // ← paste Growtheon form id to go live
-      fields: {                   // ← paste each field's key from the Growtheon form
-        name:     '',
-        company:  '',
-        email:    '',
-        phone:    '',
-        industry: '',
-        quantity: '',
-        colour:   '',
-        logo:     '',             // must be a File Upload field in Growtheon
-        notes:    ''
+      formId: '1df0e449-9c15-4b5b-8929-ad16264122d9',
+      fields: {
+        name:     'first-name-field_1781110444597_nzvudq',
+        company:  'company-field_1781110450648_li0u23',
+        email:    'email-field_1781110459157_vm916b',
+        phone:    'phone-field_1781123833090_cfgdai',
+        industry: 'select-field_1781110494945_q28f69',
+        quantity: 'select-field_1781110661193_k9b70o',
+        colour:   'text-field_1788272322396_ncm2wz',
+        logo:     'file-field_1788272364055_ayqgjc',
+        notes:    'textarea-field_1781111620488_bino7k'
       }
     };
 
@@ -497,7 +497,13 @@
         if (f.colour)   data[f.colour]   = val('c-colour');
         if (f.notes)    data[f.notes]    = val('c-message');
         if (f.logo && fileInput && fileInput.files && fileInput.files.length) {
-          data[f.logo] = await readFile(fileInput.files[0]);
+          var lf = fileInput.files[0];
+          if (lf.size <= 4 * 1024 * 1024) {
+            data[f.logo] = await readFile(lf);       // small logo: attach inline
+          } else if (f.notes) {                       // too large: note it so the lead still submits
+            data[f.notes] = (data[f.notes] ? data[f.notes] + '\n\n' : '') +
+              '[Logo "' + lf.name + '" was too large to attach here — please request it from the customer.]';
+          }
         }
         var payload = {
           formId: CREW_FORM.formId,

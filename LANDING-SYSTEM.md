@@ -128,14 +128,18 @@ the same shot *type* across industries so every page feels like one system.
   final CTA). **Printed apparel only — no embroidery mentioned; no pricing /
   turnaround / shipping claims.** Its quote form is **purpose-built** (not the
   apparel backend): fields are Name, Company, Email, Phone, Industry, Approx.
-  Hoodies, Preferred Colour, Logo Upload (file), Additional Info. It runs in
-  **preview mode** via the self-contained `CREW_FORM` config at the bottom of
-  the page — set `formId` + each field key (build the Growtheon form with Logo
-  as a **File Upload**) to go live; logo is sent as a base64 data URL like the
-  mortgage page. Meta-Pixel hooks in place (`.cta-quote` → CTAClick, first
-  focus → FormStart, success → `Lead`). Hero photo slot (`crew-hero.jpg`) and 5
-  showcase slots await real construction/automotive/trades photography —
-  branded gradient placeholders until then.
+  Hoodies, Preferred Colour, Logo Upload (file), Additional Info. Its quote
+  form is **wired + verified live** via the self-contained `CREW_FORM` config
+  (Growtheon form `1df0e449-9c15-4b5b-8929-ad16264122d9`). Selects submit
+  option values (`option1`…); the logo is sent as a base64 data URL when ≤4MB,
+  else its filename is noted in the message so the lead still submits. A
+  successful submit **redirects to `crew-hoodies-thank-you.html`** (noindex),
+  which fires the Meta Pixel `PageView` + `Lead` — the clean conversion URL.
+  Meta Pixel `859951363749640` is installed on both pages; on the form page
+  `.cta-quote` → CTAClick and first field focus → FormStart. Honeypot hits get
+  a silent inline success and never reach the thank-you page. Real branded-crew
+  photography is in (`crew-hero`, `crew-construction`, `crew-automotive`,
+  `crew-print`).
 
 ## Planned industries
 
