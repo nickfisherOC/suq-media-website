@@ -455,6 +455,8 @@
       if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     }
 
+    function redirectToThankYou() { window.location.href = 'crew-hoodies-thank-you.html'; }
+
     function readFile(file) {
       return new Promise(function (resolve, reject) {
         var r = new FileReader();
@@ -479,8 +481,7 @@
       // PREVIEW MODE — no form id wired yet: show success, don't send.
       if (!CREW_FORM.formId) {
         console.info('[SUQ] Crew form in preview mode — set CREW_FORM.formId + field keys to go live.');
-        track('Lead', true);
-        showSuccess();
+        redirectToThankYou();
         return;
       }
 
@@ -513,8 +514,7 @@
         });
         var result = await res.json().catch(function () { return {}; });
         if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-        track('Lead', true);
-        showSuccess();
+        redirectToThankYou();
       } catch (err) {
         if (btn) { btn.disabled = false; btn.textContent = label; }
         if (errEl) {
