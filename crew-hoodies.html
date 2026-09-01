@@ -11,15 +11,25 @@
   <meta property="og:description" content="We put your brand on your crew. Custom printed hoodies for construction, trades and automotive teams — printed right here in Calgary, Alberta. Get a crew quote." />
   <meta property="og:image" content="https://suqmedia.com/public/images/logo.png" />
 
-  <!-- ══════════════════════════════════════════════════════════
-       META PIXEL — paste your Pixel base code here (fires PageView).
-       Clean hooks already exposed on this page:
-         • CTA click        -> trackCustom 'CTAClick'  (.cta-quote)
-         • Form start        -> trackCustom 'FormStart' (first field focus)
-         • Successful submit -> track 'Lead'            (on success)
-       No Pixel ID is invented — add yours below.
-       ══════════════════════════════════════════════════════════ -->
-  <!-- <script>!function(f,b,e,v,n,t,s){...fbq('init','YOUR_PIXEL_ID');fbq('track','PageView');</script> -->
+  <!-- Meta Pixel Code — fires PageView on load. This page's hooks then fire:
+       CTA click -> trackCustom 'CTAClick' | first field focus -> trackCustom 'FormStart'
+       | successful quote submit -> track 'Lead'. -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '859951363749640');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=859951363749640&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
