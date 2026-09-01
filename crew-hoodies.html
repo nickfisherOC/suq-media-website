@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Custom Crew Hoodies | Construction &amp; Automotive Apparel | SUQ MEDIA</title>
-  <meta name="description" content="Custom printed crew hoodies for construction companies, automotive shops, trades and businesses. Put your brand on your whole crew — bulk orders, professional quality, local service. Get a crew quote from SUQ Media." />
+  <title>Custom Crew Hoodies Calgary | Construction &amp; Automotive Apparel | SUQ MEDIA</title>
+  <meta name="description" content="Custom printed crew hoodies for construction companies, automotive shops, trades and businesses — printed locally in Calgary, Alberta. Put your brand on your whole crew with bulk orders and professional-quality apparel. Get a crew quote from SUQ Media." />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Custom Crew Hoodies | Construction &amp; Automotive Apparel | SUQ MEDIA" />
-  <meta property="og:description" content="We put your brand on your crew. Custom printed hoodies for construction, trades and automotive teams. Get a crew quote." />
+  <meta property="og:title" content="Custom Crew Hoodies Calgary | Construction &amp; Automotive Apparel | SUQ MEDIA" />
+  <meta property="og:description" content="We put your brand on your crew. Custom printed hoodies for construction, trades and automotive teams — printed right here in Calgary, Alberta. Get a crew quote." />
   <meta property="og:image" content="https://suqmedia.com/public/images/logo.png" />
 
   <!-- ══════════════════════════════════════════════════════════
@@ -32,6 +32,21 @@
     .btn-orange:hover { opacity: .9; background: var(--gold); }
 
     .crew-tags { margin-top: 1.75rem; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+    /* Hero "printed in Calgary" badge */
+    .hero-local { display: inline-flex; align-items: center; gap: .55rem; margin-top: 1.6rem; padding: .5rem 1.05rem; border: 1px solid oklch(0.72 0.18 55 / .45); border-radius: 2rem; background: oklch(0.72 0.18 55 / .09); font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+    .hero-local svg { width: 1rem; height: 1rem; stroke: var(--gold); fill: none; stroke-width: 2; flex-shrink: 0; }
+
+    /* "Proudly local — printed in Calgary" feature band */
+    .local-band { background: linear-gradient(115deg, oklch(0.2 0.06 292) 0%, var(--bg) 68%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: clamp(3rem, 7vw, 5rem) 1.5rem; }
+    .local-inner { max-width: 64rem; margin: 0 auto; display: flex; align-items: center; gap: 2.75rem; }
+    .local-mark { flex-shrink: 0; display: grid; place-items: center; width: 6rem; height: 6rem; border: 1px solid oklch(0.72 0.18 55 / .4); border-radius: 50%; background: oklch(0.72 0.18 55 / .08); }
+    .local-mark svg { width: 3rem; height: 3rem; stroke: var(--gold); fill: none; stroke-width: 1.7; }
+    .local-copy h2 { margin: .4rem 0 .9rem; }
+    .local-copy p { color: var(--muted); max-width: 42rem; line-height: 1.6; }
+    .local-tags { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+    .local-tags span { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--fg); border: 1px solid var(--border); background: var(--card); padding: .4rem .8rem; border-radius: 2rem; }
+    @media (max-width: 680px) { .local-inner { flex-direction: column; text-align: center; gap: 1.5rem; } .local-copy p { margin: 0 auto; } .local-tags { justify-content: center; } }
 
     /* Hero image — let the crew read through more strongly than the default */
     #lp-hero .lp-hero-bg { opacity: .85; }
@@ -146,10 +161,24 @@
         Custom printed hoodies for construction crews, automotive shops, trades and businesses that want their team
         looking professional and representing their brand.
       </p>
+      <p class="hero-local fade-up delay-2"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Designed &amp; printed in Calgary, Alberta</p>
       <div class="lp-hero-btns fade-up delay-3">
         <a href="#quote" class="btn btn-orange cta-quote" data-cta="hero">Get a Crew Quote</a>
       </div>
       <p class="crew-tags fade-up delay-3">Construction • Trades • Automotive • Crews</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROUDLY LOCAL — CALGARY ══ -->
+<section class="local-band" id="local">
+  <div class="local-inner reveal">
+    <div class="local-mark"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+    <div class="local-copy">
+      <p class="section-label">Proudly Local</p>
+      <h2 class="display">Printed Right Here In <span class="gold">Calgary, Alberta.</span></h2>
+      <p>Every SUQ Media hoodie is custom printed locally, right here in Calgary — not outsourced. When you order, you're working with a local team and putting your money into a Calgary business.</p>
+      <div class="local-tags"><span>Locally Printed</span><span>Calgary, AB</span><span>Support Local</span></div>
     </div>
   </div>
 </section>
@@ -181,7 +210,7 @@
       <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Multiple sizes for your crew</div>
       <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Bulk ordering</div>
       <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Professional-quality apparel</div>
-      <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Local service</div>
+      <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Printed locally in Calgary, Alberta</div>
       <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Small crews through large companies</div>
     </div>
     <div class="qty-row reveal">
@@ -240,7 +269,7 @@
           <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Free, no-obligation quote</li>
           <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Custom printed with your branding</li>
           <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Small crews to large companies</li>
-          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Local service</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Printed in Calgary, Alberta</li>
         </ul>
         <a class="email-btn" href="mailto:info@suqmedia.com"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>info@suqmedia.com</a>
       </div>
@@ -318,7 +347,7 @@
   <div class="final-inner reveal">
     <p class="section-label" style="display:flex;justify-content:center;">Let's Get Started</p>
     <h2 class="display"><span style="color:var(--fg);">Ready To Put Your Brand On</span><br><span class="gold">Your Crew?</span></h2>
-    <p>Custom printed hoodies, built around your brand, ready for your whole team.</p>
+    <p>Custom printed hoodies, built around your brand and printed right here in Calgary, Alberta.</p>
     <div class="final-btns">
       <a href="#quote" class="btn btn-orange cta-quote" data-cta="final">Get a Crew Quote</a>
     </div>
