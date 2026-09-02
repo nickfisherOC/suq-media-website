@@ -110,6 +110,25 @@
     .file-drop svg { width: 1.3rem; height: 1.3rem; stroke: var(--gold); fill: none; stroke-width: 1.7; flex-shrink: 0; }
     .file-drop .fd-text { font-size: .8rem; color: var(--muted); line-height: 1.4; }
     .file-drop .fd-name { color: var(--fg); font-weight: 600; }
+
+    /* 40% → Foundation splashes + section */
+    .hero-give { margin-top: .8rem; font-size: .8rem; color: var(--muted); }
+    .hero-give b { color: var(--gold); font-weight: 800; }
+    .offer-give { text-align: center; color: var(--muted); font-size: .95rem; max-width: 40rem; margin: 0 auto 2.75rem; line-height: 1.55; }
+    .offer-give b { color: var(--gold); font-weight: 800; font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; }
+    .offer-give a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+
+    #give { position: relative; overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: center; }
+    #give .give-bg { position: absolute; inset: 0; background: url('public/images/community-bg.jpg') center/cover no-repeat; opacity: .18; }
+    #give .give-overlay { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, oklch(0.72 0.18 55 / .16) 0%, transparent 55%), linear-gradient(to bottom, var(--bg) 0%, transparent 45%, var(--bg) 100%); }
+    #give .give-inner { position: relative; z-index: 2; max-width: 52rem; margin: 0 auto; padding: clamp(4rem, 9vw, 6.5rem) 1.5rem; }
+    .give-40 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(5rem, 15vw, 11rem); line-height: .95; color: var(--gold); }
+    .give-40-sub { font-size: 1.05rem; color: var(--fg); max-width: 34rem; margin: .25rem auto 1.75rem; }
+    #give h2 { margin-bottom: 1.25rem; }
+    .give-body { color: var(--muted); line-height: 1.7; max-width: 40rem; margin: 0 auto 2rem; }
+    .give-body a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+    .give-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; max-width: 40rem; margin: 0 auto 2.5rem; }
+    .give-pills span { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--fg); border: 1px solid oklch(0.72 0.18 55 / .35); background: oklch(0.72 0.18 55 / .07); padding: .5rem .9rem; border-radius: 2rem; }
   </style>
 </head>
 <body>
@@ -177,6 +196,7 @@
         <a href="#quote" class="btn btn-orange cta-quote" data-cta="hero">Get a Crew Quote</a>
       </div>
       <p class="crew-tags fade-up delay-3">Construction • Trades • Automotive • Crews</p>
+      <p class="hero-give fade-up delay-3"><b>40%</b> of profits fund the Markin K Kossowski Foundation for Hope.</p>
     </div>
   </div>
 </section>
@@ -224,6 +244,7 @@
       <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Printed locally in Calgary, Alberta</div>
       <div class="hl"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Small crews through large companies</div>
     </div>
+    <p class="offer-give reveal"><b>40%</b> of every order supports the <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">Markin K Kossowski Foundation for Hope</a>.</p>
     <div class="qty-row reveal">
       <div class="qty-tile"><p class="n">10+</p><p class="l">Hoodies</p></div>
       <div class="qty-tile"><p class="n">25+</p><p class="l">Hoodies</p></div>
@@ -248,6 +269,27 @@
     <div class="showcase-item tall"><img src="public/images/crew-construction.jpg" alt="Construction crew walking a job site in matching branded printed hoodies" loading="lazy" /><span class="showcase-lbl">On The Site</span></div>
     <div class="showcase-item"><img src="public/images/crew-automotive.jpg" alt="Automotive shop crew in matching branded printed hoodies" loading="lazy" /><span class="showcase-lbl">In The Shop</span></div>
     <div class="showcase-item"><img src="public/images/crew-print.jpg" alt="Close-up of a custom printed logo on the back of a crew hoodie" loading="lazy" /><span class="showcase-lbl">Print Detail</span></div>
+  </div>
+</section>
+
+<!-- ══ FOUNDATION — 40% GIVEBACK ══ -->
+<section id="give">
+  <div class="give-bg"></div>
+  <div class="give-overlay"></div>
+  <div class="give-inner reveal">
+    <p class="section-label" style="display:inline-flex;">Purpose</p>
+    <p class="give-40">40%</p>
+    <p class="give-40-sub">of every order supports the Markin K Kossowski Foundation for Hope.</p>
+    <h2 class="display">Your Crew's Gear <span class="gold">Gives Back.</span></h2>
+    <p class="give-body">
+      Every SUQ Media order helps fund the
+      <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer">Markin K Kossowski Foundation for Hope</a>
+      — a nonprofit supporting people facing mental health challenges, addiction, poverty and homelessness. Kitting out your crew does more than look sharp.
+    </p>
+    <div class="give-pills">
+      <span>Mental Health</span><span>Addiction Recovery</span><span>Poverty</span><span>Homelessness</span>
+    </div>
+    <a href="https://markinkkossowskifoundation.org/" target="_blank" rel="noopener noreferrer" class="btn btn-orange">Learn About The Foundation ↗</a>
   </div>
 </section>
 
@@ -281,6 +323,7 @@
           <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Custom printed with your branding</li>
           <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Small crews to large companies</li>
           <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Printed in Calgary, Alberta</li>
+          <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>40% of profits support the Foundation for Hope</li>
         </ul>
         <a class="email-btn" href="mailto:info@suqmedia.com"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>info@suqmedia.com</a>
       </div>
