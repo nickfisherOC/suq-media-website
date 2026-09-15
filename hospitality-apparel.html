@@ -7,11 +7,11 @@
   <!-- ══════════════════════════════════════════════════════════
        INDUSTRY CONTENT · META
        ══════════════════════════════════════════════════════════ -->
-  <title>Hospitality Uniforms &amp; Custom Apparel | SUQ MEDIA</title>
-  <meta name="description" content="Custom uniforms and branded apparel for restaurants, hotels, bars and hospitality teams. Outfit your crew with professional apparel from SUQ MEDIA." />
+  <title>Hospitality Uniforms &amp; Custom Apparel Calgary | SUQ MEDIA</title>
+  <meta name="description" content="Custom uniforms and branded apparel for restaurants, hotels, bars and hospitality teams — designed and made right here in Calgary, Alberta. Outfit your team with professional apparel from SUQ MEDIA." />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Hospitality Uniforms &amp; Custom Apparel | SUQ MEDIA" />
-  <meta property="og:description" content="Professional custom apparel for restaurants, hotels, bars and hospitality teams. Look consistent, on-brand and professional. Get a custom quote." />
+  <meta property="og:title" content="Hospitality Uniforms &amp; Custom Apparel Calgary | SUQ MEDIA" />
+  <meta property="og:description" content="Professional custom apparel for restaurants, hotels, bars and hospitality teams — made right here in Calgary, Alberta. Look consistent, on-brand and professional. Get a custom quote." />
   <meta property="og:image" content="https://suqmedia.com/public/images/logo.png" />
 
   <!-- Meta Pixel Code — base pixel, fires PageView on load. Page hooks then fire:
@@ -93,6 +93,21 @@
     .give-body a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
     .give-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; max-width: 40rem; margin: 0 auto 2.5rem; }
     .give-pills span { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--fg); border: 1px solid oklch(0.72 0.18 55 / .35); background: oklch(0.72 0.18 55 / .07); padding: .5rem .9rem; border-radius: 2rem; }
+
+    /* Hero "made in Calgary" badge */
+    .hero-local { display: inline-flex; align-items: center; gap: .55rem; margin-top: 1.6rem; padding: .5rem 1.05rem; border: 1px solid oklch(0.72 0.18 55 / .45); border-radius: 2rem; background: oklch(0.72 0.18 55 / .09); font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+    .hero-local svg { width: 1rem; height: 1rem; stroke: var(--gold); fill: none; stroke-width: 2; flex-shrink: 0; }
+
+    /* "Proudly local — made in Calgary" feature band */
+    .local-band { background: linear-gradient(115deg, oklch(0.2 0.06 292) 0%, var(--bg) 68%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: clamp(3rem, 7vw, 5rem) 1.5rem; }
+    .local-inner { max-width: 64rem; margin: 0 auto; display: flex; align-items: center; gap: 2.75rem; }
+    .local-mark { flex-shrink: 0; display: grid; place-items: center; width: 6rem; height: 6rem; border: 1px solid oklch(0.72 0.18 55 / .4); border-radius: 50%; background: oklch(0.72 0.18 55 / .08); }
+    .local-mark svg { width: 3rem; height: 3rem; stroke: var(--gold); fill: none; stroke-width: 1.7; }
+    .local-copy h2 { margin: .4rem 0 .9rem; }
+    .local-copy p { color: var(--muted); max-width: 42rem; line-height: 1.6; }
+    .local-tags { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+    .local-tags span { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--fg); border: 1px solid var(--border); background: var(--card); padding: .4rem .8rem; border-radius: 2rem; }
+    @media (max-width: 680px) { .local-inner { flex-direction: column; text-align: center; gap: 1.5rem; } .local-copy p { margin: 0 auto; } .local-tags { justify-content: center; } }
   </style>
 </head>
 <body>
@@ -145,11 +160,25 @@
         Custom apparel built for restaurants, hotels and hospitality teams that want to look professional, stay
         consistent and represent their brand properly.
       </p>
+      <p class="hero-local fade-up delay-2"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Designed &amp; made in Calgary, Alberta</p>
       <div class="lp-hero-btns fade-up delay-3">
         <a href="#quote" class="btn btn-orange cta-quote" data-cta="hero">Get a Custom Quote</a>
       </div>
       <p class="hosp-tags fade-up delay-3">Restaurants • Hotels • Bars • Hospitality Teams</p>
       <p class="hero-give fade-up delay-3"><b>40%</b> of profits fund the Markin K Kossowski Foundation for Hope.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROUDLY LOCAL — CALGARY ══ -->
+<section class="local-band" id="local">
+  <div class="local-inner reveal">
+    <div class="local-mark"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+    <div class="local-copy">
+      <p class="section-label">Proudly Local</p>
+      <h2 class="display">Made Right Here In <span class="gold">Calgary, Alberta.</span></h2>
+      <p>Every SUQ Media order is designed and produced locally, right here in Calgary — not outsourced. When you outfit your team with us, you're working with a local team and putting your money into a Calgary business.</p>
+      <div class="local-tags"><span>Locally Made</span><span>Calgary, AB</span><span>Support Local</span></div>
     </div>
   </div>
 </section>
