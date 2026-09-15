@@ -329,11 +329,11 @@
           </div>
           <div class="form-group"><label for="h-colour">Preferred Colour <span>*</span></label><input id="h-colour" name="colour" type="text" required placeholder="e.g. black, charcoal, navy — or not sure yet" /></div>
           <div class="form-group">
-            <label for="h-logo">Logo Upload <span>*</span></label>
+            <label for="h-logo">Logo Upload <span style="color:var(--muted);text-transform:none;letter-spacing:0;">(optional — or we'll request it after)</span></label>
             <label class="file-drop" for="h-logo">
               <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5-5 5 5M12 5v12"/></svg>
               <span class="fd-text"><span class="fd-name" id="h-logo-name">PNG, JPG, PDF, AI, SVG</span></span>
-              <input id="h-logo" name="logo" type="file" accept=".png,.jpg,.jpeg,.pdf,.ai,.svg,.eps" required />
+              <input id="h-logo" name="logo" type="file" accept=".png,.jpg,.jpeg,.pdf,.ai,.svg,.eps" />
             </label>
           </div>
           <div class="form-group"><label for="h-message">Additional Information <span>*</span></label><textarea id="h-message" name="message" required rows="4" placeholder="Tell us about your team, the apparel you need, and any deadlines…"></textarea></div>
@@ -433,15 +433,6 @@
         fileName.textContent = fileInput.files && fileInput.files.length ? fileInput.files[0].name : 'PNG, JPG, PDF, AI, SVG';
       });
     }
-    function readFile(file) {
-      return new Promise(function (resolve, reject) {
-        var r = new FileReader();
-        r.onload = function () { resolve(r.result); };
-        r.onerror = reject;
-        r.readAsDataURL(file);
-      });
-    }
-
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
@@ -457,15 +448,12 @@
         'text-field_1788272322396_ncm2wz': val('h-colour'),
         'textarea-field_1781111620488_bino7k': val('h-message')
       };
-      // Logo: attach inline if small; if too large, note it so the lead still submits
+      // Logo: the CRM submission endpoint can't accept files inline, so record the
+      // file name in the notes and have the team collect the logo directly.
       if (fileInput && fileInput.files && fileInput.files.length) {
         var lf = fileInput.files[0];
-        if (lf.size <= 4 * 1024 * 1024) {
-          data['file-field_1788272364055_ayqgjc'] = await readFile(lf);
-        } else {
-          data['textarea-field_1781111620488_bino7k'] = (data['textarea-field_1781111620488_bino7k'] ? data['textarea-field_1781111620488_bino7k'] + '\n\n' : '') +
-            '[Logo "' + lf.name + '" was too large to attach here — please request it from the customer.]';
-        }
+        data['textarea-field_1781111620488_bino7k'] = (data['textarea-field_1781111620488_bino7k'] ? data['textarea-field_1781111620488_bino7k'] + '\n\n' : '') +
+          '[Logo to collect: "' + lf.name + '" — customer has a logo ready; request it directly.]';
       }
       var payload = {
         formId: FORM_ID,
