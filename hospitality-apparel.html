@@ -70,6 +70,14 @@
 
     /* Café-scene background behind the quote form (overrides the shared hero-bg) */
     #quote .quote-bg { background-image: url('public/images/hospitality-cafe-bg.jpg'); }
+
+    /* File upload (logo) */
+    .file-drop { position: relative; border: 1px dashed var(--border); background: var(--bg); padding: 1rem; display: flex; align-items: center; gap: .8rem; cursor: pointer; transition: border-color .2s, background .2s; }
+    .file-drop:hover { border-color: oklch(0.72 0.18 55 / .5); background: oklch(0.72 0.18 55 / .04); }
+    .file-drop input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .file-drop svg { width: 1.3rem; height: 1.3rem; stroke: var(--gold); fill: none; stroke-width: 1.7; flex-shrink: 0; }
+    .file-drop .fd-text { font-size: .8rem; color: var(--muted); line-height: 1.4; }
+    .file-drop .fd-name { color: var(--fg); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -221,49 +229,46 @@
           </div>
           <div class="form-row">
             <div class="form-group"><label for="h-name">Name <span>*</span></label><input id="h-name" name="name" type="text" required placeholder="Your name" /></div>
-            <div class="form-group"><label for="h-brand">Company / Brand</label><input id="h-brand" name="brand" type="text" placeholder="Business name" /></div>
+            <div class="form-group"><label for="h-brand">Company <span>*</span></label><input id="h-brand" name="brand" type="text" required placeholder="Business name" /></div>
           </div>
           <div class="form-row">
             <div class="form-group"><label for="h-email">Email <span>*</span></label><input id="h-email" name="email" type="email" required placeholder="you@business.com" /></div>
-            <div class="form-group"><label for="h-phone">Phone</label><input id="h-phone" name="phone" type="tel" placeholder="(555) 555-5555" /></div>
+            <div class="form-group"><label for="h-phone">Phone <span>*</span></label><input id="h-phone" name="phone" type="tel" required placeholder="(555) 555-5555" /></div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="h-type">Project Type <span>*</span></label>
+              <label for="h-type">Industry <span>*</span></label>
               <select id="h-type" name="type" required>
-                <option value="" disabled selected>Select a project type</option>
-                <option value="option5">Hospitality / Uniforms</option>
-                <option value="option2">Corporate / Branded Apparel</option>
-                <option value="option3">Event &amp; Merch Program</option>
-                <option value="option7">Full Brand Build</option>
-                <option value="option8">Other</option>
+                <option value="" disabled selected>Select your industry</option>
+                <option value="option1">Restaurant / Café</option>
+                <option value="option2">Bar / Pub</option>
+                <option value="option3">Hotel</option>
+                <option value="option4">Catering / Events</option>
+                <option value="option5">Other</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="h-qty">Estimated Quantity</label>
-              <select id="h-qty" name="quantity">
+              <label for="h-qty">Estimated Quantity <span>*</span></label>
+              <select id="h-qty" name="quantity" required>
                 <option value="" disabled selected>Select a range</option>
-                <option value="option1">Under 100 units</option>
-                <option value="option2">100 – 500 units</option>
-                <option value="option3">500 – 1,000 units</option>
-                <option value="option4">1,000 – 5,000 units</option>
-                <option value="option5">5,000+ units</option>
-                <option value="option6">Not sure yet</option>
+                <option value="option1">10 – 24</option>
+                <option value="option2">25 – 49</option>
+                <option value="option3">50 – 99</option>
+                <option value="option4">100+</option>
+                <option value="option5">Not sure yet</option>
               </select>
             </div>
           </div>
+          <div class="form-group"><label for="h-colour">Preferred Colour <span>*</span></label><input id="h-colour" name="colour" type="text" required placeholder="e.g. black, charcoal, navy — or not sure yet" /></div>
           <div class="form-group">
-            <label for="h-timeline">Target Timeline</label>
-            <select id="h-timeline" name="timeline">
-              <option value="" disabled selected>Select a timeline</option>
-              <option value="option1">ASAP / Rush</option>
-              <option value="option2">1 – 2 months</option>
-              <option value="option3">3 – 4 months</option>
-              <option value="option4">Flexible</option>
-              <option value="option5">Just exploring</option>
-            </select>
+            <label for="h-logo">Logo Upload <span>*</span></label>
+            <label class="file-drop" for="h-logo">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5-5 5 5M12 5v12"/></svg>
+              <span class="fd-text"><span class="fd-name" id="h-logo-name">PNG, JPG, PDF, AI, SVG</span></span>
+              <input id="h-logo" name="logo" type="file" accept=".png,.jpg,.jpeg,.pdf,.ai,.svg,.eps" required />
+            </label>
           </div>
-          <div class="form-group"><label for="h-message">Project Details <span>*</span></label><textarea id="h-message" name="message" required rows="4" placeholder="Tell us about your team, the apparel you need, and any deadlines…"></textarea></div>
+          <div class="form-group"><label for="h-message">Additional Information <span>*</span></label><textarea id="h-message" name="message" required rows="4" placeholder="Tell us about your team, the apparel you need, and any deadlines…"></textarea></div>
           <button type="submit" class="btn btn-orange" style="width:100%;justify-content:center;">Get My Custom Quote →</button>
           <p id="hospitalityError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
         </form>
@@ -315,14 +320,14 @@
 
 <script src="public/landing/landing.js"></script>
 <script>
-  /* ── Quote form → LIVE Custom Apparel backend (Growtheon) ──
-     Same endpoint, form ID and field keys as custom-apparel.html. */
+  /* ── Quote form → dedicated Hospitality form (Growtheon) ──
+     Fields mirror the "Hospitality Apparel Request Ad Landing" form exactly. */
   (function () {
     var form = document.getElementById('hospitalityForm');
     if (!form) return;
     var ENDPOINT = 'https://auth.growtheon.co/functions/v1/handle-form-submission';
     var KEY = 'sb_publishable_enLE5YM6C8teak0PBuPBHA_yxTm1MXO';
-    var FORM_ID = 'ffc5bbd9-9fec-4991-bf36-ace1b741fa87';
+    var FORM_ID = 'b0bea061-8d1f-4fae-87fe-4b0430f408b0';
     var start = Date.now();
     var started = false;
 
@@ -352,6 +357,23 @@
       if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     }
 
+    // Logo upload — show chosen file name
+    var fileInput = document.getElementById('h-logo');
+    var fileName = document.getElementById('h-logo-name');
+    if (fileInput && fileName) {
+      fileInput.addEventListener('change', function () {
+        fileName.textContent = fileInput.files && fileInput.files.length ? fileInput.files[0].name : 'PNG, JPG, PDF, AI, SVG';
+      });
+    }
+    function readFile(file) {
+      return new Promise(function (resolve, reject) {
+        var r = new FileReader();
+        r.onload = function () { resolve(r.result); };
+        r.onerror = reject;
+        r.readAsDataURL(file);
+      });
+    }
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
@@ -364,9 +386,19 @@
         'phone-field_1781123833090_cfgdai': val('h-phone'),
         'select-field_1781110494945_q28f69': document.getElementById('h-type').value,
         'select-field_1781110661193_k9b70o': document.getElementById('h-qty').value,
-        'select-field_1781110789205_11tfng': document.getElementById('h-timeline').value,
+        'text-field_1788272322396_ncm2wz': val('h-colour'),
         'textarea-field_1781111620488_bino7k': val('h-message')
       };
+      // Logo: attach inline if small; if too large, note it so the lead still submits
+      if (fileInput && fileInput.files && fileInput.files.length) {
+        var lf = fileInput.files[0];
+        if (lf.size <= 4 * 1024 * 1024) {
+          data['file-field_1788272364055_ayqgjc'] = await readFile(lf);
+        } else {
+          data['textarea-field_1781111620488_bino7k'] = (data['textarea-field_1781111620488_bino7k'] ? data['textarea-field_1781111620488_bino7k'] + '\n\n' : '') +
+            '[Logo "' + lf.name + '" was too large to attach here — please request it from the customer.]';
+        }
+      }
       var payload = {
         formId: FORM_ID,
         data: data,
