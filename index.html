@@ -792,6 +792,28 @@
     .partner-tile:hover { border-color: oklch(0.55 0.28 292 / .5); transform: translateY(-4px); box-shadow: 0 0 30px oklch(0.55 0.28 292 / .12); }
     .partner-tile img { max-width: 100%; max-height: 3.5rem; width: auto; height: auto; object-fit: contain; display: block; }
   </style>
+
+  <!-- LocalBusiness structured data (address / local SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "SUQ Media",
+    "url": "https://suqmedia.com/",
+    "logo": "https://suqmedia.com/public/images/logo.png",
+    "image": "https://suqmedia.com/public/images/logo.png",
+    "email": "info@suqmedia.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "5534 1A Street SW",
+      "addressLocality": "Calgary",
+      "addressRegion": "AB",
+      "postalCode": "T2H 0E7",
+      "addressCountry": "CA"
+    },
+    "areaServed": "Calgary, Alberta"
+  }
+  </script>
 </head>
 <body>
 
@@ -1294,6 +1316,7 @@
       <div>
         <img src="public/images/logo.png" alt="Suq Media" />
         <p class="footer-tagline">Creativity. Culture. Healing. Hope.</p>
+        <p class="footer-address" style="margin-top:.75rem;font-size:.8rem;color:var(--muted);line-height:1.5;">5534 1A St SW, Calgary, AB T2H 0E7</p>
       </div>
       <ul class="footer-nav">
         <li><a href="#about">About</a></li>
