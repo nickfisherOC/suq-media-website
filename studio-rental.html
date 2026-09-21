@@ -101,7 +101,7 @@
     .nav-dropdown > a::after { content: '▾'; font-size: .55rem; transition: transform .2s; }
     .nav-dropdown:hover > a::after { transform: rotate(180deg); }
     .dropdown-menu { position: absolute; top: calc(100% + 1rem); left: 0; background: oklch(0.1 0 0 / .95); backdrop-filter: blur(12px); border: 1px solid var(--border); min-width: 12rem; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: all .2s; z-index: 200; list-style: none; }
-    .nav-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); } .nav-dropdown:focus-within .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
     .dropdown-menu li a { display: block; padding: .85rem 1.25rem; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; color: var(--muted); text-decoration: none; transition: color .2s, background .2s; border-bottom: 1px solid var(--border); }
     .dropdown-menu li:last-child a { border-bottom: none; }
     .dropdown-menu li a:hover { color: var(--fg); background: var(--secondary); }
@@ -446,7 +446,7 @@
       <span class="st-badge"><svg viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>8K Video</span>
       <span class="st-badge"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zM5 10v2a7 7 0 0 0 14 0v-2"/></svg>Podcast Setup</span>
       <span class="st-badge"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Music Recording</span>
-      <span class="st-badge"><svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Fast Turnaround</span>
+      <span class="st-badge"><svg viewBox="0 0 24 24"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Editing Support</span>
       <span class="st-badge"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Creative Environment</span>
     </div>
   </div>

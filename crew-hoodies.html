@@ -288,8 +288,8 @@
 </section>
 
 <!-- ══ 4. VISUAL SHOWCASE ══
-     Drop real photos into public/images and swap each .showcase-ph for:
-     <img src="public/images/crew-xxx.jpg" alt="..." loading="lazy" /> -->
+     FUTURE IMAGES: when real crew photos arrive, drop them into public/images
+     and replace each .showcase-ph div with an <img> (with descriptive alt + loading="lazy"). -->
 <section class="section" id="showcase">
   <div class="sec-head center reveal">
     <p class="section-label">The Work</p>
@@ -532,15 +532,6 @@
 
     function redirectToThankYou() { window.location.href = 'crew-hoodies-thank-you.html'; }
 
-    function readFile(file) {
-      return new Promise(function (resolve, reject) {
-        var r = new FileReader();
-        r.onload = function () { resolve(r.result); };
-        r.onerror = reject;
-        r.readAsDataURL(file);
-      });
-    }
-
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
@@ -571,14 +562,12 @@
         if (f.quantity) data[f.quantity] = val('c-qty');
         if (f.colour)   data[f.colour]   = val('c-colour');
         if (f.notes)    data[f.notes]    = val('c-message');
-        if (f.logo && fileInput && fileInput.files && fileInput.files.length) {
+        // Logo: the CRM submission endpoint can't accept files inline, so record the
+        // file name in the notes and have the team collect the logo directly.
+        if (fileInput && fileInput.files && fileInput.files.length && f.notes) {
           var lf = fileInput.files[0];
-          if (lf.size <= 4 * 1024 * 1024) {
-            data[f.logo] = await readFile(lf);       // small logo: attach inline
-          } else if (f.notes) {                       // too large: note it so the lead still submits
-            data[f.notes] = (data[f.notes] ? data[f.notes] + '\n\n' : '') +
-              '[Logo "' + lf.name + '" was too large to attach here — please request it from the customer.]';
-          }
+          data[f.notes] = (data[f.notes] ? data[f.notes] + '\n\n' : '') +
+            '[Logo to collect: "' + lf.name + '" — customer has a logo ready; request it directly.]';
         }
         var payload = {
           formId: CREW_FORM.formId,
