@@ -951,7 +951,8 @@
       <p class="section-label">SUQ MEDIA Picks</p>
       <h2 class="display" style="font-size:clamp(2rem,4vw,3.5rem);">Curated <span style="color:var(--gold);">For You</span></h2>
     </div>
-    <a href="#" class="btn btn-ghost">View All Picks</a>
+<!-- Placeholder CTA — swap <span> back to <a href="…"> when the destination exists. -->
+    <span class="btn btn-ghost" aria-disabled="true" style="cursor:default;opacity:.6;">View All Picks — Coming Soon</span>
   </div>
   <div class="picks-grid" id="picksGrid">
     <div class="pick-card" data-genre="folk"><div class="pick-artwork"><p class="display">♪</p><div class="pick-play-overlay"><div class="pick-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><span class="pick-genre-tag">Folk</span><span class="pick-suq-tag">Suq Pick</span></div><div class="pick-body"><p class="pick-title">Dust &amp; Light</p><p class="pick-artist">River James · Independent</p><div class="pick-meta"><span>Folk</span><span>3:47</span></div></div></div>
@@ -968,7 +969,7 @@
   <div style="max-width:90rem;margin:0 auto;">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;flex-wrap:wrap;gap:1rem;">
       <div><p class="section-label">Trending This Week</p><h2 class="display" style="font-size:clamp(2rem,4vw,3.5rem);">Top <span style="color:var(--gold);">10</span></h2></div>
-      <a href="#" class="btn btn-ghost">Full Chart</a>
+      <span class="btn btn-ghost" aria-disabled="true" style="cursor:default;opacity:.6;">Full Chart — Coming Soon</span>
     </div>
     <div class="trending-grid">
       <div class="trending-card"><span class="trending-rank">01</span><div class="trending-thumb"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div class="trending-info"><p class="trending-genre">Folk</p><p class="trending-song">Dust &amp; Light</p><p class="trending-artist">River James</p></div><div class="trending-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
@@ -990,23 +991,25 @@
   <p class="section-label">Browse By Genre</p>
   <h2 class="display" style="font-size:clamp(2.5rem,5vw,4rem);margin-bottom:.75rem;">Find Your <span style="color:var(--gold);">Sound</span></h2>
   <p style="color:var(--muted);line-height:1.7;max-width:36rem;margin-bottom:3.5rem;">Every genre. Every mood. Music for every moment.</p>
+  <!-- Placeholder cards (no destinations yet): non-clickable <div>s showing "Coming Soon".
+       To activate one, change its <div class="genre-card"> to <a href="URL" class="genre-card"> (and </div> to </a>). -->
   <div class="genre-grid">
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎸</span><p class="genre-name">Rock</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🌿</span><p class="genre-name">Alternative</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🤠</span><p class="genre-name">Country</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🪵</span><p class="genre-name">Folk</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎤</span><p class="genre-name">Hip Hop</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">⚡</span><p class="genre-name">Electronic</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">✨</span><p class="genre-name">Pop</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎷</span><p class="genre-name">Blues</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎺</span><p class="genre-name">Jazz</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🕊️</span><p class="genre-name">Soul</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎻</span><p class="genre-name">Classical</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎹</span><p class="genre-name">Instrumental</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">✝️</span><p class="genre-name">Christian</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🪶</span><p class="genre-name">Indigenous</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎙️</span><p class="genre-name">Singer-Songwriter</p><p class="genre-count">Coming Soon</p></a>
-    <a href="#" class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🌍</span><p class="genre-name">World Music</p><p class="genre-count">Coming Soon</p></a>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎸</span><p class="genre-name">Rock</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🌿</span><p class="genre-name">Alternative</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🤠</span><p class="genre-name">Country</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🪵</span><p class="genre-name">Folk</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎤</span><p class="genre-name">Hip Hop</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">⚡</span><p class="genre-name">Electronic</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">✨</span><p class="genre-name">Pop</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎷</span><p class="genre-name">Blues</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎺</span><p class="genre-name">Jazz</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🕊️</span><p class="genre-name">Soul</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎻</span><p class="genre-name">Classical</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎹</span><p class="genre-name">Instrumental</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">✝️</span><p class="genre-name">Christian</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🪶</span><p class="genre-name">Indigenous</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🎙️</span><p class="genre-name">Singer-Songwriter</p><p class="genre-count">Coming Soon</p></div>
+    <div class="genre-card"><div class="genre-bg"></div><span class="genre-icon">🌍</span><p class="genre-name">World Music</p><p class="genre-count">Coming Soon</p></div>
   </div>
 </div>
 
@@ -1016,19 +1019,21 @@
     <p class="section-label">Discover By Mood</p>
     <h2 class="display" style="font-size:clamp(2.5rem,5vw,4rem);margin-bottom:.75rem;">How Are You <span style="color:var(--gold);">Feeling?</span></h2>
     <p style="color:var(--muted);line-height:1.7;max-width:36rem;margin-bottom:3.5rem;">Let the music meet you where you are.</p>
+    <!-- Placeholder cards (no destinations yet): non-clickable <div>s showing "Coming Soon".
+         To activate one, change its <div class="mood-card"> to <a href="URL" class="mood-card"> (and </div> to </a>). -->
     <div class="mood-grid">
-      <a href="#" class="mood-card"><span class="mood-emoji">🔥</span><p class="mood-name">Motivation</p><p class="mood-desc">Music to move mountains and push past limits</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">🌊</span><p class="mood-name">Deep Thinking</p><p class="mood-desc">Slow down and let the music make you think</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">🙏</span><p class="mood-name">Faith</p><p class="mood-desc">Music rooted in belief, hope and spiritual depth</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">💚</span><p class="mood-name">Healing</p><p class="mood-desc">Songs for the broken places within us</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">💔</span><p class="mood-name">Heartbreak</p><p class="mood-desc">Feel it fully. Music for the hard moments</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">🏔️</span><p class="mood-name">Adventure</p><p class="mood-desc">Soundtrack for the open road and new horizons</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">🧠</span><p class="mood-name">Focus</p><p class="mood-desc">Deep work music that doesn't get in the way</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">⚡</span><p class="mood-name">Energy</p><p class="mood-desc">High-octane tracks to get you moving</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">🌙</span><p class="mood-name">Reflection</p><p class="mood-desc">Late night listening for quiet introspection</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">🌅</span><p class="mood-name">Freedom</p><p class="mood-desc">Music that feels like wide open space</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">❤️</span><p class="mood-name">Love</p><p class="mood-desc">From first sparks to deep devotion</p><p class="mood-count">Coming Soon</p></a>
-      <a href="#" class="mood-card"><span class="mood-emoji">🕊️</span><p class="mood-name">Soulful</p><p class="mood-desc">Music that reaches somewhere deep inside you</p><p class="mood-count">Coming Soon</p></a>
+      <div class="mood-card"><span class="mood-emoji">🔥</span><p class="mood-name">Motivation</p><p class="mood-desc">Music to move mountains and push past limits</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">🌊</span><p class="mood-name">Deep Thinking</p><p class="mood-desc">Slow down and let the music make you think</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">🙏</span><p class="mood-name">Faith</p><p class="mood-desc">Music rooted in belief, hope and spiritual depth</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">💚</span><p class="mood-name">Healing</p><p class="mood-desc">Songs for the broken places within us</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">💔</span><p class="mood-name">Heartbreak</p><p class="mood-desc">Feel it fully. Music for the hard moments</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">🏔️</span><p class="mood-name">Adventure</p><p class="mood-desc">Soundtrack for the open road and new horizons</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">🧠</span><p class="mood-name">Focus</p><p class="mood-desc">Deep work music that doesn't get in the way</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">⚡</span><p class="mood-name">Energy</p><p class="mood-desc">High-octane tracks to get you moving</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">🌙</span><p class="mood-name">Reflection</p><p class="mood-desc">Late night listening for quiet introspection</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">🌅</span><p class="mood-name">Freedom</p><p class="mood-desc">Music that feels like wide open space</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">❤️</span><p class="mood-name">Love</p><p class="mood-desc">From first sparks to deep devotion</p><p class="mood-count">Coming Soon</p></div>
+      <div class="mood-card"><span class="mood-emoji">🕊️</span><p class="mood-name">Soulful</p><p class="mood-desc">Music that reaches somewhere deep inside you</p><p class="mood-count">Coming Soon</p></div>
     </div>
   </div>
 </section>
@@ -1086,7 +1091,7 @@
   <div style="max-width:90rem;margin:0 auto;">
     <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;flex-wrap:wrap;gap:1rem;">
       <div><p class="section-label">New Releases</p><h2 class="display" style="font-size:clamp(2rem,4vw,3.5rem);">Just <span style="color:var(--gold);">Dropped</span></h2></div>
-      <a href="#" class="btn btn-ghost">All Releases</a>
+      <span class="btn btn-ghost" aria-disabled="true" style="cursor:default;opacity:.6;">All Releases — Coming Soon</span>
     </div>
     <div class="releases-list">
       <div class="release-row"><div class="release-art"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><p class="release-title">Dust &amp; Light</p><p class="release-artist">River James</p><p class="release-genre">Folk</p><span class="release-new">New</span></div>
