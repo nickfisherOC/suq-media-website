@@ -1388,8 +1388,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqLead) window.suqLead('Music & Video Production', 'music_submission');
-      showSubmitSuccess();
+      if (window.suqMarkConversion) window.suqMarkConversion();
+      window.location.href = 'music-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
       errEl.textContent = "Sorry, we couldn't submit your music just now. Please try again, or email info@suqmedia.com.";
@@ -1440,8 +1440,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqNewsletter) window.suqNewsletter('Newsletter (Music)');
-      showMusicNewsletterSuccess();
+      if (window.suqMarkConversion) window.suqMarkConversion();
+      window.location.href = 'newsletter-music-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
       errEl.textContent = "Sorry, we couldn't sign you up just now. Please try again, or email info@suqmedia.com.";

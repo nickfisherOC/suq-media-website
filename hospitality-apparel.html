@@ -542,9 +542,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         });
         var result = await res.json().catch(function () { return {}; });
         if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-        track('Lead', true); // Meta standard 'Lead' event on success
-        if (window.suqLead) window.suqLead('Hospitality Apparel', 'apparel');
-        showSuccess();
+        // Meta 'Lead' + generate_lead now fire once on the thank-you page.
+        if (window.suqMarkConversion) window.suqMarkConversion();
+        window.location.href = 'hospitality-apparel-thank-you.html';
+        return;
       } catch (err) {
         if (btn) { btn.disabled = false; btn.textContent = label; }
         if (errEl) {

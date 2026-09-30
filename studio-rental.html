@@ -936,8 +936,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqLead) window.suqLead('Studio Rental', 'studio_booking');
-      showBookingSuccess();
+      if (window.suqMarkConversion) window.suqMarkConversion();
+      window.location.href = 'studio-rental-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
       errEl.textContent = "Sorry, we couldn't submit your booking request just now. Please try again, or email info@suqmedia.com.";

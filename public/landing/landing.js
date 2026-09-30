@@ -152,7 +152,10 @@
       });
       var result = await res.json().catch(function () { return {}; });
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqLead) window.suqLead(cfg.leadName || cfg.industry || 'Quote', cfg.leadType || 'apparel');
+      // Mark the one-time conversion flag, then redirect to the thank-you page
+      // (which fires generate_lead once). Falls back to inline success if no page set.
+      if (window.suqMarkConversion) window.suqMarkConversion();
+      if (cfg.thankYou) { window.location.href = cfg.thankYou; return; }
       showSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

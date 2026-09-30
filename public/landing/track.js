@@ -75,6 +75,16 @@
     });
   };
 
+  /* ── One-time conversion redirect flag ──────────────────────
+     A form calls this ONCE, immediately before redirecting to its
+     thank-you page, ONLY after a genuinely successful response.
+     The thank-you page consumes the flag once (see below), so a
+     refresh or a direct visit fires nothing. */
+  var CONVERSION_FLAG = 'suq_conversion';
+  window.suqMarkConversion = function () {
+    try { sessionStorage.setItem(CONVERSION_FLAG, '1'); } catch (e) { /* no-op */ }
+  };
+
   /* ── CTA / phone location inference ─────────────────────── */
   function locationOf(el) {
     var explicit = el.getAttribute('data-cta-location');
@@ -143,10 +153,36 @@
   }, false);
 
   /* ── Thank-you / confirmation pages ─────────────────────────
-     There is deliberately NO unconditional page-load lead event.
-     A confirmation page (e.g. crew-hoodies-thank-you.html) fires
-     generate_lead only when a one-time sessionStorage flag, set by
-     the form immediately before its post-success redirect, is
-     present — then consumes the flag so a refresh or a direct visit
-     fires nothing. That check lives on the confirmation page itself. */
+     There is deliberately NO unconditional page-load event. A thank-you
+     page declares its conversion with body attributes:
+       data-ty-event="generate_lead"  data-ty-name="Custom Apparel"  data-ty-type="apparel"
+       data-ty-event="newsletter_signup"  data-ty-name="Newsletter (Home)"
+     The event fires ONCE, and only when the one-time flag set by the form
+     (window.suqMarkConversion, just before its post-success redirect) is
+     present. The flag is consumed immediately, so a refresh, a direct visit,
+     or a new session fires nothing. */
+  function onReady(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn, { once: true });
+    } else {
+      fn();
+    }
+  }
+  onReady(function () {
+    var b = document.body;
+    if (!b) return;
+    var ev = b.getAttribute('data-ty-event');
+    if (!ev) return;
+    var confirmed = false;
+    try {
+      confirmed = !!sessionStorage.getItem(CONVERSION_FLAG);
+      if (confirmed) sessionStorage.removeItem(CONVERSION_FLAG);
+    } catch (e) { confirmed = false; }
+    if (!confirmed) return;
+    if (ev === 'generate_lead') {
+      fireLead(b.getAttribute('data-ty-name'), b.getAttribute('data-ty-type'));
+    } else if (ev === 'newsletter_signup') {
+      window.suqNewsletter(b.getAttribute('data-ty-name'));
+    }
+  });
 })();
