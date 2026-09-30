@@ -154,7 +154,7 @@
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
       // Mark the one-time conversion flag, then redirect to the thank-you page
       // (which fires generate_lead once). Falls back to inline success if no page set.
-      if (window.suqMarkConversion) window.suqMarkConversion();
+      if (window.suqMarkConversion && cfg.thankYou) window.suqMarkConversion({ event: 'generate_lead', form_name: cfg.leadName || cfg.industry || 'Quote', lead_type: cfg.leadType || 'apparel', thank_you_path: cfg.thankYou });
       if (cfg.thankYou) { window.location.href = cfg.thankYou; return; }
       showSuccess();
     } catch (err) {

@@ -606,7 +606,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
         // Mark the one-time conversion flag, then redirect to the thank-you page,
         // which fires generate_lead once and clears the flag.
-        if (window.suqMarkConversion) window.suqMarkConversion();
+        if (window.suqMarkConversion) window.suqMarkConversion({ event: 'generate_lead', form_name: 'Crew Hoodies', lead_type: 'apparel', thank_you_path: 'crew-hoodies-thank-you.html' });
         redirectToThankYou();
       } catch (err) {
         if (btn) { btn.disabled = false; btn.textContent = label; }

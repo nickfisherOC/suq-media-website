@@ -22,7 +22,8 @@
   <title>Request Received | SUQ MEDIA</title>
   <meta name="description" content="Thanks — your branded apparel quote request has been received. The SUQ MEDIA team will be in touch shortly." />
 
-  <!-- Meta Pixel Code -->
+  <!-- Meta Pixel Code — base pixel only (PageView). Meta 'Lead' is fired by
+       track.js exactly once, only for a validated generate_lead conversion. -->
   <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -34,10 +35,9 @@
   'https://connect.facebook.net/en_US/fbevents.js');
   fbq('init', '2315605848993797');
   fbq('track', 'PageView');
-  fbq('track', 'Lead');
   </script>
   <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=2315605848993797&ev=Lead&noscript=1"
+  src="https://www.facebook.com/tr?id=2315605848993797&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Meta Pixel Code -->
 
@@ -67,7 +67,7 @@
     @media (max-width: 520px) { .ty-btns .btn { width: 100%; justify-content: center; } }
   </style>
 </head>
-<body data-ty-event="generate_lead" data-ty-name="Mortgage Broker Apparel" data-ty-type="apparel">
+<body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WHFVKFBN"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

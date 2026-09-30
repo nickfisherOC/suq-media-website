@@ -936,7 +936,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqMarkConversion) window.suqMarkConversion();
+      if (window.suqMarkConversion) window.suqMarkConversion({ event: 'generate_lead', form_name: 'Studio Rental', lead_type: 'studio_booking', thank_you_path: 'studio-rental-thank-you.html' });
       window.location.href = 'studio-rental-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

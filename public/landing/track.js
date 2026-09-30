@@ -75,14 +75,25 @@
     });
   };
 
-  /* ── One-time conversion redirect flag ──────────────────────
+  /* ── One-time conversion record ─────────────────────────────
      A form calls this ONCE, immediately before redirecting to its
-     thank-you page, ONLY after a genuinely successful response.
-     The thank-you page consumes the flag once (see below), so a
-     refresh or a direct visit fires nothing. */
-  var CONVERSION_FLAG = 'suq_conversion';
-  window.suqMarkConversion = function () {
-    try { sessionStorage.setItem(CONVERSION_FLAG, '1'); } catch (e) { /* no-op */ }
+     thank-you page, ONLY after a genuinely successful response. It
+     stores a validated, non-PII record that the destination thank-you
+     page checks (path + expiry) and consumes exactly once, so refresh,
+     direct visits, new sessions and the wrong page fire nothing.
+     Record: { event, form_name, lead_type?, thank_you_path, ts } — no PII. */
+  var CONVERSION_KEY = 'suq_conversion';
+  var CONVERSION_TTL = 10 * 60 * 1000; // 10 minutes
+  window.suqMarkConversion = function (rec) {
+    rec = rec || {};
+    var record = {
+      event: rec.event || 'generate_lead',
+      form_name: rec.form_name || 'Unknown',
+      thank_you_path: rec.thank_you_path || '',
+      ts: Date.now()
+    };
+    if (rec.lead_type) record.lead_type = rec.lead_type;
+    try { sessionStorage.setItem(CONVERSION_KEY, JSON.stringify(record)); } catch (e) { /* no-op */ }
   };
 
   /* ── CTA / phone location inference ─────────────────────── */
@@ -153,14 +164,17 @@
   }, false);
 
   /* ── Thank-you / confirmation pages ─────────────────────────
-     There is deliberately NO unconditional page-load event. A thank-you
-     page declares its conversion with body attributes:
-       data-ty-event="generate_lead"  data-ty-name="Custom Apparel"  data-ty-type="apparel"
-       data-ty-event="newsletter_signup"  data-ty-name="Newsletter (Home)"
-     The event fires ONCE, and only when the one-time flag set by the form
-     (window.suqMarkConversion, just before its post-success redirect) is
-     present. The flag is consumed immediately, so a refresh, a direct visit,
-     or a new session fires nothing. */
+     There is deliberately NO unconditional page-load event and NO
+     unconditional Meta 'Lead' in any thank-you page's HTML. On load we
+     look for the one-time conversion record set by the form. It fires
+     only when ALL hold:
+       • a record exists,
+       • it has not expired (10 min),
+       • its thank_you_path matches THIS page (so the wrong thank-you
+         page can neither fire nor consume another page's record).
+     The record is removed BEFORE firing, so a refresh cannot re-fire.
+     Meta 'Lead' fires here too, but ONLY for generate_lead — never for
+     newsletter_signup, and never on a direct visit/refresh. */
   function onReady(fn) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', fn, { once: true });
@@ -168,21 +182,32 @@
       fn();
     }
   }
+  function currentPageFile() {
+    return location.pathname.split('/').pop() || '';
+  }
   onReady(function () {
-    var b = document.body;
-    if (!b) return;
-    var ev = b.getAttribute('data-ty-event');
-    if (!ev) return;
-    var confirmed = false;
-    try {
-      confirmed = !!sessionStorage.getItem(CONVERSION_FLAG);
-      if (confirmed) sessionStorage.removeItem(CONVERSION_FLAG);
-    } catch (e) { confirmed = false; }
-    if (!confirmed) return;
-    if (ev === 'generate_lead') {
-      fireLead(b.getAttribute('data-ty-name'), b.getAttribute('data-ty-type'));
-    } else if (ev === 'newsletter_signup') {
-      window.suqNewsletter(b.getAttribute('data-ty-name'));
+    var raw;
+    try { raw = sessionStorage.getItem(CONVERSION_KEY); } catch (e) { return; }
+    if (!raw) return;
+    var rec;
+    try { rec = JSON.parse(raw); } catch (e) {
+      try { sessionStorage.removeItem(CONVERSION_KEY); } catch (_e) {}
+      return;
+    }
+    // Stale records can't be used later.
+    if (!rec || !rec.ts || (Date.now() - rec.ts) > CONVERSION_TTL) {
+      try { sessionStorage.removeItem(CONVERSION_KEY); } catch (e) {}
+      return;
+    }
+    // Only the intended destination may consume/fire this record.
+    if (rec.thank_you_path !== currentPageFile()) return;
+    // Valid — consume BEFORE firing so a refresh can't re-fire.
+    try { sessionStorage.removeItem(CONVERSION_KEY); } catch (e) {}
+    if (rec.event === 'generate_lead') {
+      fireLead(rec.form_name, rec.lead_type);
+      try { if (typeof window.fbq === 'function') window.fbq('track', 'Lead'); } catch (e) { /* no-op */ }
+    } else if (rec.event === 'newsletter_signup') {
+      window.suqNewsletter(rec.form_name);
     }
   });
 })();

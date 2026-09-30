@@ -1388,7 +1388,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqMarkConversion) window.suqMarkConversion();
+      if (window.suqMarkConversion) window.suqMarkConversion({ event: 'generate_lead', form_name: 'Music & Video Production', lead_type: 'music_submission', thank_you_path: 'music-thank-you.html' });
       window.location.href = 'music-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
@@ -1440,7 +1440,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqMarkConversion) window.suqMarkConversion();
+      if (window.suqMarkConversion) window.suqMarkConversion({ event: 'newsletter_signup', form_name: 'Newsletter (Music)', thank_you_path: 'newsletter-music-thank-you.html' });
       window.location.href = 'newsletter-music-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

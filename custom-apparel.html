@@ -1129,7 +1129,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqMarkConversion) window.suqMarkConversion();
+      if (window.suqMarkConversion) window.suqMarkConversion({ event: 'generate_lead', form_name: 'Custom Apparel', lead_type: 'apparel', thank_you_path: 'custom-apparel-thank-you.html' });
       window.location.href = 'custom-apparel-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

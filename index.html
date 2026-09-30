@@ -1498,7 +1498,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqMarkConversion) window.suqMarkConversion();
+      if (window.suqMarkConversion) window.suqMarkConversion({ event: 'newsletter_signup', form_name: 'Newsletter (Home)', thank_you_path: 'newsletter-home-thank-you.html' });
       window.location.href = 'newsletter-home-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
@@ -1556,7 +1556,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
-      if (window.suqMarkConversion) window.suqMarkConversion();
+      if (window.suqMarkConversion) window.suqMarkConversion({ event: 'generate_lead', form_name: 'Home Contact', lead_type: 'contact', thank_you_path: 'home-contact-thank-you.html' });
       window.location.href = 'home-contact-thank-you.html';
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
