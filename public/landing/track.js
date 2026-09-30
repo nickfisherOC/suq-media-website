@@ -64,6 +64,17 @@
   }
   window.suqLead = fireLead;
 
+  /* ── newsletter_signup ──────────────────────────────────────
+     A secondary engagement event, NOT a sales lead. Call ONCE at
+     a newsletter form's confirmed-success point. Never generate_lead. */
+  window.suqNewsletter = function (formName) {
+    window.suqTrack('newsletter_signup', {
+      form_name: formName || 'Newsletter',
+      page_path: pagePath(),
+      page_title: pageTitle()
+    });
+  };
+
   /* ── CTA / phone location inference ─────────────────────── */
   function locationOf(el) {
     var explicit = el.getAttribute('data-cta-location');
@@ -108,8 +119,11 @@
       return;
     }
 
-    // CTAs must be styled conversion buttons — not plain nav/footer links.
-    if (!(a.classList.contains('btn') || a.classList.contains('opt-cta'))) return;
+    // CTAs must be styled conversion buttons (.btn/.opt-cta) or an element
+    // explicitly marked as a conversion CTA (data-cta-location, e.g. the
+    // styled "Get a Quote" buttons in the desktop/mobile headers).
+    // Plain nav/footer/dropdown/menu links are excluded.
+    if (!(a.classList.contains('btn') || a.classList.contains('opt-cta') || a.hasAttribute('data-cta-location'))) return;
 
     if (isQuoteHref(href)) {
       window.suqTrack('quote_cta_click', {
@@ -128,21 +142,11 @@
     }
   }, false);
 
-  /* ── Thank-you / confirmation pages fire generate_lead once ──
-     A confirmation page marks itself with:
-       <body data-generate-lead="Crew Hoodies" data-lead-type="apparel">
-     This page is only reachable after a genuine successful submit. */
-  function onReady(fn) {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', fn, { once: true });
-    } else {
-      fn();
-    }
-  }
-  onReady(function () {
-    var b = document.body;
-    if (b && b.getAttribute('data-generate-lead')) {
-      fireLead(b.getAttribute('data-generate-lead'), b.getAttribute('data-lead-type'));
-    }
-  });
+  /* ── Thank-you / confirmation pages ─────────────────────────
+     There is deliberately NO unconditional page-load lead event.
+     A confirmation page (e.g. crew-hoodies-thank-you.html) fires
+     generate_lead only when a one-time sessionStorage flag, set by
+     the form immediately before its post-success redirect, is
+     present — then consumes the flag so a refresh or a direct visit
+     fires nothing. That check lives on the confirmation page itself. */
 })();

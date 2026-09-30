@@ -68,7 +68,7 @@
     @media (max-width: 520px) { .ty-btns .btn { width: 100%; justify-content: center; } }
   </style>
 </head>
-<body data-generate-lead="Crew Hoodies" data-lead-type="apparel">
+<body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WHFVKFBN"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -94,7 +94,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <li><a href="studio-rental.html">Studio Rental</a></li>
       <li><a href="music.html">Music &amp; Video Production</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="custom-apparel.html#intake" style="background:var(--gold);color:#0a0a0a;padding:.5rem .9rem;border-radius:3px;">Get a Quote</a></li>
+      <li><a data-cta-location="desktop_header" href="custom-apparel.html#intake" style="background:var(--gold);color:#0a0a0a;padding:.5rem .9rem;border-radius:3px;">Get a Quote</a></li>
     </ul>
     <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -114,7 +114,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a href="studio-rental.html" class="mobile-link">Studio Rental</a>
     <a href="music.html" class="mobile-link">Music &amp; Video Production</a>
     <a href="contact.html" class="mobile-link">Contact</a>
-    <a href="custom-apparel.html#intake" class="mobile-link" style="color:var(--gold);">Get a Quote</a>
+    <a data-cta-location="mobile_header" href="custom-apparel.html#intake" class="mobile-link" style="color:var(--gold);">Get a Quote</a>
   </div>
 </header>
 
@@ -176,5 +176,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script src="public/landing/landing.js"></script>
+<!-- One-time lead confirmation: fire generate_lead only if the Crew Hoodies
+     form set the flag on a genuine successful submit, then clear it so a
+     refresh or a direct visit to this URL fires nothing. -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    try {
+      if (sessionStorage.getItem('suq_crew_lead')) {
+        sessionStorage.removeItem('suq_crew_lead');
+        if (window.suqLead) window.suqLead('Crew Hoodies', 'apparel');
+      }
+    } catch (e) { /* sessionStorage unavailable — fire nothing */ }
+  });
+</script>
 </body>
 </html>

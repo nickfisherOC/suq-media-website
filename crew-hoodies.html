@@ -604,6 +604,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         });
         var result = await res.json().catch(function () { return {}; });
         if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+        // One-time lead flag: set ONLY on a genuine successful response, read
+        // and cleared once on the thank-you page so refresh/direct-visit fire nothing.
+        try { sessionStorage.setItem('suq_crew_lead', '1'); } catch (e) {}
         redirectToThankYou();
       } catch (err) {
         if (btn) { btn.disabled = false; btn.textContent = label; }
