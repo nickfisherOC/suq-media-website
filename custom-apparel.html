@@ -15,6 +15,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WHFVKFBN');</script>
   <!-- End Google Tag Manager -->
+  <!-- Conversion event tracking (dataLayer only; consumed by GTM) -->
+  <script src="public/landing/track.js" defer></script>
   <title>Custom Apparel Calgary | Hoodies, Workwear &amp; Uniforms | SUQ MEDIA</title>
   <meta name="description" content="Custom branded apparel for Calgary &amp; Alberta businesses — hoodies, workwear, uniforms and crew gear. Quality garments sourced through trusted suppliers, then printed and embroidered in-house at our Calgary location. Serving Edmonton and Alberta. Get a quote." />
   <link rel="canonical" href="https://suqmedia.com/custom-apparel.html" />
@@ -1127,6 +1129,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      if (window.suqLead) window.suqLead('Custom Apparel', 'apparel');
       showIntakeSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

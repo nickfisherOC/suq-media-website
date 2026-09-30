@@ -15,6 +15,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WHFVKFBN');</script>
   <!-- End Google Tag Manager -->
+  <!-- Conversion event tracking (dataLayer only; consumed by GTM) -->
+  <script src="public/landing/track.js" defer></script>
   <title>Contact SUQ MEDIA | Custom Apparel Quotes in Calgary &amp; Alberta</title>
   <meta name="description" content="Contact SUQ MEDIA in Calgary for custom apparel, branded workwear and uniform quotes — screen printing and embroidery in-house. Serving Edmonton and businesses across Alberta, with shipping throughout Canada and the U.S. Get a quote or book the studio." />
   <link rel="canonical" href="https://suqmedia.com/contact.html" />
@@ -762,6 +764,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      if (window.suqLead) window.suqLead('Contact', 'contact');
       showContactSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

@@ -15,6 +15,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WHFVKFBN');</script>
   <!-- End Google Tag Manager -->
+  <!-- Conversion event tracking (dataLayer only; consumed by GTM) -->
+  <script src="public/landing/track.js" defer></script>
   <title>Music &amp; Video Production Calgary | SUQ MEDIA</title>
   <meta name="description" content="Music and video production services from SUQ MEDIA in Calgary for artists, creators, organizations and businesses. Contact our team to discuss your next production." />
   <link rel="canonical" href="https://suqmedia.com/music.html" />
@@ -1386,6 +1388,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      if (window.suqLead) window.suqLead('Music & Video Production', 'music_submission');
       showSubmitSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
@@ -1437,6 +1440,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      if (window.suqLead) window.suqLead('Newsletter (Music)', 'newsletter');
       showMusicNewsletterSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

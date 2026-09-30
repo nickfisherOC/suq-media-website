@@ -152,6 +152,7 @@
       });
       var result = await res.json().catch(function () { return {}; });
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      if (window.suqLead) window.suqLead(cfg.leadName || cfg.industry || 'Quote', cfg.leadType || 'apparel');
       showSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

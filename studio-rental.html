@@ -15,6 +15,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WHFVKFBN');</script>
   <!-- End Google Tag Manager -->
+  <!-- Conversion event tracking (dataLayer only; consumed by GTM) -->
+  <script src="public/landing/track.js" defer></script>
   <title>Podcast &amp; Music Studio Rental Calgary | SUQ MEDIA</title>
   <meta name="description" content="Rent SUQ MEDIA's Calgary podcast and music production studio — pro audio, multi-camera video, studio lighting, editing and on-site support for creators, artists, brands and businesses. Book your session." />
   <link rel="canonical" href="https://suqmedia.com/studio-rental.html" />
@@ -934,6 +936,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      if (window.suqLead) window.suqLead('Studio Rental', 'studio_booking');
       showBookingSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

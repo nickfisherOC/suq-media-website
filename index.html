@@ -15,6 +15,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WHFVKFBN');</script>
   <!-- End Google Tag Manager -->
+  <!-- Conversion event tracking (dataLayer only; consumed by GTM) -->
+  <script src="public/landing/track.js" defer></script>
   <title>Custom Apparel &amp; Branded Workwear Calgary | SUQ MEDIA</title>
   <meta name="description" content="Custom hoodies, workwear and uniforms for Calgary &amp; Alberta businesses — screen printing and embroidery done in-house at our Calgary location. Serving Edmonton and all of Alberta, with shipping across Canada and the U.S. Get a quote." />
   <link rel="canonical" href="https://suqmedia.com/" />
@@ -1496,6 +1498,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      if (window.suqLead) window.suqLead('Newsletter (Home)', 'newsletter');
       showNewsletterSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }
@@ -1553,6 +1556,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
       const result = await res.json().catch(() => ({}));
       if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
+      if (window.suqLead) window.suqLead('Home Contact', 'contact');
       showHomeSuccess();
     } catch (err) {
       if (btn) { btn.disabled = false; btn.textContent = originalLabel; }

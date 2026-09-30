@@ -15,6 +15,8 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WHFVKFBN');</script>
   <!-- End Google Tag Manager -->
+  <!-- Conversion event tracking (dataLayer only; consumed by GTM) -->
+  <script src="public/landing/track.js" defer></script>
 
   <!-- ══════════════════════════════════════════════════════════
        INDUSTRY CONTENT · META
@@ -541,6 +543,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         var result = await res.json().catch(function () { return {}; });
         if (!(res.ok && result.success)) throw new Error(result.message || 'Submission failed');
         track('Lead', true); // Meta standard 'Lead' event on success
+        if (window.suqLead) window.suqLead('Hospitality Apparel', 'apparel');
         showSuccess();
       } catch (err) {
         if (btn) { btn.disabled = false; btn.textContent = label; }
