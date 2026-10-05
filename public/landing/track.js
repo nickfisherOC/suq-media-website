@@ -164,17 +164,14 @@
   }, false);
 
   /* ── Thank-you / confirmation pages ─────────────────────────
-     There is deliberately NO unconditional page-load event and NO
-     unconditional Meta 'Lead' in any thank-you page's HTML. On load we
+     There is deliberately NO unconditional page-load event. On load we
      look for the one-time conversion record set by the form. It fires
      only when ALL hold:
        • a record exists,
        • it has not expired (10 min),
        • its thank_you_path matches THIS page (so the wrong thank-you
          page can neither fire nor consume another page's record).
-     The record is removed BEFORE firing, so a refresh cannot re-fire.
-     Meta 'Lead' fires here too, but ONLY for generate_lead — never for
-     newsletter_signup, and never on a direct visit/refresh. */
+     The record is removed BEFORE firing, so a refresh cannot re-fire. */
   function onReady(fn) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', fn, { once: true });
@@ -205,7 +202,6 @@
     try { sessionStorage.removeItem(CONVERSION_KEY); } catch (e) {}
     if (rec.event === 'generate_lead') {
       fireLead(rec.form_name, rec.lead_type);
-      try { if (typeof window.fbq === 'function') window.fbq('track', 'Lead'); } catch (e) { /* no-op */ }
     } else if (rec.event === 'newsletter_signup') {
       window.suqNewsletter(rec.form_name);
     }

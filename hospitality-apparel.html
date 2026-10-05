@@ -55,26 +55,6 @@
   }
   </script>
 
-  <!-- Meta Pixel Code — base pixel, fires PageView on load. Page hooks then fire:
-       CTA click -> trackCustom 'CTAClick' | first field focus -> trackCustom 'FormStart'
-       | successful quote submit -> track 'Lead'. -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '2315605848993797');
-  fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=2315605848993797&ev=PageView&noscript=1"
-  /></noscript>
-  <!-- End Meta Pixel Code -->
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -465,11 +445,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var start = Date.now();
     var started = false;
 
-    // Tracking helper — fires Meta Pixel (if present) + a DOM event for GTM.
+    // Tracking helper — dispatches a DOM event for other scripts.
     function track(ev, std) {
-      try {
-        if (window.fbq) { window.fbq(std ? 'track' : 'trackCustom', ev); }
-      } catch (e) {}
       document.dispatchEvent(new CustomEvent('suq:' + ev));
     }
 
