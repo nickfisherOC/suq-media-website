@@ -510,6 +510,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var start = Date.now();
     var started = false;
 
+    // ── Logo upload → the CRM's "form-uploads" storage (anonymous, exactly how the
+    //    native Growtheon form uploads it) so the logo attaches to the lead record. ──
+    var SUPA_STORAGE = 'https://wbginzbwypbidjhfgbgy.storage.supabase.co';
+    var FORM_BUSINESS_ID = '7a5087af-41f2-4e81-810b-fe7c350263ee';
+    var LOGO_ALLOWED = ['png', 'jpg', 'jpeg', 'pdf', 'ai', 'svg', 'eps'];
+    var LOGO_MAX_BYTES = 10 * 1024 * 1024;
+    async function uploadLogo(file) {
+      try {
+        var nm = file.name || 'logo';
+        var ext = (nm.indexOf('.') > -1 ? nm.split('.').pop() : '').toLowerCase();
+        if (LOGO_ALLOWED.indexOf(ext) === -1) return { error: 'unsupported type' };
+        if (file.size > LOGO_MAX_BYTES) return { error: 'over 10MB' };
+        var uuid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+          : 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16); });
+        var base = nm.replace(/\.[^/.]+$/, '').substring(0, 80).replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '') || 'logo';
+        var objectPath = FORM_BUSINESS_ID + '/' + CREW_FORM.formId + '/' + uuid + '/' + Date.now() + '-' + base + (ext ? '.' + ext : '');
+        var fd = new FormData();
+        fd.append('cacheControl', '3600');
+        fd.append('', file, nm);
+        var r = await fetch(SUPA_STORAGE + '/storage/v1/object/form-uploads/' + objectPath, {
+          method: 'POST',
+          headers: { 'apikey': CREW_FORM.key, 'authorization': 'Bearer ' + CREW_FORM.key, 'x-upsert': 'false' },
+          body: fd
+        });
+        if (!r.ok) return { error: 'upload failed' };
+        return { ref: {
+          kind: 'form-upload', name: nm, size: file.size,
+          mimeType: file.type || 'application/octet-stream',
+          bucket: 'form-uploads', path: objectPath,
+          url: SUPA_STORAGE + '/storage/v1/object/public/form-uploads/' + objectPath,
+          uploadedAt: new Date().toISOString()
+        } };
+      } catch (e) { return { error: 'upload failed' }; }
+    }
+
     function track(ev, std) {
       document.dispatchEvent(new CustomEvent('suq:' + ev));
     }
@@ -565,12 +600,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (f.quantity) data[f.quantity] = val('c-qty');
         if (f.colour)   data[f.colour]   = val('c-colour');
         if (f.notes)    data[f.notes]    = val('c-message');
-        // Logo: the CRM submission endpoint can't accept files inline, so record the
-        // file name in the notes and have the team collect the logo directly.
-        if (fileInput && fileInput.files && fileInput.files.length && f.notes) {
+        // Logo: upload it to the CRM's form-uploads storage so it attaches to the lead.
+        // Falls back to a notes reference if the upload fails or the file is unsupported,
+        // so the lead is never lost.
+        if (fileInput && fileInput.files && fileInput.files.length) {
           var lf = fileInput.files[0];
-          data[f.notes] = (data[f.notes] ? data[f.notes] + '\n\n' : '') +
-            '[Logo to collect: "' + lf.name + '" — customer has a logo ready; request it directly.]';
+          if (btn) btn.textContent = 'Uploading logo…';
+          var up = await uploadLogo(lf);
+          if (btn) btn.textContent = 'Sending…';
+          if (up.ref && f.logo) {
+            data[f.logo] = [up.ref];
+          } else if (f.notes) {
+            data[f.notes] = (data[f.notes] ? data[f.notes] + '\n\n' : '') +
+              '[Logo to collect: "' + lf.name + '"' + (up.error ? ' (auto-upload ' + up.error + ')' : '') +
+              ' — customer has a logo ready; request it directly.]';
+          }
         }
         var payload = {
           formId: CREW_FORM.formId,
