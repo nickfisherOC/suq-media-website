@@ -983,6 +983,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <input id="ca-logo" name="logo" type="file" accept=".png,.jpg,.jpeg,.pdf,.ai,.svg,.eps" />
             </label>
           </div>
+          <div class="form-group">
+            <label for="ca-find">How did you find us? <span>*</span></label>
+            <select id="ca-find" name="how_did_you_find_us" required>
+              <option value="" disabled selected>Choose an option...</option>
+              <option value="option1">Google search</option>
+              <option value="option2">Instagram</option>
+              <option value="option3">Facebook</option>
+              <option value="option4">TikTok</option>
+              <option value="option5">Referral / word of mouth</option>
+              <option value="option6">Saw someone wearing our apparel</option>
+              <option value="option7">Returning customer</option>
+              <option value="option8">Other</option>
+            </select>
+          </div>
           <button type="submit" class="btn btn-gold glow-pulse" style="width:100%; justify-content:center;">Get a Quote →</button>
           <p id="intakeError" role="alert" style="display:none;margin-top:1rem;font-size:.8rem;color:oklch(0.62 0.19 25);"></p>
         </form>
@@ -1150,6 +1164,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       'select-field_1781110494945_q28f69': document.getElementById('ca-type').value,
       'select-field_1781110661193_k9b70o': document.getElementById('ca-qty').value,
       'select-field_1781110789205_11tfng': document.getElementById('ca-timeline').value,
+      'select-field_1792522725976_ooylg1': document.getElementById('ca-find').value,
       'textarea-field_1781111620488_bino7k': document.getElementById('ca-message').value.trim()
     };
     const errEl = document.getElementById('intakeError');
